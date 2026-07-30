@@ -73,11 +73,15 @@ export default function App() {
     </>
   ) : (
     <>
+      {/*
+        Pas de « ⋮ » ici : la liste n'a que ces deux actions. Un menu de dépassement
+        vide apprend à ne plus l'ouvrir, et fait douter des autres écrans où il en
+        contient vraiment.
+      */}
       <Button icon={<Icon name="download" size={14} />}>Export</Button>
       <Button type="primary" icon={<Icon name="plus" size={14} />}>
         New segment
       </Button>
-      <Button icon={<Icon name="dots" size={14} />} aria-label="Plus d'actions" />
     </>
   );
 

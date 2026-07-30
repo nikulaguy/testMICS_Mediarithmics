@@ -31,6 +31,8 @@ Le serveur écoute sur **http://localhost:5199**
 - **Actions de page dans l'Actionbar** (Export, New segment, ⋮), actions de tableau dans la Toolbar.
 - **Panneau Filters en cascade** : dimensions à gauche avec un **compteur** par dimension (pas de
   pastille de couleur), valeurs à droite, application immédiate, `CLEAR <DIMENSION>` à portée explicite.
+- **Compteur du bouton Filters** : il compte les **filtres**, pas les dimensions. Trois types
+  cochés dans « Segment type », c'est 3 — le même nombre que les chips affichées juste en dessous.
 - **Barre de filtres actifs** : une chip par dimension (« Segment type : Campaign +2 »), fermable,
   plus `Clear all filters`. Elle n'apparaît que s'il existe au moins un filtre actif.
 - **Repli automatique** : la largeur réelle des chips est mesurée (`ResizeObserver`) ; le lien

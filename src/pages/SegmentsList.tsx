@@ -95,7 +95,6 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
   const toggleColumn = (key: string) =>
     setVisible((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
 
-  const activeDimensions = Object.keys(filters).length;
   // Une chip par filtre appliqué : la barre est un rappel exhaustif, pas un résumé.
   const chips: ActiveFilter[] = DIMENSIONS.flatMap((d) =>
     (filters[d.key] ?? []).map((value) => {
@@ -103,6 +102,13 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
       return { key: `${d.key}::${value}`, label: `${d.label} : ${readable}` };
     }),
   );
+  /*
+    Le compteur du bouton Filters compte les FILTRES, pas les dimensions : trois types
+    cochés dans « Segment type », c'est 3. Compter les dimensions annonçait 1 alors que
+    trois valeurs restreignaient la liste, et le chiffre ne collait plus au nombre de
+    chips affichées juste en dessous.
+  */
+  const activeFilterCount = chips.length;
   const removeChip = (key: string) => {
     const [dimensionKey, value] = key.split('::');
     toggleValue(dimensionKey, value);
@@ -210,7 +216,7 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
           <div ref={panelRef} style={{ position: 'relative' }}>
             <Button icon={<Icon name="filter" size={14} />} onClick={() => setPanelOpen((v) => !v)}>
               Filters
-              {activeDimensions > 0 && <CountBadge count={activeDimensions} />}
+              {activeFilterCount > 0 && <CountBadge count={activeFilterCount} />}
             </Button>
             {panelOpen && (
               <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: 1050 }}>
