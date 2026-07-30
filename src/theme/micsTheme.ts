@@ -106,6 +106,7 @@ export const typography = {
 export const scale = {
   space4: 4,
   space8: 8,
+  space10: 10,
   space12: 12,
   space16: 16,
   space20: 20,

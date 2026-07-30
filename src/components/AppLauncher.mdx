@@ -12,9 +12,9 @@ import { DocTable } from '../docs/DocTable';
   <span><b>Maquette</b> : Figma AppLauncher <code>19:148</code></span>
 </div>
 
-Contenu du panneau « Applications » de la TopBar : bandeau de marque, application courante, puis
-les autres applications de la plateforme. C'est le seul endroit du produit où l'on change
-d'application, donc le seul endroit où la marque est rappelée en grand.
+Contenu du panneau « Applications » de la TopBar : bandeau de marque, puis les entrées groupées —
+les applications de la plateforme, un filet, les ressources documentaires. C'est le seul endroit du
+produit où l'on change d'application, donc le seul endroit où la marque est rappelée en grand.
 
 Le composant **ne dessine pas sa surface** : il se pose dans un `DropdownPanel`, comme tous les
 panneaux du produit. Une ombre et un radius de plus seraient une ombre et un radius à maintenir.
@@ -27,30 +27,36 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
 
 ## Règles d'usage
 
-- L'application courante est **en tête et non cliquable** : y naviguer ne ferait rien, et un item
-  cliquable qui ne fait rien apprend à se méfier de la liste.
-- La **pastille de couleur** identifie l'application. C'est le seul menu du produit où une couleur
-  aide vraiment à reconnaître la cible : les applications sont peu nombreuses et stables.
-- Largeur **300** : plus large que les autres panneaux de la TopBar, parce que le bandeau de marque
-  a besoin d'air. C'est une exception assumée, pas un précédent.
+- Chaque entrée porte la **marque de son application**, pas un glyphe du set. C'est le seul menu du
+  produit qui fait quitter l'application courante : le logo rend la cible reconnaissable avant même
+  la lecture du libellé. Les marques gardent leurs couleurs, la prop `color` de l'`Icon` n'a aucun
+  effet dessus — un logo qui change de couleur n'est plus un logo.
+- **Deux groupes, un filet.** Les applications d'abord, les ressources documentaires ensuite. Les
+  premières changent de contexte, les secondes ouvrent un autre site : ce ne sont pas les mêmes
+  conséquences, elles ne se mélangent pas dans une liste plate.
+- Pas de **filet sous le dernier groupe** : il ferait un trait au ras du bord du panneau, qui
+  doublerait son propre contour.
+- Les groupes viennent du **code produit** (`getAppMenuSections`), pas d'une liste figée : Computing
+  Console n'apparaît que sur une organisation `core_cdp`, Platform Admin que sur l'organisation mics.
 - Changer d'application **recharge le contexte** : ce n'est pas une navigation interne, ne pas la
   mélanger avec les entrées du SideMenu.
 
+<Canvas of={LauncherStories.Marques} />
+
 ## Exemples d'usage
 
-**Une seule autre application** : la liste reste une liste.
+**Sans Computing Console** : le groupe se réduit, il ne disparaît pas.
 
-<Canvas of={LauncherStories.UneSeuleAutreApp} />
-
-**Depuis Navigator** : l'application courante change, la liste aussi.
-
-<Canvas of={LauncherStories.DepuisNavigator} />
+<Canvas of={LauncherStories.SansComputingConsole} />
 
 ## Anatomie
 
-1. **Bandeau de marque** : hauteur 68, logo de 140 centré, bordure basse `border/input`.
-2. **Application courante** : rangée de 40, padding horizontal 16, `text/normal`, non cliquable.
-3. **Applications** : rangées de 40, pastille 18 en radius 4, gap 12, fond `bg/hover` au survol.
+1. **Panneau** : largeur 260, surface du `DropdownPanel` (fond `bg/container`, radius/base, ombre
+   Dropdown).
+2. **Bandeau de marque** : hauteur 101, padding 20 haut / 16 bas, logo de 140 centré.
+3. **Entrée** : padding 10 vertical / 20 horizontal, gap 10, marque 20 × 20, libellé Body/Book 12 en
+   `text/normal`, fond `bg/hover` au survol.
+4. **Filet** : 1 px `border/input` entre deux groupes, jamais après le dernier.
 
 ## Accessibilité (RGAA)
 
@@ -65,15 +71,23 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
       </>,
     ],
     [
-      'États',
+      'Groupes',
       <>
-        L'application courante porte <code>aria-current</code> : sa position en tête ne suffit pas à
-        l'annoncer (RGAA 9.x).
+        Chaque groupe porte <code>role="group"</code> : le filet est une information visuelle, il
+        doit exister aussi dans l'arbre d'accessibilité (RGAA 9.1).
+      </>,
+    ],
+    [
+      'Liens externes',
+      <>
+        La documentation et le guide ouvrent un autre site : l'entrée porte un texte
+        <code>.mics-sr-only</code> « Nouvelle fenêtre ». Sans lui, le retour arrière du lecteur
+        d'écran ne ramène nulle part (RGAA 13.2).
       </>,
     ],
     [
       'Information couleur',
-      "La pastille double le nom de l'application, elle ne le remplace jamais (RGAA 3.1).",
+      "La marque double le nom de l'application, elle ne le remplace jamais (RGAA 3.1).",
     ],
     [
       'Images',
@@ -86,5 +100,12 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
 
 - **Écart avec la production.** Le panneau est posé à la main dans la TopBar, sans composant ni
   états d'items homogènes avec le reste des menus.
+- **Écart résolu.** Le dev affichait une ligne « application courante » en tête, absente de la
+  maquette : la production liste Navigator et Computing Console comme des cibles, l'application
+  courante n'est pas répétée. La ligne a été retirée, et la prop `current` avec elle.
+- **Marques redessinées.** La maquette ne fournit les icônes qu'en capture d'écran. Les quatre
+  marques ont été retracées en vectoriel dans `assets/icons/app-*.svg`, couleurs relevées sur la
+  capture (`#479fda`, `#6c58c9`, `#4ca86d`). À remplacer par les sources officielles quand elles
+  seront disponibles.
 - **À construire.** La navigation clavier complète (flèches) et la recherche d'application, utile
   seulement si la liste s'allonge.

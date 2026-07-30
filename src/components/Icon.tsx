@@ -1,3 +1,7 @@
+import appComputingConsole from '../assets/icons/app-computing-console.svg?raw';
+import appDeveloperDocumentation from '../assets/icons/app-developer-documentation.svg?raw';
+import appNavigator from '../assets/icons/app-navigator.svg?raw';
+import appUserGuide from '../assets/icons/app-user-guide.svg?raw';
 import appstore from '../assets/icons/appstore.svg?raw';
 import automation from '../assets/icons/automation.svg?raw';
 import automations from '../assets/icons/automations.svg?raw';
@@ -51,6 +55,14 @@ import view from '../assets/icons/view.svg?raw';
  * se pilotent en CSS comme pour un glyphe de police.
  */
 const ICONS: Record<string, string> = {
+  // Marques d'application (préfixe `app-`) : ce ne sont pas des glyphes mais des
+  // logos produit. Ils gardent leurs couleurs de marque, donc la prop `color`
+  // n'a aucun effet dessus — c'est voulu, un logo qui change de couleur n'est
+  // plus un logo.
+  'app-computing-console': appComputingConsole,
+  'app-developer-documentation': appDeveloperDocumentation,
+  'app-navigator': appNavigator,
+  'app-user-guide': appUserGuide,
   appstore,
   automation,
   automations,

@@ -64,7 +64,20 @@ export const SurBoutonFiltre: Story = {
 /** Cas d'usage 2 : alertes à traiter sur un onglet. */
 export const SurOnglet: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: scale.space24, borderBottom: `1px solid ${semantic.borderInput}`, paddingBottom: scale.space8 }}>
+    /*
+      alignItems: center sur la rangée. Sans lui les items s'étirent (align-items: stretch par
+      défaut) : l'onglet sans badge fait la hauteur de sa ligne de texte, celui qui en a un fait
+      20 px, et les deux libellés ne tombent plus sur la même ligne.
+    */
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: scale.space24,
+        borderBottom: `1px solid ${semantic.borderInput}`,
+        paddingBottom: scale.space8,
+      }}
+    >
       <span style={{ color: semantic.textLighter }}>Usage overview</span>
       <span style={{ display: 'inline-flex', gap: scale.space8, alignItems: 'center', color: semantic.primary }}>
         Alerts <CountBadge count={2} tone="warning" />

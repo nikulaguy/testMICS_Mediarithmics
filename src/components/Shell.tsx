@@ -4,7 +4,7 @@ import { IconButton } from './IconButton';
 import { DropdownPanel } from './DropdownPanel';
 import { AppLauncher } from './AppLauncher';
 import logoUrl from '../assets/logo-mediarithmics.png';
-import { primitives, scale, semantic } from '../theme/micsTheme';
+import { scale, semantic } from '../theme/micsTheme';
 
 function PanelRow({ children, onClick }: { children: ReactNode; onClick?: () => void }) {
   return (
@@ -30,9 +30,19 @@ const ORGS = [
   { name: 'mediarithmics - Dogfooding', id: '11125' },
 ];
 
-const APPS = [
-  { name: 'Developer console', color: primitives.purpleMain },
-  { name: 'Navigator', color: semantic.primary },
+/*
+  Deux groupes, comme le code produit (getAppMenuSections) : les applications
+  d'abord, les ressources documentaires ensuite, séparées par un filet.
+*/
+const APP_GROUPS = [
+  [
+    { name: 'Navigator', icon: 'app-navigator' },
+    { name: 'Computing console', icon: 'app-computing-console' },
+  ],
+  [
+    { name: 'Developer Documentation', icon: 'app-developer-documentation', external: true },
+    { name: 'User Guide', icon: 'app-user-guide', external: true },
+  ],
 ];
 
 type PanelName = 'org' | 'apps' | 'account' | null;
@@ -162,7 +172,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
 
         {open === 'apps' && (
           <DropdownPanel anchored width={300}>
-            <AppLauncher current="Platform Admin" apps={APPS} />
+            <AppLauncher groups={APP_GROUPS} />
           </DropdownPanel>
         )}
 

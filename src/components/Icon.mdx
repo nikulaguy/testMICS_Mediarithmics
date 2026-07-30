@@ -12,12 +12,20 @@ import { DocTable } from '../docs/DocTable';
   <span><b>Maquette</b> : page « 🖼 Icons » du fichier Figma</span>
 </div>
 
-Glyphe du design system. Les 36 icônes sont **exportées du fichier Figma**, pas de la librairie
+Glyphe du design system. Les icônes sont **exportées du fichier Figma**, pas de la librairie
 Ant Design : ce sont les glyphes du produit. À l'export, les `fill` sont remplacés par
 `currentColor` et les dimensions par `1em`, si bien que couleur et taille se pilotent en CSS
 comme pour un caractère de police.
 
 <Canvas of={IconStories.Bibliotheque} />
+
+## Marques d'application
+
+Le set contient aussi quatre entrées préfixées `app-` qui ne sont pas des glyphes mais des **logos
+produit**. Elles gardent leurs couleurs de marque et **ignorent la prop `color`** : un logo qui
+change de couleur n'est plus un logo. Elles ne servent que dans l'`AppLauncher`.
+
+<Canvas of={IconStories.MarquesApplication} />
 
 ## Props
 

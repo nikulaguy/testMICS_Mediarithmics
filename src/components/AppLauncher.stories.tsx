@@ -1,26 +1,35 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLauncher } from './AppLauncher';
 import { DropdownPanel } from './DropdownPanel';
-import { primitives, scale, semantic } from '../theme/micsTheme';
+import { Icon } from './Icon';
+import { scale, semantic } from '../theme/micsTheme';
 
-const APPS = [
-  { name: 'Developer console', color: primitives.purpleMain },
-  { name: 'Navigator', color: semantic.primary },
+const GROUPS = [
+  [
+    { name: 'Navigator', icon: 'app-navigator' },
+    { name: 'Computing console', icon: 'app-computing-console' },
+  ],
+  [
+    { name: 'Developer Documentation', icon: 'app-developer-documentation', external: true },
+    { name: 'User Guide', icon: 'app-user-guide', external: true },
+  ],
 ];
 
 const meta = {
   title: 'Composants/AppLauncher',
   component: AppLauncher,
   argTypes: {
-    current: { control: 'text', description: "Application courante, en tête, non cliquable." },
-    apps: { control: false, description: 'Les autres applications accessibles.' },
+    groups: {
+      control: false,
+      description: 'Groupes d’entrées, séparés par un filet : applications, puis ressources.',
+    },
     onSelect: { control: false },
   },
-  args: { current: 'Platform Admin', apps: APPS },
+  args: { groups: GROUPS },
   decorators: [
     (Story) => (
       <div style={{ background: semantic.bgWindow, padding: scale.space24, display: 'inline-block' }}>
-        <DropdownPanel width={300}>
+        <DropdownPanel width={260}>
           <Story />
         </DropdownPanel>
       </div>
@@ -31,21 +40,45 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Dans sa surface réelle : le panneau de 300 de la TopBar. */
+/** Dans sa surface réelle : le panneau de 260 de la TopBar. */
 export const BacASable: Story = {};
 
-/** Une seule autre application : la liste reste, elle ne se replie pas en lien. */
-export const UneSeuleAutreApp: Story = {
-  args: { apps: [{ name: 'Navigator', color: semantic.primary }] },
-};
-
-/** Depuis Navigator : l'application courante change, la liste aussi. */
-export const DepuisNavigator: Story = {
+/** Une organisation sans Computing Console : le groupe se réduit, il ne disparaît pas. */
+export const SansComputingConsole: Story = {
   args: {
-    current: 'Navigator',
-    apps: [
-      { name: 'Platform Admin', color: semantic.info },
-      { name: 'Developer console', color: primitives.purpleMain },
+    groups: [
+      [{ name: 'Navigator', icon: 'app-navigator' }],
+      [
+        { name: 'Developer Documentation', icon: 'app-developer-documentation', external: true },
+        { name: 'User Guide', icon: 'app-user-guide', external: true },
+      ],
     ],
   },
+};
+
+/** Les quatre marques, à leur taille de menu (20) et en grand (40). */
+export const Marques: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: scale.space24, background: semantic.bgContainer }}>
+      {GROUPS.flat().map((app) => (
+        <div
+          key={app.name}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: scale.space8,
+            width: 130,
+            color: semantic.textNormal,
+          }}
+        >
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: scale.space12 }}>
+            <Icon name={app.icon} size={40} />
+            <Icon name={app.icon} size={20} />
+          </span>
+          <span style={{ fontSize: 10, color: semantic.textLighter, textAlign: 'center' }}>{app.icon}</span>
+        </div>
+      ))}
+    </div>
+  ),
 };
