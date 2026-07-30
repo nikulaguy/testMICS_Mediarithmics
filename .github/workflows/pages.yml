@@ -1,0 +1,67 @@
+# Publie l'app de démonstration et le Storybook sur GitHub Pages à chaque push.
+# `enablement: true` active Pages tout seul : aucun réglage à faire dans Settings.
+# Le dépôt doit être PUBLIC (Pages sur dépôt privé demande un plan payant).
+#
+# URL : https://nikulaguy.github.io/testMICS_Mediarithmics/
+#       https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/
+name: App + Storybook → GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "index.html"
+      - "package-lock.json"
+      - "vite.config.ts"
+      - ".storybook/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run build-storybook
+      # L'app à la racine, le Storybook dans un sous-dossier. Les deux builds
+      # utilisent `base: './'`, donc le même artefact marche sous n'importe quel
+      # sous-chemin — c'est ce qui permet de les empiler ici.
+      - name: Assembler l'artefact
+        run: |
+          mkdir -p site/storybook
+          cp -R dist/. site/
+          cp -R storybook-static/. site/storybook/
+          touch site/.nojekyll
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

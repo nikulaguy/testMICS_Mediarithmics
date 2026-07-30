@@ -156,29 +156,20 @@ correspondance Figma → dev, écarts connus et pièges rencontrés.
 
 ## Consulter en ligne
 
-Les deux artefacts sont publiés sur la branche `gh-pages` de ce dépôt :
-
 | | URL |
 | --- | --- |
 | App de démonstration | https://nikulaguy.github.io/testMICS_Mediarithmics/ |
 | Storybook (design system) | https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/ |
 
-**Activation, une seule fois** : dépôt → *Settings* → *Pages* → *Build and deployment*,
-source « Deploy from a branch », branche `gh-pages`, dossier `/ (root)`. GitHub publie en
-une à deux minutes.
-
-## Republier après une modification
-
-```bash
-npm run build && npm run build-storybook
-rm -rf /tmp/mics-pages && mkdir -p /tmp/mics-pages/storybook
-cp -R dist/. /tmp/mics-pages/
-cp -R storybook-static/. /tmp/mics-pages/storybook/
-touch /tmp/mics-pages/.nojekyll
-cd /tmp/mics-pages && git init -q -b gh-pages \
-  && git remote add origin git@github.com:nikulaguy/testMICS_Mediarithmics.git \
-  && git add -A && git commit -qm "Publication" && git push -f origin gh-pages
-```
+La publication est automatique : `.github/workflows/pages.yml` construit les deux artefacts à
+chaque push sur `main` et les déploie sur GitHub Pages, l'app à la racine et le Storybook sous
+`/storybook/`. Rien à lancer à la main, et rien à régler dans *Settings* non plus :
+`actions/configure-pages` est appelé avec `enablement: true`, qui active Pages tout seul.
 
 Le build utilise des chemins relatifs (`base: './'` dans `vite.config.ts`), donc le même
 artefact fonctionne en local et sous le sous-chemin de GitHub Pages.
+
+**Une condition, une seule** : le dépôt doit être **public**. GitHub Pages ne sert un dépôt privé
+que sur un plan payant (Pro / Team / Enterprise) ; sur un compte gratuit, l'étape de déploiement
+échoue. C'est la seule différence avec `smoking-app`, qui fait tourner le même workflow sur un
+dépôt public.
