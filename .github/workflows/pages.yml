@@ -6,17 +6,12 @@
 #       https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/
 name: App + Storybook → GitHub Pages
 
+# Pas de filtre `paths` : tout est susceptible de changer le rendu (dépendances,
+# tsconfig, assets hors src/). Un filtre incomplet publie une version périmée sans
+# rien signaler, ce qui coûte plus cher que deux minutes de build en trop.
 on:
   push:
     branches: [main]
-    paths:
-      - "src/**"
-      - "public/**"
-      - "index.html"
-      - "package-lock.json"
-      - "vite.config.ts"
-      - ".storybook/**"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
