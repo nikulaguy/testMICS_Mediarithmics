@@ -14,6 +14,7 @@ import {
   TabPanel,
   Tag,
 } from '../ui';
+import { BoardContent } from './BoardContents';
 import { SEGMENTS } from '../data/segments';
 import { scale, semantic, typography } from '../theme/micsTheme';
 
@@ -376,16 +377,7 @@ export function Boards() {
       )}
 
       <TabPanel tabKey={board} idPrefix="board">
-        {board === 'activities' ? (
-          <ActivitiesBoard />
-        ) : (
-          <Card>
-            <span style={{ color: semantic.textLighter }}>
-              Le tableau de bord « {DASHBOARDS.find((d) => d.key === board)?.label} » n'est pas maquetté :
-              hors périmètre de ce test.
-            </span>
-          </Card>
-        )}
+        {board === 'activities' ? <ActivitiesBoard /> : <BoardContent board={board} />}
       </TabPanel>
 
       {/*
