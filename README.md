@@ -163,13 +163,24 @@ correspondance Figma → dev, écarts connus et pièges rencontrés.
 
 La publication est automatique : `.github/workflows/pages.yml` construit les deux artefacts à
 chaque push sur `main` et les déploie sur GitHub Pages, l'app à la racine et le Storybook sous
-`/storybook/`. Rien à lancer à la main, et rien à régler dans *Settings* non plus :
-`actions/configure-pages` est appelé avec `enablement: true`, qui active Pages tout seul.
+`/storybook/`. Rien à lancer à la main.
 
 Le build utilise des chemins relatifs (`base: './'` dans `vite.config.ts`), donc le même
 artefact fonctionne en local et sous le sous-chemin de GitHub Pages.
 
-**Une condition, une seule** : le dépôt doit être **public**. GitHub Pages ne sert un dépôt privé
-que sur un plan payant (Pro / Team / Enterprise) ; sur un compte gratuit, l'étape de déploiement
-échoue. C'est la seule différence avec `smoking-app`, qui fait tourner le même workflow sur un
-dépôt public.
+### Deux prérequis, une seule fois
+
+1. Le dépôt doit être **public**. GitHub Pages ne sert un dépôt privé que sur un plan payant.
+2. **Settings → Pages → Build and deployment → Source → « GitHub Actions »**.
+
+Le second n'est pas contournable, malgré le `enablement: true` passé à `actions/configure-pages` :
+le `GITHUB_TOKEN` du workflow n'a pas le droit de **créer** un site Pages. Sans activation
+préalable, l'étape échoue avec
+
+```
+Get Pages site failed.    Error: Not Found
+Create Pages site failed. Error: Resource not accessible by integration
+```
+
+Une fois Pages activé, le `GET` réussit et `enablement` ne tente plus rien : le paramètre reste
+utile si le dépôt est recréé, il ne coûte rien sinon.
