@@ -170,8 +170,9 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
         <IconButton icon="options" label="Réglages" />
         <IconButton icon="user" label="Mon compte" expanded={open === 'account'} onPointerDown={toggle('account')} />
 
+        {/* 260 : la largeur du composant Figma. */}
         {open === 'apps' && (
-          <DropdownPanel anchored width={300}>
+          <DropdownPanel anchored width={260}>
             <AppLauncher groups={APP_GROUPS} />
           </DropdownPanel>
         )}
