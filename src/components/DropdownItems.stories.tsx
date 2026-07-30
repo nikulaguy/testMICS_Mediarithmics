@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
+  DropdownActionItem,
   DropdownCheckboxItem,
   DropdownDivider,
   DropdownFooter,
@@ -37,7 +38,7 @@ const Legend = ({ children, label }: { children: React.ReactNode; label: string 
   </div>
 );
 
-/** Les cinq briques, avec leurs états. */
+/** Les six briques, avec leurs états. */
 export const Briques: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: scale.space24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
@@ -65,10 +66,35 @@ export const Briques: Story = {
           <DropdownLabelItem label="e-commerce" />
         </DropdownGroup>
       </Legend>
+      <Legend label="Action Item">
+        <DropdownGroup>
+          <DropdownActionItem icon="user-lookalike" label="Create Lookalike" onSelect={() => {}} />
+          <DropdownActionItem icon="trash" label="Delete" tone="danger" onSelect={() => {}} />
+        </DropdownGroup>
+      </Legend>
       <Legend label="Footer">
         <DropdownFooter label="Clear all filters" onClick={() => {}} />
       </Legend>
     </div>
+  ),
+};
+
+/**
+ * Action Item : icône + libellé, l'entrée déclenche quelque chose. Le menu d'actions
+ * d'un segment, tel qu'il est en production : ce qui crée un objet, un filet, ce qui
+ * touche au segment lui-même. `tone="danger"` ferme la marche.
+ */
+export const ActionItem: Story = {
+  render: () => (
+    <DropdownPanel width={240}>
+      <div role="menu" aria-label="Actions du segment" style={{ paddingBlock: scale.space8 }}>
+        <DropdownActionItem icon="user-lookalike" label="Create Lookalike" onSelect={() => {}} />
+        <DropdownActionItem icon="chart-line" label="Create Experiment" onSelect={() => {}} />
+        <DropdownDivider inset={scale.space16} />
+        <DropdownActionItem icon="history" label="History" onSelect={() => {}} />
+        <DropdownActionItem icon="trash" label="Delete" tone="danger" onSelect={() => {}} />
+      </div>
+    </DropdownPanel>
   ),
 };
 

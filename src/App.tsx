@@ -6,6 +6,7 @@ import { SegmentsList } from './pages/SegmentsList';
 import { UsageOverview } from './pages/UsageOverview';
 import { AlertsPage, ALERT_SECTIONS } from './pages/AlertsPage';
 import { SegmentDetail } from './pages/SegmentDetail';
+import { SegmentDetailActions } from './pages/SegmentDetailActions';
 import type { Segment } from './data/segments';
 
 type Tab = 'segments' | 'usage' | 'alerts';
@@ -77,14 +78,9 @@ export default function App() {
         : [{ label: 'Segments', onClick: goSegments }, { label: TAB_LABEL[tab] }];
 
   const actions = detail ? (
-    <>
-      <Button icon={<Icon name="view" size={14} />}>Edit</Button>
-      <Button icon={<Icon name="download" size={14} />}>Export</Button>
-      <Button type="primary" icon={<Icon name="feeds" size={14} />}>
-        Add a Feed
-      </Button>
-      <Button icon={<Icon name="dots" size={14} />} aria-label="Plus d'actions" />
-    </>
+    // Supprimer le segment ouvert renvoie à la liste : l'écran qu'on regardait
+    // n'existe plus, y rester afficherait une ressource fantôme.
+    <SegmentDetailActions segmentName={detail.name} onDelete={() => setDetail(null)} />
   ) : (
     <>
       {/*

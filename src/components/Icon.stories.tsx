@@ -7,10 +7,10 @@ const NAMES = [
   'appstore', 'automation', 'automations', 'broom', 'calendar', 'campaigns',
   'chart-bar', 'chart-line', 'chevron-bottom', 'chevron-right', 'close', 'cloud',
   'cluster', 'database', 'display', 'download', 'feeds', 'file-image',
-  'file-import', 'filter', 'funnel', 'inbox', 'info', 'magnifier',
-  'monitor', 'options', 'plug', 'plus', 'dots', 'query',
-  'save', 'server', 'settings', 'table', 'tag', 'target',
-  'team', 'terminal', 'tree', 'user', 'users', 'user-lookalike',
+  'file-import', 'filter', 'funnel', 'history', 'inbox', 'info',
+  'magnifier', 'monitor', 'options', 'plug', 'plus', 'dots',
+  'query', 'save', 'server', 'settings', 'table', 'tag',
+  'target', 'team', 'terminal', 'trash', 'tree', 'user', 'users', 'user-lookalike',
   'user-pixel', 'user-query', 'view',
 ];
 

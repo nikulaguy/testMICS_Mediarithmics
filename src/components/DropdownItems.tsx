@@ -191,6 +191,53 @@ export function DropdownOptionItem({
 }
 
 /**
+ * Entrée d'ACTION d'un menu : icône + libellé, elle déclenche quelque chose.
+ * À ne pas confondre avec le Nav Item, qui ouvre une sous-liste, ni avec l'Option
+ * Item, qui sélectionne une valeur. Trois besoins, trois entrées.
+ *
+ * `tone="danger"` pour une action destructive : libellé et icône en `error`. La
+ * couleur ne suffit pas à prévenir — c'est la confirmation qui protège — mais elle
+ * évite le clic distrait sur une entrée voisine.
+ */
+export function DropdownActionItem({
+  icon,
+  label,
+  onSelect,
+  tone = 'default',
+}: {
+  icon: string;
+  label: string;
+  onSelect: () => void;
+  tone?: 'default' | 'danger';
+}) {
+  const { hover, handlers } = useRowHover();
+  const color = tone === 'danger' ? semantic.error : semantic.textNormal;
+  return (
+    <div
+      role="menuitem"
+      tabIndex={0}
+      {...handlers}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
+      style={{
+        ...rowBase,
+        gap: scale.space12,
+        background: hover ? semantic.bgHover : 'transparent',
+        color,
+      }}
+    >
+      <Icon name={icon} size={16} />
+      <span>{label}</span>
+    </div>
+  );
+}
+
+/**
  * Dropdown / Label Item (Figma 143:77) — étiquette de la liste des labels.
  * Cliquer ajoute le label aux valeurs sélectionnées (chips fermables au-dessus).
  */

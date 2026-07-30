@@ -27,6 +27,7 @@ comportent pareil, y compris au clavier.
     ['Checkbox Item', 'Multi-sélection', <code>menuitemcheckbox</code>, 'Unchecked · Hover · Checked'],
     ['Option Item', 'Sélection unique', <code>menuitemradio</code>, 'Default · Hover · Selected'],
     ['Label Item', "Étiquette d'une liste de labels", <code>menuitem</code>, 'Default · Hover'],
+    ['Action Item', 'Déclenche une action', <code>menuitem</code>, 'Default · Hover · ton danger'],
     ['Footer', 'Réinitialisation, toujours en dernier', <code>button</code>, 'Actif · Désactivé'],
   ]}
 />
@@ -72,6 +73,23 @@ valeurs mutuellement exclusives : Persisted / Not persisted, Today / Last 7 days
 sélectionnées, affichées en **chips fermables** au-dessus de la liste.
 
 <Canvas of={ItemStories.LabelItem} />
+
+## Action Item
+
+Icône + libellé, l'entrée **déclenche quelque chose**. À ne pas confondre avec le Nav Item, qui
+ouvre une sous-liste, ni avec l'Option Item, qui sélectionne une valeur : trois besoins, trois
+briques.
+
+`tone="danger"` passe libellé et icône en `error`, pour une action irréversible. La couleur ne
+protège de rien à elle seule — c'est la **confirmation** qui protège — mais elle évite le clic
+distrait sur l'entrée voisine. Une seule entrée `danger` par menu, et toujours en dernier : une
+liste qui se termine par une action destructive se lit sans surprise.
+
+L'exemple ci-dessous est le menu « ⋮ » d'une page de détail de segment, tel qu'il est en
+production : d'abord ce qui **crée** un objet à partir du segment, un filet, puis ce qui touche au
+segment lui-même.
+
+<Canvas of={ItemStories.ActionItem} />
 
 ## Footer
 

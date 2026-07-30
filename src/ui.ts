@@ -39,6 +39,7 @@ export {
   DropdownNavItem,
   DropdownCheckboxItem,
   DropdownOptionItem,
+  DropdownActionItem,
   DropdownLabelItem,
   DropdownFooter,
   DropdownDivider,

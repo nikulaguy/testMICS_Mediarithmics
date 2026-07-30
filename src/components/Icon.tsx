@@ -25,6 +25,7 @@ import filter from '../assets/icons/filter.svg?raw';
 import inbox from '../assets/icons/inbox.svg?raw';
 import info from '../assets/icons/info.svg?raw';
 import funnel from '../assets/icons/funnel.svg?raw';
+import history from '../assets/icons/history.svg?raw';
 import magnifier from '../assets/icons/magnifier.svg?raw';
 import monitor from '../assets/icons/monitor.svg?raw';
 import options from '../assets/icons/options.svg?raw';
@@ -40,6 +41,7 @@ import tag from '../assets/icons/tag.svg?raw';
 import target from '../assets/icons/target.svg?raw';
 import team from '../assets/icons/team.svg?raw';
 import terminal from '../assets/icons/terminal.svg?raw';
+import trash from '../assets/icons/trash.svg?raw';
 import tree from '../assets/icons/tree.svg?raw';
 import user from '../assets/icons/user.svg?raw';
 import users from '../assets/icons/users.svg?raw';
@@ -86,6 +88,7 @@ const ICONS: Record<string, string> = {
   inbox,
   info,
   funnel,
+  history,
   magnifier,
   monitor,
   options,
@@ -101,6 +104,7 @@ const ICONS: Record<string, string> = {
   target,
   team,
   terminal,
+  trash,
   tree,
   user,
   users,
