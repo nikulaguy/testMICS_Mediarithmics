@@ -12,9 +12,9 @@
 
 // --- THÉMÉS -----------------------------------------------------------------
 // Règle : un besoin = UNE entrée. Un composant AntD dont le DS a sa propre version
-// (Badge → CountBadge, Tag → Tag, Empty → EmptyBlock) n'est PAS réexporté ici :
+// (Badge → CountBadge, Tag → Tag, Empty → EmptyState) n'est PAS réexporté ici :
 // deux portes d'entrée pour le même besoin, et les écrans finissent par diverger.
-export { Button, Checkbox, Radio, Table, DatePicker, Tooltip } from 'antd';
+export { Button, Checkbox, Radio, Table, DatePicker, Tooltip, Steps } from 'antd';
 export type { TableColumnsType } from 'antd';
 
 // --- ENVELOPPÉS -------------------------------------------------------------
@@ -27,9 +27,10 @@ export type { SelectOption } from './components/Select';
 export { Switch } from './components/Switch';
 export { Pagination } from './components/Pagination';
 export type { TagColor } from './components/Tag';
-export { EmptyBlock } from './components/EmptyBlock';
+export { EmptyState } from './components/EmptyState';
 
 // --- CONSTRUITS -------------------------------------------------------------
+export { Card } from './components/Card';
 export { Icon } from './components/Icon';
 export { IconButton } from './components/IconButton';
 export { Link } from './components/Link';

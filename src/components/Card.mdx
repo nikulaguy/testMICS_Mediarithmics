@@ -1,0 +1,98 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CardStories from './Card.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={CardStories} />
+
+# Card
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : classe <code>mcs-card</code>, relevée en production</span>
+  <span><b>Maquette</b> : Figma Card <code>706:116913</code></span>
+</div>
+
+Surface de contenu d'un écran. Fond `bg/container`, radius/card, padding **15 vertical / 20
+horizontal**, gap 15, en-tête optionnel. C'est le composant le plus répété du produit : chaque
+onglet d'une page de détail en est une.
+
+<Canvas of={CardStories.BacASable} />
+
+## Props
+
+<Controls of={CardStories.BacASable} />
+
+## Règles d'usage
+
+- **Toute zone de contenu passe par la carte.** Aucun écran ne redessine `background` + `radius` +
+  `padding` à la main : c'est exactement ce qui avait divergé avant que le composant existe.
+- **Ni bordure ni ombre.** La carte est posée sur `bg/window`, elle ne flotte pas. L'ombre est
+  réservée aux surfaces flottantes — `DropdownPanel`, `Overlay`. Une carte ombrée dans une page
+  ferait croire à un panneau.
+- L'en-tête ne porte que le titre et **les actions de la carte**. Les actions de la page restent
+  dans l'Actionbar : deux endroits pour agir, mais deux portées différentes.
+- **Pas de carte dans une carte.** Pour découper, un filet `border/default`. Deux surfaces
+  emboîtées ne disent plus laquelle porte le contenu.
+- Le **gap entre deux cartes appartient à la page**, pas à la carte : c'est la page qui connaît son
+  rythme vertical.
+
+<Canvas of={CardStories.AvecActions} />
+
+## Exemples d'usage
+
+**Sans en-tête** : le contenu remonte contre le padding.
+
+<Canvas of={CardStories.SansEnTete} />
+
+**Actions seules** : le titre garde sa place, les actions restent à droite.
+
+<Canvas of={CardStories.ActionsSeules} />
+
+**Deux cartes empilées** dans une page.
+
+<Canvas of={CardStories.DeuxCartes} />
+
+## Anatomie
+
+1. **Surface** : `bg/container`, radius/card (6), padding 15 / 20, gap 15.
+2. **En-tête** (si `title` ou `actions`) : titre Headline 4 (Circular Medium 16 / 24) en
+   `text/darker`, `flex: 1` ; actions à droite, gap 8.
+3. **Contenu** : libre, pleine largeur.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Structure',
+      <>
+        La carte rend un <code>section</code> et son titre un <code>h3</code> : une carte est une
+        section de la page, pas un rectangle décoratif (RGAA 9.1).
+      </>,
+    ],
+    [
+      'Niveaux de titre',
+      <>
+        <code>h3</code> parce que la page porte déjà un <code>h1</code> (nom de la ressource) et que
+        les onglets s'intercalent. Vérifier la hiérarchie quand la carte est réutilisée ailleurs.
+      </>,
+    ],
+    [
+      'Contraste',
+      "Titre text/darker sur bg/container : 12,6:1, très au-delà du seuil (RGAA 3.2).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la maquette, tranché en faveur de la production.** Le fichier Figma contient onze
+  composants qui redessinent cette surface avec un padding de **24** et parfois une bordure de 1 px
+  (`Counter`, `Metrics Column`, `Chart / Bar`, `Chart / Stats Line`, `Chart / Scatter`,
+  `Chart / Stacked Bar`, `Chart / Adoption Funnel`, `Alert Row`, `Funnel / Step Card`,
+  `Builder / Criteria Group`, `Spin`), plus un `Chart / Card` qui applique le bon padding mais un
+  radius de 0. La production applique **15 / 20 et un radius de 6, sans bordure** : c'est cette
+  valeur qui fait foi. La migration des onze composants reste à planifier.
+- **À construire.** Une variante sans padding, pour une carte qui ne contient qu'un tableau pleine
+  largeur.

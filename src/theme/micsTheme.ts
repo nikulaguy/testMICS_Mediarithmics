@@ -31,6 +31,8 @@ export const primitives = {
   orangeMain: '#fd7c12',
   redVivid: '#fc3f48',
   purpleMain: '#513fab',
+  /** Sixième couleur de série des graphiques, relevée sur le graphique Stats. */
+  brown700: '#862f2f',
   redMain: '#eb5c5d',
   neutral400: '#d9d9d9',
   grey100: '#f5f8f9',
@@ -108,6 +110,8 @@ export const scale = {
   space8: 8,
   space10: 10,
   space12: 12,
+  /** Padding et gap de la Card, relevés sur la classe `mcs-card` de la production. */
+  space15: 15,
   space16: 16,
   space20: 20,
   space24: 24,

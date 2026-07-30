@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
-import { Button, CountBadge, EmptyBlock, Icon, Link, Table, Tag } from '../ui';
+import { Button, CountBadge, EmptyState, Icon, Link, Table, Tag } from '../ui';
 import { primitives, scale, semantic } from '../theme/micsTheme';
 
 interface AlertRow {
@@ -199,7 +199,7 @@ export function AlertsPage({ sections, onClose }: Props) {
                     ]}
                   />
                 ) : (
-                  <EmptyBlock title="No alert triggered" description="There are no alerts at the moment." />
+                  <EmptyState title="No alert triggered" description="There are no alerts at the moment." />
                 )}
               </div>
             )}

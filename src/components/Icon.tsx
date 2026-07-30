@@ -12,6 +12,7 @@ import chartBar from '../assets/icons/chart-bar.svg?raw';
 import chartLine from '../assets/icons/chart-line.svg?raw';
 import chevronBottom from '../assets/icons/chevron-bottom.svg?raw';
 import chevronRight from '../assets/icons/chevron-right.svg?raw';
+import clock from '../assets/icons/clock.svg?raw';
 import close from '../assets/icons/close.svg?raw';
 import cloud from '../assets/icons/cloud.svg?raw';
 import cluster from '../assets/icons/cluster.svg?raw';
@@ -75,6 +76,7 @@ const ICONS: Record<string, string> = {
   'chart-line': chartLine,
   'chevron-bottom': chevronBottom,
   'chevron-right': chevronRight,
+  clock,
   close,
   cloud,
   cluster,

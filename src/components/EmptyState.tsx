@@ -9,6 +9,12 @@ interface Props {
   description?: string;
   /** Action de sortie optionnelle. Prop « Show button ». */
   action?: ReactNode;
+  /**
+   * Illustration. Prop « Illustration (swap d'icône) » de la maquette : le glyphe
+   * suit ce qui manque — `users` pour une audience, `inbox` par défaut. Toujours
+   * décoratif, jamais porteur de l'information à lui seul.
+   */
+  icon?: string;
 }
 
 /**
@@ -16,7 +22,7 @@ interface Props {
  * action optionnelle. Centré dans son conteneur, jamais aligné à gauche.
  * Gap 12 entre les blocs, 4 entre titre et description, padding 35×24.
  */
-export function EmptyBlock({ title, description, action }: Props) {
+export function EmptyState({ title, description, action, icon = 'inbox' }: Props) {
   return (
     <div
       style={{
@@ -30,7 +36,7 @@ export function EmptyBlock({ title, description, action }: Props) {
         textAlign: 'center',
       }}
     >
-      <Icon name="inbox" size={44} color={semantic.textLightest} />
+      <Icon name={icon} size={44} color={semantic.textLightest} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space4, color: semantic.textLighter }}>
         <p style={{ margin: 0, fontSize: 16, lineHeight: '24px', fontWeight: 500 }}>{title}</p>
         {description && <p style={{ margin: 0, fontSize: 12, lineHeight: '20px' }}>{description}</p>}

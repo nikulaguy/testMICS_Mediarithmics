@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from 'antd';
-import { EmptyBlock } from './EmptyBlock';
+import { EmptyState } from './EmptyState';
 import { scale, semantic } from '../theme/micsTheme';
 
 const Card = ({ children }: { children: React.ReactNode }) => (
@@ -18,8 +18,8 @@ const Card = ({ children }: { children: React.ReactNode }) => (
 );
 
 const meta = {
-  title: 'Composants/EmptyBlock',
-  component: EmptyBlock,
+  title: 'Composants/EmptyState',
+  component: EmptyState,
   argTypes: {
     title: {
       control: 'text',
@@ -39,7 +39,7 @@ const meta = {
       </Card>
     ),
   ],
-} satisfies Meta<typeof EmptyBlock>;
+} satisfies Meta<typeof EmptyState>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -51,13 +51,13 @@ export const Compositions: Story = {
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: scale.space16 }}>
       <Card>
-        <EmptyBlock title="No alert triggered" />
+        <EmptyState title="No alert triggered" />
       </Card>
       <Card>
-        <EmptyBlock title="No alert triggered" description="There are no alerts at the moment." />
+        <EmptyState title="No alert triggered" description="There are no alerts at the moment." />
       </Card>
       <Card>
-        <EmptyBlock
+        <EmptyState
           title="No segment yet"
           description="Create your first segment to start building audiences."
           action={<Button type="primary">New segment</Button>}

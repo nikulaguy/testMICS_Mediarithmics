@@ -2,17 +2,21 @@ import { useMemo, useState } from 'react';
 import { App as AntApp } from 'antd';
 import {
   Button,
+  Card,
   DropdownGroup,
   DropdownOptionItem,
-  EmptyBlock,
+  EmptyState,
   Icon,
   Input,
   Overlay,
   ResourceTitleHeader,
   Select,
+  Steps,
   TabBar,
+  Table,
   TabPanel,
   type ResourceLabel,
+  type TableColumnsType,
 } from '../ui';
 import { SegmentHeader, type SegmentMetric } from '../components/SegmentHeader';
 import { SEGMENTS, type Segment } from '../data/segments';
@@ -128,21 +132,217 @@ function niceMax(max: number) {
 
 const tick = (v: number) => (v >= 1000 ? `${num(v / 1000)}k` : num(v));
 
-function Card({ children, title }: { children: React.ReactNode; title?: string }) {
+/*
+  Il y avait ici une carte locale. Elle a disparu : c'est le composant Card du DS
+  qui rend la surface, avec les valeurs relevées en production — padding 15/20,
+  gap 15, radius 6, sans bordure.
+*/
+
+/* ─── Onglet Stats ─────────────────────────────────────────────────────────────
+   Relevé en production : une carte sans titre, un sélecteur de plage de dates à
+   droite, et un graphique en aires de 400 de haut portant SIX séries — les cinq
+   identifiants du Segment Header, plus le UserPoint.
+
+   Les couleurs relevées sont exactement les sémantiques du DS. Une seule exception :
+   la production dessine « Vector IDs » dans le même bleu que « User Accounts », donc
+   deux séries indistinguables. On prend `info` pour Vector IDs : c'est le seul écart
+   de cet onglet, et il corrige un défaut plutôt qu'il n'en invente un.
+*/
+const STATS_SERIES = [
+  { key: 'userPoint', label: 'UserPoint', color: semantic.warning, ratio: 1 },
+  { key: 'accounts', label: 'User Accounts', color: semantic.primary, ratio: 0.95 },
+  { key: 'profiles', label: 'User Profiles', color: semantic.success, ratio: 0.16 },
+  { key: 'devicePoints', label: 'User Device Points', color: semantic.error, ratio: 1.19 },
+  { key: 'installations', label: 'Installation IDs', color: primitives.brown700, ratio: 0 },
+  { key: 'vectors', label: 'Vector IDs', color: semantic.info, ratio: 0.9 },
+];
+
+const STATS_DAYS = 30;
+
+/**
+ * Série quotidienne déterministe. Pas de Math.random : deux rendus successifs
+ * donneraient deux graphiques, et une capture de contrôle ne vaudrait plus rien.
+ */
+function statsSeries(base: number, ratio: number) {
+  const start = Math.round(base * ratio);
+  return Array.from({ length: STATS_DAYS + 1 }, (_, i) => {
+    const drift = Math.sin(i / 3.1) * 0.02 + Math.sin(i / 7.7) * 0.015;
+    const slope = -0.08 * (i / STATS_DAYS);
+    return Math.max(0, Math.round(start * (1 + drift + slope)));
+  });
+}
+
+/** Étiquette « 30. Jun » de l'axe des abscisses, comme en production. */
+function axisDate(offsetFromEnd: number) {
+  const end = new Date(Date.UTC(2026, 6, 30));
+  const d = new Date(end.getTime() - offsetFromEnd * 86400000);
+  return `${d.getUTCDate()}. ${d.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' })}`;
+}
+
+/**
+ * Graphique en aires des Stats. Dessiné dans la page, comme l'histogramme de
+ * « Features and adoption » : le DS ne porte pas encore de composant de graphique.
+ */
+function StatsChart({ userPoint }: { userPoint: number }) {
+  const W = 1000;
+  const H = 320;
+  const padLeft = 34;
+  const padBottom = 22;
+  const series = STATS_SERIES.map((s) => ({ ...s, values: statsSeries(userPoint, s.ratio) }));
+  const max = niceMax(Math.max(...series.flatMap((s) => s.values), 1));
+  const x = (i: number) => padLeft + (i * (W - padLeft)) / STATS_DAYS;
+  const y = (v: number) => (H - padBottom) * (1 - v / max);
+  const ticks = Array.from({ length: 6 }, (_, i) => (max / 5) * i);
+
   return (
-    <section
-      style={{
-        background: semantic.bgContainer,
-        borderRadius: scale.radiusCard,
-        padding: scale.space20,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: scale.space16,
-      }}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={340} role="img"
+        aria-label={`Évolution des identifiants du segment sur ${STATS_DAYS} jours`}>
+        {ticks.map((t) => (
+          <g key={t}>
+            {/* Grille pointillée, comme en production : elle guide sans peser. */}
+            <line x1={padLeft} x2={W} y1={y(t)} y2={y(t)} stroke={semantic.borderDefault}
+              strokeDasharray="3 1" strokeWidth={1} />
+            <text x={padLeft - 8} y={y(t) + 4} textAnchor="end"
+              style={{ ...typography.caption, fill: semantic.textLighter }}>
+              {tick(t)}
+            </text>
+          </g>
+        ))}
+
+        {series.map((s) => {
+          const line = s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)} ${y(v)}`).join(' ');
+          const area = `${line} L${x(STATS_DAYS)} ${y(0)} L${x(0)} ${y(0)} Z`;
+          return (
+            <g key={s.key}>
+              <path d={area} fill={s.color} opacity={0.12} />
+              <path d={line} fill="none" stroke={s.color} strokeWidth={1.5} />
+              {s.values.map((v, i) => (
+                <circle key={i} cx={x(i)} cy={y(v)} r={2.5} fill={s.color} />
+              ))}
+            </g>
+          );
+        })}
+
+        {/* Une étiquette tous les deux jours : au-delà elles se chevauchent. */}
+        {Array.from({ length: STATS_DAYS / 2 + 1 }, (_, k) => k * 2).map((i) => (
+          <text key={i} x={x(i)} y={H - 4} textAnchor="middle"
+            style={{ ...typography.caption, fill: semantic.textLighter }}>
+            {axisDate(STATS_DAYS - i)}
+          </text>
+        ))}
+      </svg>
+
+      {/* Légende centrée sous le graphique : pastille ronde + libellé. */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: scale.space20 }}>
+        {STATS_SERIES.map((s) => (
+          <span key={s.key} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: semantic.textNormal }}>
+            <span aria-hidden style={{ width: 8, height: 8, borderRadius: 4, background: s.color }} />
+            <span style={{ ...typography.bodyMedium }}>{s.label}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StatsTab({ userPoint }: { userPoint: number }) {
+  return (
+    <Card
+      actions={
+        // Le sélecteur de plage de dates de la production. Le calendrier lui-même
+        // n'est pas câblé : c'est un DatePicker.RangePicker du DS, à brancher.
+        <Button icon={<Icon name="clock" size={14} />}>
+          2026-06-30 ~ 2026-07-30
+          <Icon name="chevron-bottom" size={10} style={{ marginInlineStart: scale.space8 }} />
+        </Button>
+      }
     >
-      {title && <span style={{ ...typography.bodyMedium, color: semantic.textDarker }}>{title}</span>}
-      {children}
-    </section>
+      <StatsChart userPoint={userPoint} />
+    </Card>
+  );
+}
+
+/* ─── Onglet Overlap ─────────────────────────────────────────────────────────── */
+
+function OverlapTab() {
+  return (
+    <Card actions={<Button icon={<Icon name="chart-bar" size={14} />}>Create overlap analysis</Button>}>
+      {/*
+        La production affiche l'Empty d'Ant Design : une phrase grise, sans titre.
+        On rend l'état vide du DS, qui met cette phrase en message. Écart assumé de
+        typographie, en faveur d'un seul état vide dans tout le produit.
+      */}
+      <EmptyState title="There is no available analysis for segment overlap." />
+    </Card>
+  );
+}
+
+/* ─── Onglet Exports ─────────────────────────────────────────────────────────── */
+
+interface ExportRow {
+  key: string;
+  submission: string;
+  status: string;
+  progress: string;
+  start: string;
+  end: string;
+  identifier: string;
+  userPointInSegment: number;
+  exportedUserPoint: number;
+  exportedIdentifiers: number;
+}
+
+/** Les neuf colonnes relevées en production, dans l'ordre. */
+const EXPORT_COLUMNS: TableColumnsType<ExportRow> = [
+  { title: 'Submission Date', dataIndex: 'submission', width: 160 },
+  { title: 'Status', dataIndex: 'status', width: 110 },
+  { title: 'Progress', dataIndex: 'progress', width: 110 },
+  { title: 'Start Date', dataIndex: 'start', width: 130 },
+  { title: 'End Date', dataIndex: 'end', width: 130 },
+  { title: 'User Identifier type', dataIndex: 'identifier', width: 170 },
+  { title: 'UserPoint in segment', dataIndex: 'userPointInSegment', width: 170 },
+  { title: 'Exported UserPoint (with identifiers)', dataIndex: 'exportedUserPoint', width: 250 },
+  { title: 'Exported Identifiers', dataIndex: 'exportedIdentifiers', width: 160 },
+];
+
+function ExportsTab() {
+  return (
+    <Card actions={<Button>New export</Button>}>
+      {/*
+        Aucun export sur ce segment en production : c'est le « No data » natif du
+        Table qui s'affiche, pas l'état vide du DS. Un tableau vide garde ses
+        en-têtes — elles disent ce qu'on verra quand il se remplira.
+      */}
+      <Table<ExportRow> size="small" rowKey="key" columns={EXPORT_COLUMNS} dataSource={[]} pagination={false} />
+    </Card>
+  );
+}
+
+/* ─── Onglet Contextual Targeting ────────────────────────────────────────────── */
+
+const CT_STEPS = [
+  { title: 'Browsed URL analysis' },
+  { title: 'Select lift' },
+  { title: 'Semantic analysis' },
+];
+
+function ContextualTargetingTab() {
+  return (
+    // Pas de carte ici : la production pose le contenu à même le fond de page.
+    // Deux colonnes 19/24 et 5/24, relevées sur la grille Ant Design.
+    <div style={{ display: 'grid', gridTemplateColumns: '19fr 5fr', gap: scale.space24, alignItems: 'start' }}>
+      <EmptyState
+        icon="users"
+        title="Use this segment as a panel for contextual targeting"
+        action={<Button type="primary">Start URL analysis on this segment</Button>}
+      />
+      {/*
+        Le stepper ANNONCE le parcours : les trois étapes sont visibles avant même
+        le démarrage, d'où current={-1} — aucune n'est ni en cours ni validée.
+      */}
+      <Steps direction="vertical" current={-1} items={CT_STEPS} />
+    </div>
   );
 }
 
@@ -454,11 +654,12 @@ export function SegmentDetail({ segment }: { segment: Segment }) {
             </div>
           </TabPanel>
         ) : (
-          <Card>
-            <span style={{ color: semantic.textLighter }}>
-              L'onglet « {TABS.find((t) => t.key === tab)?.label} » n'est pas maquetté : hors périmètre de ce test.
-            </span>
-          </Card>
+          <TabPanel tabKey={tab} idPrefix="segment">
+            {tab === 'stats' && <StatsTab userPoint={segment.userPoint} />}
+            {tab === 'overlap' && <OverlapTab />}
+            {tab === 'exports' && <ExportsTab />}
+            {tab === 'targeting' && <ContextualTargetingTab />}
+          </TabPanel>
         )}
       </div>
 
@@ -511,7 +712,7 @@ export function SegmentDetail({ segment }: { segment: Segment }) {
               ))}
             </DropdownGroup>
           ) : (
-            <EmptyBlock
+            <EmptyState
               title="Aucun segment ne correspond"
               description="Essayez un autre terme de recherche."
             />

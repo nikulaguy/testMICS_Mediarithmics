@@ -1,10 +1,10 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
-import * as EmptyBlockStories from './EmptyBlock.stories';
+import * as EmptyStateStories from './EmptyState.stories';
 import { DocTable } from '../docs/DocTable';
 
-<Meta of={EmptyBlockStories} />
+<Meta of={EmptyStateStories} />
 
-# EmptyBlock
+# EmptyState
 
 <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
   <span><b>Catégorie</b> : enveloppé</span>
@@ -18,11 +18,11 @@ contenu qui a raté son chargement.
 
 Trois compositions, du plus sobre au plus complet :
 
-<Canvas of={EmptyBlockStories.Compositions} />
+<Canvas of={EmptyStateStories.Compositions} />
 
 ## Props
 
-<Controls of={EmptyBlockStories.BacASable} />
+<Controls of={EmptyStateStories.BacASable} />
 
 ## Règles d'usage
 
@@ -41,15 +41,15 @@ Trois compositions, du plus sobre au plus complet :
 
 **Filtre trop restrictif** : l'action ramène à un état utile.
 
-<Canvas of={EmptyBlockStories.FiltreTropRestrictif} />
+<Canvas of={EmptyStateStories.FiltreTropRestrictif} />
 
 **Rien à traiter**, sans action :
 
-<Canvas of={EmptyBlockStories.RienATraiter} />
+<Canvas of={EmptyStateStories.RienATraiter} />
 
 **Première création**, l'action est la création :
 
-<Canvas of={EmptyBlockStories.PremiereCreation} />
+<Canvas of={EmptyStateStories.PremiereCreation} />
 
 ## Anatomie
 

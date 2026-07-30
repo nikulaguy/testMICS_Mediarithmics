@@ -1,0 +1,74 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as StepsStories from './Steps.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={StepsStories} />
+
+# Steps
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : thémé</span>
+  <span><b>Source code</b> : <code>antd/Steps</code>, tel quel</span>
+  <span><b>Relevé</b> : onglet « Contextual Targeting » d'une page de détail de segment</span>
+</div>
+
+Annonce d'un parcours en plusieurs étapes. **Thémé** : l'anatomie et les états d'Ant Design sont
+ceux de la production — pastille numérotée, filet de liaison, titre — donc rien à envelopper. Le
+`ConfigProvider` suffit à l'habiller.
+
+<Canvas of={StepsStories.ParcoursAVenir} />
+
+## Props
+
+<Controls of={StepsStories.BacASable} />
+
+## Règles d'usage
+
+- Le stepper **annonce** le parcours, il ne le pilote pas. En production les trois étapes de
+  l'analyse contextuelle sont affichées avant même le démarrage : elles disent ce qui va se passer.
+  Ne pas les rendre cliquables tant que l'étape n'est pas atteignable.
+- `current={-1}` pour un parcours **pas encore commencé** : toutes les étapes en attente. C'est le
+  cas relevé en production, et il n'est pas le défaut d'Ant Design.
+- **Vertical** quand le stepper accompagne un contenu à côté de lui (colonne étroite à droite),
+  **horizontal** quand il ouvre un tunnel pleine largeur.
+- Titres **courts**, sans ponctuation, au même niveau de langue que les onglets.
+- Trois à cinq étapes. Au-delà, ce n'est plus un parcours qu'on garde en tête.
+
+<Canvas of={StepsStories.EnCours} />
+
+<Canvas of={StepsStories.Horizontal} />
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      "Ant Design rend une liste ordonnée : l'ordre des étapes est dans le balisage, pas seulement dans la disposition (RGAA 9.3).",
+    ],
+    [
+      'États',
+      <>
+        L'étape courante porte <code>aria-current="step"</code>. Sans lui, rien ne distingue
+        « en cours » de « à venir » pour un lecteur d'écran (RGAA 9.1).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "Le numéro et la coche doublent la couleur de la pastille : l'état ne repose jamais sur elle seule (RGAA 3.1).",
+    ],
+    [
+      'Contenu dynamique',
+      "Quand l'étape courante change sans action de l'utilisateur, le conteneur porte un aria-live=\"polite\" (RGAA 7.4).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Les pastilles y sont grises et le libellé en `text/lighter` pour un
+  parcours non démarré ; c'est le rendu natif d'Ant Design en état `wait`, non retouché.
+- **À vérifier.** Aucun jeton `Steps` n'est déclaré dans `micsTheme` : le composant tourne
+  aujourd'hui sur les défauts d'Ant Design. À relever écran par écran si le produit en met d'autres
+  en service.

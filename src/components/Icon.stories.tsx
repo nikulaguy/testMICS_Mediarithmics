@@ -5,7 +5,7 @@ import { scale, semantic } from '../theme/micsTheme';
 /** Glyphes : monochromes, ils prennent la couleur du texte parent. */
 const NAMES = [
   'appstore', 'automation', 'automations', 'broom', 'calendar', 'campaigns',
-  'chart-bar', 'chart-line', 'chevron-bottom', 'chevron-right', 'close', 'cloud',
+  'chart-bar', 'chart-line', 'chevron-bottom', 'chevron-right', 'clock', 'close', 'cloud',
   'cluster', 'database', 'display', 'download', 'feeds', 'file-image',
   'file-import', 'filter', 'funnel', 'history', 'inbox', 'info',
   'magnifier', 'monitor', 'options', 'plug', 'plus', 'dots',
