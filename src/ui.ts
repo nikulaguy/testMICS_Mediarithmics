@@ -47,6 +47,7 @@ export {
 export { Toolbar, ToolbarSearch } from './components/Toolbar';
 export { Counter } from './components/Counter';
 export { ResourceTitleHeader } from './components/ResourceTitleHeader';
+export { LabelPicker } from './components/LabelPicker';
 export type { ResourceLabel } from './components/ResourceTitleHeader';
 export { AppLauncher } from './components/AppLauncher';
 export { SectionToggle } from './components/SectionToggle';

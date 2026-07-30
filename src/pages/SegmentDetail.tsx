@@ -76,6 +76,19 @@ const SCOPES = [
   { value: 'all', label: 'All datamarts' },
 ];
 
+/**
+ * Labels définis au niveau de l'organisation, proposés à l'ajout. Ceux déjà posés
+ * sur le segment sont retirés de la liste par le composant.
+ */
+const ORGANISATION_LABELS = [
+  'Test 1',
+  'Test 2',
+  'Test 3',
+  'Test 4',
+  'test_max_260526',
+  'test_max_261226',
+];
+
 /** Jeux de données d'usage des features. Chaque colonne a le sien, et sa propre échelle. */
 const USAGE: Record<string, Array<[string, number]>> = {
   general: [
@@ -328,7 +341,8 @@ export function SegmentDetail({ segment }: { segment: Segment }) {
         typeIcon="user-query"
         created={`Created on ${segment.creationDate} - 11:11:49`}
         labels={labels}
-        onAddLabel={() => setLabels((l) => [...l, { key: String(l.length), label: 'Nouveau label' }])}
+        availableLabels={ORGANISATION_LABELS}
+        onAddLabel={(label) => setLabels((l) => [...l, { key: label, label }])}
         onRemoveLabel={(key) => setLabels((l) => l.filter((x) => x.key !== key))}
       />
 

@@ -9,7 +9,7 @@ import { DocTable } from '../docs/DocTable';
 <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : bloc titre refait page par page sur les écrans de détail</span>
-  <span><b>Maquette</b> : Figma Resource Title Header <code>250:88</code> — 5 écrans de détail de segment</span>
+  <span><b>Maquette</b> : Figma Resource Title Header <code>706:116522</code> — 5 écrans de détail de segment</span>
 </div>
 
 Bloc titre d'une page de détail. Ligne 1 : le nom de la ressource à gauche, ses métadonnées à
@@ -34,6 +34,26 @@ concurrenceraient le nom, qui est la seule chose que l'utilisateur cherche en ar
 - Les chips sont des **Tag** du DS, fermables si `onRemoveLabel` est fourni. Pas de chip maison.
 - Le titre est du texte, pas un lien : on y est déjà.
 
+## Ajout d'un label
+
+Cliquer sur « Add label » ne pose pas un label générique : le bouton **laisse la place à un champ de
+recherche** et la liste des labels de l'organisation s'ouvre en dessous. C'est la maquette
+`status=adding`, et le comportement de la production.
+
+Trois décisions portent ce parcours :
+
+- Le champ **remplace** le bouton, il ne s'ajoute pas à côté. La rangée ne se réorganise pas et
+  l'action reste à l'endroit exact où l'on vient de cliquer.
+- Sa liste est **collée sous le champ**, sans la gouttière de 4 px des panneaux ancrés du produit.
+  Une liste attachée à une saisie n'est pas un menu flottant : l'écart la détacherait de son champ.
+- Les labels **déjà posés ne sont pas proposés**. Une liste qui propose ce qui est déjà là fait
+  douter de ce qu'on vient de faire.
+
+Au clavier, c'est le motif combobox du WAI-APG : le focus ne quitte jamais le champ, les flèches
+déplacent une rangée active désignée par `aria-activedescendant`, Entrée choisit, Échap annule.
+
+<Canvas of={HeaderStories.AjoutDeLabel} />
+
 ## Exemples d'usage
 
 **Sans labels** : la ligne 2 disparaît entièrement.
@@ -54,7 +74,9 @@ concurrenceraient le nom, qui est la seule chose que l'utilisateur cherche en ar
    type et la date, gap 12, chacun icône 14 + libellé.
 2. **Ligne 2** (si `labels`) : bouton « Add label » taille M avec le glyphe `plus`, puis les Tag,
    gap 8, retour à la ligne autorisé.
-3. Gap 12 entre les deux lignes.
+3. **Ligne 2 en ajout** : le bouton devient un champ de 240 × 32 à loupe, et la liste de
+   suggestions se pose à `top: 100%`, même largeur, sur la surface du `DropdownPanel`.
+4. Gap 12 entre les deux lignes.
 
 ## Accessibilité (RGAA)
 
@@ -80,6 +102,16 @@ concurrenceraient le nom, qui est la seule chose que l'utilisateur cherche en ar
       </>,
     ],
     [
+      'Ajout de label',
+      <>
+        Motif combobox du WAI-APG : le champ porte <code>role="combobox"</code>,{' '}
+        <code>aria-expanded</code>, <code>aria-controls</code> et{' '}
+        <code>aria-activedescendant</code> ; la liste <code>role="listbox"</code>, ses rangées{' '}
+        <code>role="option"</code>. Le focus reste dans le champ, les rangées sortent de l'ordre de
+        tabulation (RGAA 7.1, 7.3).
+      </>,
+    ],
+    [
       'Contraste',
       "Les métadonnées en text/lighter atteignent 4,5:1 sur bg/container (RGAA 3.2).",
     ],
@@ -90,5 +122,9 @@ concurrenceraient le nom, qui est la seule chose que l'utilisateur cherche en ar
 
 - **Écart avec la production.** Le bloc est refait page par page sur les cinq écrans de détail de
   segment, avec des alignements et des tailles qui divergent.
-- **À construire.** Le titre éditable en ligne (renommer sans passer par un formulaire) et la
-  pastille de statut à côté du nom.
+- **Ajouté au code.** La navigation clavier de la liste (flèches, Entrée, Échap) et le retrait des
+  labels déjà posés. La maquette décrit l'apparence des trois états, pas le clavier.
+- **Choix assumé.** La liste ne s'ouvre pas quand aucun label ne correspond à la saisie, plutôt
+  qu'un panneau vide ou un message inventé : le champ reste, la frappe continue.
+- **À construire.** Le titre éditable en ligne (renommer sans passer par un formulaire), la
+  pastille de statut à côté du nom, et la création d'un label absent de la liste depuis le champ.

@@ -138,22 +138,39 @@ export function DropdownCheckboxItem({
 /**
  * Dropdown / Option Item (Figma 142:76) — sélection unique, libellé seul.
  * Sélectionné = texte primary sur fond bg/window.
+ *
+ * Le rôle suit le CONTEXTE, pas l'apparence : `menuitemradio` dans un menu ouvert
+ * depuis un bouton, `option` dans la liste attachée à un champ de saisie
+ * (combobox). Même rangée, deux sémantiques, aucune raison d'en dessiner deux.
  */
 export function DropdownOptionItem({
   selected,
   label,
   onSelect,
+  role = 'menuitemradio',
+  id,
+  active = false,
 }: {
   selected: boolean;
   label: string;
   onSelect: () => void;
+  role?: 'menuitemradio' | 'option';
+  /** Nécessaire en combobox : c'est la cible d'`aria-activedescendant`. */
+  id?: string;
+  /** Rangée parcourue au clavier, sans être sélectionnée pour autant. */
+  active?: boolean;
 }) {
   const { hover, handlers } = useRowHover();
+  const isOption = role === 'option';
   return (
     <div
-      role="menuitemradio"
-      aria-checked={selected}
-      tabIndex={0}
+      id={id}
+      role={role}
+      aria-checked={isOption ? undefined : selected}
+      aria-selected={isOption ? selected : undefined}
+      // En combobox le focus reste dans le champ : la rangée sort de l'ordre de
+      // tabulation, elle est atteinte aux flèches via aria-activedescendant.
+      tabIndex={isOption ? -1 : 0}
       {...handlers}
       onClick={onSelect}
       onKeyDown={(e) => {
@@ -164,7 +181,7 @@ export function DropdownOptionItem({
       }}
       style={{
         ...rowBase,
-        background: selected ? semantic.bgWindow : hover ? semantic.bgHover : 'transparent',
+        background: selected ? semantic.bgWindow : hover || active ? semantic.bgHover : 'transparent',
         color: selected ? semantic.primary : semantic.textNormal,
       }}
     >
