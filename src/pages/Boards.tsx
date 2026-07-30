@@ -202,9 +202,15 @@ export function Boards({ board, onBoardChange }: Props) {
         )}
       </div>
 
-      <TabPanel tabKey={board} idPrefix="board">
-        <BoardContent board={board} compared={comparedSegment?.name ?? null} />
-      </TabPanel>
+      {/*
+        24 de plus sous la barre d'actions. Le gap de 16 de la colonne suffit entre les
+        onglets et la barre, mais il colle les premières cartes aux boutons.
+      */}
+      <div style={{ marginTop: scale.space24 }}>
+        <TabPanel tabKey={board} idPrefix="board">
+          <BoardContent board={board} compared={comparedSegment?.name ?? null} />
+        </TabPanel>
+      </div>
 
       {/*
         Drawer et non modale, pour la même raison que sur le détail d'un segment :
