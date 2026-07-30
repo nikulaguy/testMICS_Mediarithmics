@@ -46,6 +46,24 @@ const serie = (label: string, n: number, base: number, decay = 0.72) => ({
   values: Array.from({ length: n }, (_, i) => Math.round(base * decay ** i * (1 + Math.sin(i) * 0.08))),
 });
 
+/*
+  Sélecteurs de la barre de filtres, RELEVÉS onglet par onglet en production. Ils
+  ne sont pas les mêmes partout : Activities en a un, Features and adoption trois,
+  et six boards n'en ont aucun. Le bouton Apply n'existe que s'il y a un sélecteur —
+  sans quoi il n'appliquerait rien.
+*/
+export const BOARD_FILTERS: Record<string, string[]> = {
+  activities: ['User segments'],
+  builders: [],
+  campaigns: [],
+  client: [],
+  dataviz: [],
+  demo: [],
+  features: ['User segments', 'User organisation', 'Account'],
+  havas: [],
+  orgs: [],
+};
+
 const BOARDS: Record<string, Row[]> = {
   activities: [
     {
@@ -314,6 +332,7 @@ const BOARDS: Record<string, Row[]> = {
 
   features: [
     {
+      subtitle: 'General usages',
       cards: [
         {
           span: 2,

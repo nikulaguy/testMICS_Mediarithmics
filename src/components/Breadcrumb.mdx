@@ -22,16 +22,42 @@ l'on est passé.
 
 <Controls of={BreadcrumbStories.BacASable} />
 
-## Les trois niveaux
+## Anatomie — la même sur TOUS les écrans
+
+C'est la règle qui se perd le plus vite, parce qu'elle se décide écran par écran alors qu'elle
+est globale. Un fil d'Ariane se compose **toujours** de ces trois niveaux, dans cet ordre, et un
+niveau absent est un niveau qu'on n'affiche pas — jamais un niveau qu'on remplace par autre chose.
 
 <DocTable
   headers={['Niveau', 'Contenu', 'Rendu']}
   rows={[
-    ['1', 'Item actif du SideMenu', 'Link taille M, cliquable'],
-    ['2', 'Onglet actif', 'Link taille M, cliquable'],
+    ['1', "Entrée active du SideMenu (Boards, Segments, Feeds…)", 'Link taille M, cliquable'],
+    ['2', "Onglet actif de cette entrée", 'Link taille M, cliquable'],
     ['3', 'Ressource ouverte', 'Texte, non cliquable'],
   ]}
 />
+
+**Le niveau 2 est un onglet, quel que soit son nom dans l'écran.** C'est là que l'erreur se
+produit : sur Boards les onglets s'appellent « tableaux de bord » et sur une page de segment ils
+s'appellent « onglets », mais ce sont les mêmes objets de navigation, donc le même niveau 2.
+
+<DocTable
+  headers={['Écran', 'Fil attendu']}
+  rows={[
+    ['Boards, tableau Activities', 'Boards › Activities'],
+    ["Boards, tableau Client's usage", "Boards › Client's usage - WIP"],
+    ['Segments, onglet Segments', 'Segments › Segments'],
+    ['Segments, onglet Usage overview', 'Segments › Usage overview'],
+    ['Détail d’un segment', 'Segments › Segments › {nom du segment}'],
+    ['Entrée sans onglets (Feeds…)', 'Feeds'],
+  ]}
+/>
+
+- Le **dernier niveau n'est jamais un lien** : on y est déjà.
+- Les niveaux parents **ramènent à leur état par défaut** : cliquer « Boards » revient au premier
+  tableau de bord, cliquer « Segments » revient à l'onglet Segments.
+- Le fil ne montre **jamais** un état transitoire — un mode comparaison, un filtre, une modale
+  ouverte. Ce sont des états de l'écran, pas des niveaux de la hiérarchie.
 
 ## Les deux thèmes
 

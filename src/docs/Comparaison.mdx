@@ -1,0 +1,104 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { DocTable } from './DocTable';
+
+<Meta title="Design System/Patterns/Comparaison" />
+
+# Comparer à un segment
+
+Ce n'est pas un composant, c'est un **parcours** : il traverse les boards et le détail d'un
+segment, avec les mêmes gestes et la même mise en page. Il se refait à l'identique partout, et
+c'est là que les écarts s'installent — d'où cette page.
+
+Relevé sur la production (`/home`, `/audience/segments/{id}`) et sur les sept écrans
+« Comparing » de la maquette.
+
+## Les trois états
+
+<DocTable
+  headers={['État', 'Barre d’actions', 'Contenu']}
+  rows={[
+    [
+      'Au repos',
+      <><code>Compare to segment…</code> · filet · <code>Export</code> · filet · les sélecteurs de l’écran · <code>Apply</code></>,
+      'Une colonne',
+    ],
+    [
+      'Choix en cours',
+      'Le drawer « Select a segment » est ouvert, la barre ne change pas',
+      'Une colonne, inchangée derrière le drawer',
+    ],
+    [
+      'En comparaison',
+      <><code>✕ Stop comparing</code> · filet · les mêmes sélecteurs · <code>Apply</code></>,
+      'Deux colonnes',
+    ],
+  ]}
+/>
+
+## Règles
+
+- **Le clic choisit, il n'y a rien à valider.** Choisir un segment dans le drawer démarre la
+  comparaison et referme le drawer. Attendre un `Apply` ferait douter que le clic a pris, alors que
+  le geste est réversible d'un seul clic sur `Stop comparing`.
+- **`Stop comparing` remplace `Compare` et `Export`**, il ne s'y ajoute pas. C'est la seule sortie,
+  et elle est à la place où l'on a cliqué pour entrer.
+- **Les sélecteurs de l'écran restent en comparaison.** Ils décrivent la portée des *deux* colonnes,
+  pas seulement celle de gauche. Les retirer laisserait croire que la comparaison ignore le
+  périmètre choisi.
+- **Les sélecteurs sont propres à l'écran.** Sur les boards ils sont déclarés par tableau de bord :
+  `Activities` en a un, `Features and adoption` trois, six n'en ont aucun. Un écran sans sélecteur
+  n'a pas de bouton `Apply` — il n'appliquerait rien.
+- **`Apply` est désactivé tant qu'aucun sélecteur n'a de valeur nouvelle.** La production le laisse
+  cliquable et ne fait rien : un bouton qui ne fait rien apprend à ne plus lui faire confiance.
+  Écart assumé.
+
+## Le drawer de choix
+
+Drawer et non modale : choisir un terme de comparaison **dépend de ce qui est affiché derrière**.
+Une modale masquerait précisément les cartes qui servent à décider. C'est le critère écrit sur la
+page `Overlay`.
+
+<DocTable
+  headers={['Élément', 'Valeur']}
+  rows={[
+    ['Titre', <code>Select a segment</code>],
+    ['Recherche', <>Input <code>type="search"</code>, loupe à droite, placeholder <code>Search by name or id</code></>],
+    ['Liste', <>Une rangée par segment (<code>DropdownOptionItem</code> en <code>role="option"</code>)</>],
+    ['Colonne de droite', <>En-tête <code># User points</code>, volume aligné à droite sur chaque rangée</>],
+    ['Validation', 'Aucune. Pas de footer — c’est la variante « sélecteur sans validation » de l’Overlay'],
+  ]}
+/>
+
+Le volume n'est pas décoratif : c'est lui qui permet de choisir un segment qui ait de la matière,
+au lieu d'en essayer un vide et de recommencer.
+
+## La mise en page comparée
+
+Deux colonnes de largeur égale. Chaque colonne rend **les mêmes cartes** que le mode simple, avec
+ses propres données.
+
+<DocTable
+  headers={['Rangée', 'En-tête gauche', 'En-tête droite']}
+  rows={[
+    ['Première', <>Le sous-titre de la section, ou <code>Current scope</code> s’il n’y en a pas</>, 'Le nom du segment comparé'],
+    ['Suivantes', 'Le sous-titre de la section', 'Le même sous-titre'],
+  ]}
+/>
+
+Les en-têtes sont en **capitales**, `caption` en `text/lighter`, avec l'interlettrage des
+micro-libellés.
+
+- **Chaque graphique garde sa propre échelle.** Sur les écrans de production la colonne de gauche
+  monte à 425 et celle de droite à 120 : une échelle commune écraserait le petit à zéro. C'est la
+  *forme* des distributions qu'on compare, pas la hauteur des barres.
+- **Les cartes à blocs côte à côte s'empilent.** La colonne fait la moitié de la largeur ; trois
+  histogrammes alignés y deviennent illisibles.
+- Le sous-titre de section **n'est pas affiché au-dessus** des deux colonnes : il est repris dans
+  chaque en-tête de colonne, sinon il apparaîtrait trois fois.
+
+## Ce que la comparaison n'est pas
+
+- Ce n'est **pas un niveau de navigation** : le fil d'Ariane ne la mentionne pas. Voir l'anatomie
+  du `Breadcrumb`.
+- Ce n'est **pas un filtre** : elle n'enlève rien de l'écran, elle ajoute un terme de comparaison.
+- Il n'y a **jamais plus d'un segment comparé**. Choisir un second remplace le premier.
