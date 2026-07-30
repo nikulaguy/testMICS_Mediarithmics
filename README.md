@@ -154,3 +154,32 @@ que rendent les écrans. L'addon d'accessibilité est actif sur chaque story.
 
 Lire `ARCHITECTURE.md` : règle des trois catégories (thémé / enveloppé / construit), table de
 correspondance Figma → dev, écarts connus et pièges rencontrés.
+
+## Consulter en ligne
+
+Les deux artefacts sont publiés sur la branche `gh-pages` de ce dépôt :
+
+| | URL |
+| --- | --- |
+| App de démonstration | https://nikulaguy.github.io/testMICS_Mediarithmics/ |
+| Storybook (design system) | https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/ |
+
+**Activation, une seule fois** : dépôt → *Settings* → *Pages* → *Build and deployment*,
+source « Deploy from a branch », branche `gh-pages`, dossier `/ (root)`. GitHub publie en
+une à deux minutes.
+
+## Republier après une modification
+
+```bash
+npm run build && npm run build-storybook
+rm -rf /tmp/mics-pages && mkdir -p /tmp/mics-pages/storybook
+cp -R dist/. /tmp/mics-pages/
+cp -R storybook-static/. /tmp/mics-pages/storybook/
+touch /tmp/mics-pages/.nojekyll
+cd /tmp/mics-pages && git init -q -b gh-pages \
+  && git remote add origin git@github.com:nikulaguy/testMICS_Mediarithmics.git \
+  && git add -A && git commit -qm "Publication" && git push -f origin gh-pages
+```
+
+Le build utilise des chemins relatifs (`base: './'` dans `vite.config.ts`), donc le même
+artefact fonctionne en local et sous le sous-chemin de GitHub Pages.
