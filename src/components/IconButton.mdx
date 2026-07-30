@@ -1,0 +1,80 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as IconButtonStories from './IconButton.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={IconButtonStories} />
+
+# IconButton
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : icônes posées à la main dans la TopBar en production, sans état ni cible de pointage</span>
+  <span><b>Maquette</b> : Figma <code>666:110318</code>, doc <code>669:71</code></span>
+</div>
+
+Bouton icône sans fond ni bordure. **Seule la couleur du glyphe change selon l'état** :
+`text/on-dark` au repos, `bg/hover` au survol, `bg/selected` pressé ou panneau ouvert.
+C'est le bouton des barres denses, TopBar en tête, là où un Button à paddings serait trop lourd.
+
+<Canvas of={IconButtonStories.Etats} />
+
+## Props
+
+<Controls of={IconButtonStories.BacASable} />
+
+## Règles d'usage
+
+- `label` est **obligatoire** : sans texte visible, c'est le seul intitulé accessible du bouton.
+- La cible cliquable fait **32 × 32** alors que le glyphe visible fait 20 : le confort de pointage
+  ne se négocie pas contre la densité visuelle.
+- Quand le bouton ouvre un panneau, passer `expanded` plutôt que gérer l'état visuel à la main :
+  la prop pilote à la fois l'apparence et `aria-haspopup` / `aria-expanded`.
+- La bascule d'un panneau se fait sur `onPointerDown`, pas sur `onClick` : sinon la fermeture au
+  clic extérieur et l'ouverture au clic se marchent dessus, et le panneau clignote.
+- Variante **onLight** pour les surfaces claires : mêmes états, rampe de texte inversée.
+
+<Canvas of={IconButtonStories.RangeeTopBar} />
+
+## Anatomie
+
+1. **Cible** : 32 × 32, fond transparent, sans bordure ni padding. Aucun fond, même au survol.
+2. **Glyphe** : `Icon` de 20 px, centré, couleur pilotée par l'état.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>&lt;button type="button"&gt;</code> natif, jamais un <code>span</code> cliquable
+        (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Intitulé',
+      <>
+        <code>aria-label</code> explicite et unique dans la barre : « Applications », « Compte »,
+        « Rechercher » (RGAA 7.3, 11.9).
+      </>,
+    ],
+    [
+      'États',
+      <>
+        Bouton déclencheur de panneau : <code>aria-haspopup="true"</code> et{' '}
+        <code>aria-expanded</code> à jour à chaque ouverture et fermeture (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Contraste',
+      'Le glyphe atteint 3:1 avec le fond navy dans les trois états, y compris au survol (RGAA 3.2).',
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté en maquette.** En production, ces icônes sont posées sans état ni cible élargie.
+- **À construire.** L'anneau de focus clavier, distinct du survol, reste à décrire côté maquette :
+  aujourd'hui l'utilisateur au clavier ne distingue pas le bouton ciblé.

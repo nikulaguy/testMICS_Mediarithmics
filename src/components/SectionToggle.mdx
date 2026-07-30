@@ -1,0 +1,92 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ST from './SectionToggle.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={ST} />
+
+# SectionToggle
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : <code>Button.optional-section-title</code> (navigator) et <code>Collapse.Panel</code> (NewPluginForm) — deux implémentations</span>
+  <span><b>Maquette</b> : Figma <code>111:39</code></span>
+</div>
+
+En-tête cliquable d'une section repliable de formulaire (« Advanced »). Icône `settings`, libellé
+et chevron, le tout en `primary`. Le pattern existe dans **plus de dix formulaires** du produit —
+segment, campaign, creative, settings, datastore — avec deux implémentations différentes. Ce
+composant les unifie.
+
+<Canvas of={ST.Deplie} />
+
+## Props
+
+<Controls of={ST.BacASable} />
+
+## Règles d'usage
+
+- **Réservé aux champs optionnels.** Un champ obligatoire ne se replie jamais : ce qui est caché
+  sera rempli après un message d'erreur à la soumission, pas avant.
+- **Un seul par groupe de champs.** Deux sections repliables côte à côte transforment le
+  formulaire en jeu de piste.
+- **Libellé court**, un mot ou deux. C'est un intitulé de section, pas une phrase.
+- **Le chevron porte l'état** : `chevron-right` replié, `chevron-bottom` déplié. Il double
+  `aria-expanded`, il ne le remplace pas.
+- **Replié par défaut.** Si la section doit être ouverte à l'arrivée, c'est qu'elle n'a pas à être
+  repliable.
+
+## Exemples d'usage
+
+**Replié** — l'état par défaut :
+
+<Canvas of={ST.Replie} />
+
+**Dans un formulaire** — obligatoires en haut, optionnel replié en bas :
+
+<Canvas of={ST.DansUnFormulaire} />
+
+### À éviter
+
+<Canvas of={ST.Dont} />
+
+## Anatomie
+
+1. **En-tête** : bouton en ligne, hauteur 24, gap 8, tout en `primary`.
+2. **Icône** `settings` de 16, **libellé** Body/Medium 12, **chevron** de 12.
+3. **Panneau** : le contenu, sous l'en-tête, à 16 d'écart. Masqué par `hidden` quand replié —
+   pas seulement par `display: none` en CSS, pour qu'il sorte aussi de l'ordre de tabulation.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>&lt;button type="button"&gt;</code> natif, avec <code>aria-expanded</code> et{' '}
+        <code>aria-controls</code> pointant sur l'identifiant du panneau (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Images',
+      "Icône settings et chevron décoratifs : aria-hidden. L'état est porté par aria-expanded, pas par le chevron (RGAA 1.2).",
+    ],
+    [
+      'Navigation',
+      'Le contenu replié est retiré de l’ordre de tabulation : on ne tabule pas dans un panneau invisible (RGAA 12.8).',
+    ],
+    [
+      'Contraste',
+      "⚠ primary #00a1df sur blanc = 2,9:1, sous le seuil de 4,5:1 pour du texte (RGAA 3.2). Dette héritée de la production, à arbitrer.",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Deux implémentations coexistent : un `Button` custom stylé par
+  `common/form.less`, et un `Collapse.Panel` d'Ant Design. Ce composant les remplace toutes les
+  deux.
+- **À construire.** L'état désactivé pour une section non ouvrable, décrit comme évolution dans la
+  maquette. Le code l'accepte déjà (`disabled`), la maquette ne le dessine pas.

@@ -1,0 +1,100 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as DropdownPanelStories from './DropdownPanel.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={DropdownPanelStories} />
+
+# DropdownPanel
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : remplace les surfaces flottantes ad hoc et les trois systèmes de modales de la lib</span>
+  <span><b>Maquette</b> : Figma Dropdown / Container <code>145:69</code></span>
+</div>
+
+Surface flottante blanche du design system : `radius/base`, une ombre, un `z-index`, et rien
+d'autre. **Tous les panneaux du produit passent par ici** (menus de la TopBar, panneau de filtres,
+choix des colonnes, sélecteur d'organisation). C'est ce qui garantit qu'ils se ressemblent tous
+sans que personne n'ait à retaper une ombre.
+
+Le composant ne décide pas de la mise en page de son contenu : il porte la surface. Ce qu'on y
+empile vient des **items du DS** (`DropdownNavItem`, `DropdownCheckboxItem`,
+`DropdownOptionItem`, `DropdownLabelItem`, `DropdownFooter`), documentés sur leur propre page.
+Pour une mise en page très spécifique, l'export `panelSurface` donne les seuls styles de surface
+à appliquer soi-même.
+
+<Canvas of={DropdownPanelStories.MenuCategories} />
+
+## Props
+
+<Controls of={DropdownPanelStories.BacASable} />
+
+## Règles d'usage
+
+- **Une seule ombre dans le produit.** Ne jamais retaper un `box-shadow` : importer `panelSurface`
+  si le composant ne convient pas tel quel.
+- `anchored` positionne le panneau en absolu sous son déclencheur, à 4 px. Le déclencheur doit
+  alors porter `position: relative`.
+- `align` suit le bord de l'écran le plus proche : à droite dans la TopBar, à gauche dans une
+  barre d'outils, pour que le panneau ne sorte jamais du cadre.
+- Le panneau **ne gère pas sa propre fermeture** : c'est au parent de gérer le clic extérieur et
+  la touche Échap. Les portails d'Ant Design (calendrier, select) rendent hors du panneau, il faut
+  les exclure de la détection de clic extérieur.
+
+## Exemples d'usage
+
+**Multi-sélection** : un seul type d'items par groupe.
+
+<Canvas of={DropdownPanelStories.MultiSelection} />
+
+**Ancré** sous son déclencheur. Le conteneur en `position: relative` doit épouser le déclencheur :
+s'il est plus haut, le panneau décolle d'autant, car il se cale sur `top: 100%` du conteneur et non
+du bouton.
+
+<Canvas of={DropdownPanelStories.Ancre} />
+
+**Groupes séparés** : le séparateur marque un changement de nature d'action.
+
+<Canvas of={DropdownPanelStories.GroupesSepares} />
+
+## Anatomie
+
+1. **Surface** : fond `bg/container`, `radius/base`, double ombre
+   (`0 3px 6px -4px rgba(0,0,0,.12)` + `0 6px 16px 0 rgba(0,0,0,.08)`).
+2. **Contenu** : libre. Les listes d'items ajoutent leur propre padding vertical de 8.
+3. **Ancrage** (si `anchored`) : `top: calc(100% + 4px)`, `z-index` 1100.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        Un menu d'actions porte <code>role="menu"</code> et ses items{' '}
+        <code>role="menuitem"</code>. Un panneau de formulaire garde la sémantique native de ses
+        champs : pas de <code>role="menu"</code> par défaut (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Clavier',
+      "Échap ferme le panneau et rend le focus au déclencheur. Les flèches parcourent les items d'un menu (RGAA 7.3, 12.x).",
+    ],
+    [
+      'États',
+      <>
+        Le déclencheur porte <code>aria-expanded</code> et <code>aria-controls</code> pointant sur
+        l'identifiant du panneau (RGAA 7.1).
+      </>,
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** La lib empile trois systèmes de modales
+  (`blurred-modal`, `mcs-modal`, `modal-header`) et autant d'ombres. Ce composant est la surface
+  unique qui les remplace.
+- **À construire.** Le piège à focus (focus trap) d'un panneau modal n'est pas encore décrit :
+  aujourd'hui la tabulation peut sortir du panneau sans le fermer.

@@ -1,0 +1,101 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FilterPanelStories from './FilterPanel.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={FilterPanelStories} />
+
+# FilterPanel
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : remplace huit « selectors » sans primitive partagée</span>
+  <span><b>Maquette</b> : Figma <code>145:73</code>, test de filtres <code>631:1093</code></span>
+</div>
+
+Panneau de filtres en **cascade à deux niveaux** : le niveau 1 liste les dimensions, le niveau 2
+affiche les valeurs de la dimension survolée. C'est le modèle **panneau**, réservé aux listes à
+nombreuses dimensions.
+
+## Les deux modèles de filtrage du produit
+
+Le choix ne se discute pas écran par écran, il découle du nombre de dimensions.
+
+<DocTable
+  headers={['', 'Modèle panneau', 'Modèle exposé']}
+  rows={[
+    ['Quand', '4 dimensions ou plus', '3 dimensions ou moins'],
+    ['Déclencheur', 'Un bouton « Filters » unique, avec CountBadge', 'Un sélecteur par dimension dans la barre d\'outils'],
+    ['Barre de chips', 'Obligatoire', 'Seulement si un filtre actif n\'est pas lisible dans la barre'],
+    ['Pourquoi', 'Aligner huit sélecteurs sature la barre et rend la lecture impossible', 'Ouvrir un panneau pour deux cases coûte deux clics de trop'],
+  ]}
+/>
+
+<Canvas of={FilterPanelStories.Vierge} />
+
+## Props
+
+<Controls of={FilterPanelStories.Vierge} />
+
+## Règles d'usage
+
+- **Compteurs, pas de pastilles colorées.** Le niveau 1 affiche « 2 » à côté de la dimension
+  filtrée. Une pastille dit qu'il y a un filtre ; un compteur dit combien : à surface égale, le
+  compteur porte strictement plus d'information.
+- **Choix multiple par défaut, choix unique pour les périodes.** Une période cumulée
+  (« Today » + « Last 7 days ») n'a pas de sens : choisir un préréglage efface la plage absolue,
+  et inversement. D'où `onSet` en plus de `onToggle`.
+- **Application immédiate.** Cocher filtre. Pas de bouton « Appliquer » : le résultat sous les yeux
+  vaut mieux qu'une confirmation à l'aveugle, et l'utilisateur peut décocher aussitôt.
+- Chaque dimension a son **pied « CLEAR »** ; le panneau a le sien pour tout vider. Les deux
+  portent l'icône balai, sur fond `bg/window` qui blanchit au survol.
+- Le calendrier d'Ant Design est **ancré dans le panneau** (`getPopupContainer`) : sans cela il se
+  rend dans un portail à la racine du document et le clic sur une date est traité comme un clic
+  extérieur, qui referme tout avant la sélection de la date de fin.
+
+<Canvas of={FilterPanelStories.AvecFiltresActifs} />
+
+## Anatomie
+
+1. **Niveau 1** : liste des dimensions, icône + libellé + compteur de valeurs cochées.
+2. **Niveau 2** : valeurs de la dimension survolée. Cases à cocher, ou sélecteur de période.
+3. **Pied de dimension** : « CLEAR {'{DIMENSION}'} », icône balai, fond `bg/window` → `bg/hover`.
+4. **Pied de panneau** : « CLEAR ALL FILTERS ».
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        Les rangées de valeurs sont des <code>div role="checkbox"</code> avec{' '}
+        <code>aria-checked</code> : un <code>label</code> imbriqué dans une rangée cliquable avale
+        le clic sur la case (RGAA 7.1, 11.x).
+      </>,
+    ],
+    [
+      'Clavier',
+      "Le niveau 2 s'ouvre au survol ET au focus clavier : un panneau qui ne réagit qu'à la souris est inatteignable au clavier (RGAA 7.3, 13.x).",
+    ],
+    [
+      'Contenu dynamique',
+      <>
+        Le nombre de résultats est annoncé après chaque bascule dans une zone{' '}
+        <code>aria-live="polite"</code> (RGAA 7.4).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "Une dimension filtrée est signalée par un compteur chiffré, pas par une simple pastille de couleur (RGAA 3.1).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté en maquette.** En production, chaque écran de liste filtre à sa façon : positions,
+  affichages et comportements diffèrent d'un écran à l'autre. Ce composant est la réponse à
+  l'incohérence remontée par le client.
+- **À construire.** La recherche dans les valeurs d'une dimension très longue (labels, owners) et
+  l'enregistrement d'un jeu de filtres en vue nommée.

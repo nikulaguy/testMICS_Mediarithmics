@@ -1,0 +1,210 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as F from './Foundations.stories';
+import { DocTable } from './DocTable';
+
+<Meta of={F} />
+
+# Fondations
+
+Les tokens sont dans la page **Tokens** : voici ce qu'ils veulent dire et quand les employer.
+Chaque règle ci-dessous vient soit d'un **usage relevé dans le produit**, soit d'une **règle
+générale du web** qui s'applique ici. Les deux sont signalées.
+
+Source de valeurs unique : `src/theme/micsTheme.ts`. Aucun composant n'écrit un hex, un px ou une
+ombre en dur.
+
+---
+
+## Couleurs
+
+### Ce que chaque couleur veut dire
+
+<Canvas of={F.RolesDeCouleur} />
+
+**Une couleur porte un rôle, pas une humeur.** `primary` n'est pas « le bleu de la marque » : c'est
+l'action principale, l'état actif et la sélection. Si un élément est en `primary` sans être l'un
+des trois, il ment sur son importance.
+
+**Les cinq couleurs de sens ne se mélangent pas aux rampes de Tag.** `success` (`#00ab67`) signale
+un résultat ; `green/100-300-700` habille une étiquette. Deux verts, deux usages, jamais l'un pour
+l'autre.
+
+### La rampe de texte est une hiérarchie, pas une palette
+
+Relevé dans le code : `text/lighter` est la couleur de texte **la plus utilisée** du produit
+(55 occurrences contre 38 pour `text/normal`). C'est normal et c'est voulu : une interface de
+données est faite en majorité de métadonnées, d'en-têtes de colonne et de libellés secondaires.
+Le corps de texte en `text/normal` est le plus rare des trois premiers niveaux.
+
+<DocTable
+  headers={['Niveau', 'Quand', "Ce qu'il ne faut pas en faire"]}
+  rows={[
+    ['text/darker', 'Titres, valeur chiffrée mise en avant', 'Pas pour du corps de texte : tout paraîtrait titre'],
+    ['text/normal', 'Corps de texte, libellés cliquables', '—'],
+    ['text/lighter', 'Métadonnées, en-têtes de colonne, aide', "Pas pour une information dont dépend une décision"],
+    ['text/lightest', 'Placeholder, désactivé, illustration', "Jamais pour un texte à lire : il est sous le seuil de contraste"],
+  ]}
+/>
+
+### Deux niveaux de surface, et un demi
+
+<Canvas of={F.NiveauxDeSurface} />
+
+`bg/window` est le fond de page, `bg/container` la carte posée dessus, `bg/subtle` une zone
+secondaire **à l'intérieur** d'une carte. On s'arrête là : un quatrième gris ne se distingue plus
+du troisième, et l'utilisateur cesse de lire la profondeur.
+
+### Survol et sélection sont deux choses différentes
+
+<Canvas of={F.SurvolEtSelection} />
+
+`bg/hover` est **transitoire** : il disparaît quand le pointeur part, il n'existe pas au clavier
+seul. `bg/selected` est **persistant** : il survit au départ du pointeur parce qu'il décrit un
+état, pas un geste. Utiliser l'un pour l'autre fait croire qu'une ligne est sélectionnée alors
+qu'elle est seulement survolée.
+
+### Règles générales du web
+
+- **La couleur n'est jamais le seul porteur d'une information** (RGAA 3.1, WCAG 1.4.1). Un statut
+  coloré est doublé d'un libellé, un onglet actif d'un soulignement, une dimension filtrée d'un
+  compteur. C'est la règle qui a fait remplacer la pastille verte du filtre par un chiffre.
+- **Contraste minimal 4,5:1** pour le texte, **3:1** pour un composant d'interface ou un contour
+  (WCAG 1.4.3, 1.4.11). Deux dettes héritées de la production sont assumées et documentées :
+  blanc sur `primary` = 2,9:1, et `border/input` = 1,3:1.
+- **Ne pas coder une valeur en dur**, même « juste une fois ». Un hex écrit dans un composant
+  échappe au thème multi-tenant : les six thèmes clients n'overrident que des tokens.
+
+---
+
+## Espacements
+
+<Canvas of={F.Espacements} />
+
+### L'échelle réellement utilisée
+
+Relevé dans le code : **16 · 8 · 24 · 12** couvrent 90 % des espacements
+(55, 50, 38 et 31 occurrences). Puis 20 (padding de carte), 4 (titre / description) et 35 (marge
+de page). C'est la vraie échelle de travail.
+
+**Utiliser l'échelle 4 · 8 · 12 · 16 · 24 pour tout ce qu'on met en page.** Les valeurs 6, 7, 10 et
+15 existent dans les tokens Figma parce qu'elles décrivent l'intérieur des composants Ant Design
+(padding de bouton, de champ) : elles appartiennent au thème, pas aux écrans.
+
+### L'espace dit le groupement
+
+<Canvas of={F.RythmeVertical} />
+
+**Loi de proximité** (Gestalt) : ce qui est proche est perçu comme lié. Un titre et sa description
+sont à 4 ; deux blocs d'une même carte à 16 ; deux sections à 24. Un espace uniforme partout ne dit
+rien, et l'utilisateur doit lire pour comprendre la structure au lieu de la voir.
+
+Corollaire : **l'espace avant une bordure**. Si deux blocs sont assez espacés, la ligne de
+séparation devient du bruit. Le DS n'en met que là où l'espace ne suffit pas (pied d'overlay,
+ligne de base d'onglets).
+
+### Règles générales du web
+
+- **Un seul axe de padding par conteneur.** Le conteneur padde, l'enfant ne se re-padde pas. C'est
+  la règle écrite sur `Overlay` : padding 24 porté par le conteneur.
+- **Le gap plutôt que la marge.** Un `gap` de flex ou de grid ne fuit pas, ne s'effondre pas et ne
+  laisse pas d'espace résiduel quand un enfant disparaît. Aucun composant du DS n'utilise
+  `margin-bottom` pour espacer une liste.
+- **Cible de pointage 24 × 24 minimum** (WCAG 2.5.8). Quand le visuel est plus petit, la cible
+  s'élargit sans déformer la mise en page : la croix d'un Tag fait 8 px de glyphe dans 20 px de
+  cible, l'IconButton 20 px dans 32.
+
+---
+
+## Typographie
+
+<Canvas of={F.Typographie} />
+
+### Neuf styles, et pas un de plus
+
+Une taille absente de cette liste est une dérive, pas une nuance. L'audit du code en a trouvé
+six occurrences de `fontSize: 11` et une de 13 : toutes ramenées sur l'échelle. La police est
+**Circular**, en Book (400) et Medium (500) ; il n'y a pas d'autre graisse.
+
+Relevé dans le code : **12 px est la taille dominante** (23 occurrences), suivie de 10 (10) puis
+16 (5). C'est une interface dense de données, pas un site éditorial — la taille de base y est
+petite, ce qui rend la hiérarchie d'autant plus dépendante de la graisse et de la couleur.
+
+### La hiérarchie ne se fait pas par la taille seule
+
+<Canvas of={F.HierarchieDeTexte} />
+
+Trois leviers, dans cet ordre : **la couleur** (`text/darker` contre `text/lighter`), **la graisse**
+(Medium contre Book), **la taille**. Augmenter la taille est le levier le plus coûteux en place et
+le moins précis ; il est réservé aux vraies ruptures de niveau.
+
+### Règles générales du web
+
+- **Hiérarchie sémantique et hiérarchie visuelle sont indépendantes.** Un `h2` peut être en
+  Headline 4, et un texte en Headline 4 peut ne pas être un titre. Ne jamais choisir un niveau de
+  titre pour sa taille (RGAA 9.1).
+- **Interligne d'au moins 1,5 fois la taille** pour un paragraphe (WCAG 1.4.12). Les styles du DS
+  respectent ce rapport : 12/20, 14/22, 16/24.
+- **Pas de texte en capitales pour du contenu.** Les capitales ralentissent la lecture et sont
+  épelées par certains lecteurs d'écran. Elles sont réservées aux micro-libellés de 10 px, avec
+  l'interlettrage `trackingCaps`.
+- **Longueur de ligne** : viser 45 à 75 caractères. Dans une carte large, c'est la largeur du
+  bloc de texte qu'on limite, pas la taille de la police.
+
+---
+
+## Effets
+
+<Canvas of={F.Effets} />
+
+### Élévation : deux niveaux, une signification
+
+L'ombre ne décore pas, elle **dit qu'une surface flotte au-dessus du contenu et qu'elle va
+disparaître**. Une carte ne flotte pas : elle est dans le flux, elle n'a pas d'ombre. Un menu
+flotte au-dessus de la page. Une modale flotte au-dessus de tout.
+
+Avant cette passe, les deux ombres étaient écrites en dur à trois endroits, avec trois valeurs
+différentes, et aucune ne correspondait aux styles d'effet du fichier Figma. Elles sont maintenant
+dans `elevation`, alignées sur Figma.
+
+### Rayons
+
+`radius/sm` (2) pour la case à cocher, `radius/base` (3) pour tout ce qui est un contrôle,
+`radius/card` (6) pour tout ce qui est une surface. **Le rayon dit la nature de l'élément** : un
+bouton et une carte ne doivent pas avoir le même.
+
+### Bordures
+
+<DocTable
+  headers={['Token', 'Rôle', 'Exemple']}
+  rows={[
+    ['border/input', "Contour d'un contrôle, séparateur d'une liste", 'Champ, bouton Default, ligne de base des onglets'],
+    ['border/default', 'Séparateur de structure', "Lignes de tableau, pied et en-tête Light d'overlay"],
+  ]}
+/>
+
+### Mouvement
+
+Trois durées : **100 ms** pour un changement d'état local (survol, focus), **200 ms** pour une
+apparition de surface (menu, panneau), **300 ms** pour un déplacement ample (drawer).
+
+### Règles générales du web
+
+- **Respecter `prefers-reduced-motion`.** Toute transition supérieure à 100 ms doit être
+  neutralisée quand l'utilisateur le demande (RGAA 13.8, WCAG 2.3.3).
+- **Une ombre ne remplace pas un contour.** Elle n'est pas perceptible en contraste élevé ni en
+  impression. Une surface flottante garde un fond franc et, si nécessaire, une bordure.
+- **z-index par paliers nommés**, jamais de nombre improvisé : `zPopover` 1030, `zDropdown` 1050,
+  `zTooltip` 1060, `zModal` 1200. Une valeur inventée finit toujours par passer sous ou par-dessus
+  la mauvaise chose.
+- **Pas d'animation sur ce qui bloque la lecture.** Un contenu qui apparaît en fondu pendant que
+  l'utilisateur lit déjà est une gêne, pas une transition.
+
+---
+
+## Ce qui reste à faire
+
+- **Contrastes hérités** : blanc sur `primary` (2,9:1) et `border/input` (1,3:1) sont sous les
+  seuils. Décision produit à prendre — ces deux valeurs viennent de la production.
+- **`prefers-reduced-motion`** n'est pas encore implémenté.
+- **Les tokens de mouvement** existent dans Figma (`motion/fast-ms`, `base`, `slow`) mais ne sont
+  pas encore repris dans `micsTheme.ts` : les transitions viennent aujourd'hui d'Ant Design.

@@ -1,0 +1,104 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Introduction" />
+
+# Design System MICS
+
+Cette documentation est le pendant développement du fichier Figma
+**« Mediarithmics - MICS DS — Rebuild »**. Elle sert de référence commune entre design et
+développement : ce qui est montré ici est rendu avec le thème réel du produit, tokens compris.
+
+## Le principe : Ant Design encadré, pas remplacé
+
+Le produit repose sur **Ant Design v5** et continue de le faire. Le tableau, le sélecteur de dates
+et les composants de formulaire représentent des années de comportements clavier, de gestion des
+locales et d'accessibilité qu'il serait déraisonnable de réécrire.
+
+Ce que le design system apporte par-dessus : **une couche unique par laquelle les écrans passent**.
+Un écran n'importe jamais `antd` directement, il importe `src/ui.ts`. C'est ce qui permet de
+remplacer l'implémentation d'un composant sans toucher une seule page.
+
+## La règle des trois catégories
+
+Pour chaque composant de la maquette, un seul critère décide de son sort côté code :
+*Ant Design a-t-il la même anatomie et les mêmes états ?*
+
+<table>
+  <thead>
+    <tr><th>Réponse</th><th>Traitement</th><th>Exemples</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Oui</td>
+      <td><b>Thémé</b> : AntD tel quel, habillé par les tokens</td>
+      <td>Button, Input, Select, Checkbox, Table, Tabs, Pagination, DatePicker</td>
+    </tr>
+    <tr>
+      <td>Presque</td>
+      <td><b>Enveloppé</b> : un composant maison rend l'AntD en dessous, avec l'API du DS</td>
+      <td>Tag, Empty State</td>
+    </tr>
+    <tr>
+      <td>Non</td>
+      <td><b>Construit</b> : composant maison</td>
+      <td>Link, buttonIcon, Dropdown / Container, Badge Count, TopBar, SideMenu, palette de recherche</td>
+    </tr>
+  </tbody>
+</table>
+
+Trois corollaires, valables en maquette comme en code :
+
+- Un composant Figma doit exister comme composant côté code, dans l'une des trois catégories.
+  Une composition d'écran répétée deux fois est un composant qui s'ignore.
+- Aucune valeur en dur. Couleurs, espacements, radius et ombres viennent de `src/theme/micsTheme.ts`,
+  seule source de valeurs du projet.
+- **Un besoin = une entrée dans `src/ui.ts`.** Dès que le DS construit ou enveloppe un composant,
+  l'équivalent Ant Design **n'est plus réexporté** : `Badge` d'AntD a disparu de la surface publique
+  le jour où `CountBadge` est né. Deux portes d'entrée pour le même besoin, et un écran finit par
+  prendre la mauvaise — c'est exactement ce qui a produit une pastille flottante sur le bouton
+  Filters là où la maquette montre un compteur dans le flux.
+
+## Les trois règles d'or du DS
+
+1. **Aucune valeur en dur** : tout passe par un token ou un style.
+2. **Composants = instances** : on n'improvise pas une variante, on étend le composant.
+3. **Zéro défaut au contrôle visuel** avant livraison.
+
+## Le modèle d'une page composant
+
+Chaque composant a **une page principale** qui reprend sa documentation Figma, dans cet ordre :
+
+1. Titre, catégorie (thémé / enveloppé / construit), source code et référence de maquette
+2. Description et aperçu des variantes
+3. Props
+4. Règles d'usage, avec les paires « à faire / à éviter » quand elles existent
+5. Exemples d'usage : les cas réels du produit
+6. Anatomie
+7. Accessibilité (RGAA), une ligne par exigence testable
+8. Écarts et évolutions : ce qui diverge de la maquette et ce qui reste à construire
+
+Les sections 1 à 7 sont la transposition de la frame « {'{Composant}'} — Documentation » du fichier
+Figma. La section 8 est le lieu où l'on assume les écarts plutôt que de les masquer.
+
+## Deux règles qui évitent les bugs silencieux
+
+**Composant passé en slot à Ant Design : transmettre les props DOM.** AntD **clone** les nœuds
+qu'on lui donne en `closeIcon`, `suffix`, `prefix`, `icon`, `addonAfter` pour y injecter `onClick`,
+`onKeyDown`, `role`, `tabIndex` et `className`. Un composant React qui ne fait pas
+`{...rest}` sur son élément racine les avale sans erreur : l'icône s'affiche, elle ne réagit à
+rien. Tous les composants du DS destinés à ces emplacements (`Icon`, la croix de `Tag`) étendent
+`React.HTMLAttributes` et spreadent le reste.
+
+**Vérifier le rendu à côté de la maquette, pas de mémoire.** Les deux erreurs corrigées le
+2026-07-29 (pastille AntD au lieu du CountBadge, croix muette) se voyaient toutes les deux à
+l'écran. Comparer la story Storybook et l'écran réel côte à côte est la façon la plus rapide de
+les attraper.
+
+## Comment lire cette documentation
+
+- **Tokens** : les fondations (couleurs, échelle, typographie). Tout le reste en découle.
+- **Composants** : un composant par page, avec ses variantes et ses états. La catégorie
+  (thémé, enveloppé, construit) est rappelée en tête de chaque page.
+
+Pour l'architecture complète, les pièges rencontrés et la correspondance Figma → code,
+voir `ARCHITECTURE.md` à la racine du dépôt.

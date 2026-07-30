@@ -1,0 +1,169 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ItemStories from './DropdownItems.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={ItemStories} />
+
+# Dropdown Items
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : <code>multi-select</code>, <code>table-view-filters</code>, <code>labels-selector</code> — trois implémentations d'items en production</span>
+  <span><b>Maquette</b> : Figma Nav Item <code>142:71</code>, Checkbox Item <code>143:76</code>, Option Item <code>142:76</code>, Label Item <code>143:77</code>, Clear <code>193:2804</code></span>
+</div>
+
+Les briques qui se composent **dans le slot** d'un `DropdownPanel`. Un menu ne s'improvise pas
+avec des `div` : il empile ces items. C'est ce qui garantit que deux menus du produit se
+comportent pareil, y compris au clavier.
+
+<Canvas of={ItemStories.Briques} />
+
+## Quelle brique pour quel besoin
+
+<DocTable
+  headers={['Brique', 'Rôle', 'Sémantique', 'États']}
+  rows={[
+    ['Nav Item', 'Catégorie qui ouvre une cascade', <code>menuitem</code>, 'Default · Hover · Active (+ compteur)'],
+    ['Checkbox Item', 'Multi-sélection', <code>menuitemcheckbox</code>, 'Unchecked · Hover · Checked'],
+    ['Option Item', 'Sélection unique', <code>menuitemradio</code>, 'Default · Hover · Selected'],
+    ['Label Item', "Étiquette d'une liste de labels", <code>menuitem</code>, 'Default · Hover'],
+    ['Footer', 'Réinitialisation, toujours en dernier', <code>button</code>, 'Actif · Désactivé'],
+  ]}
+/>
+
+## Nav Item
+
+Catégorie de la colonne de gauche d'un filtre en cascade. Active = texte et icône en `primary`
+sur fond `bg/window`. Une seule active à la fois.
+
+Le **compteur remplace la pastille verte** de la production. La pastille dit qu'il y a un filtre ;
+le compteur dit combien. À surface égale, le compteur porte strictement plus d'information, et il
+reste lisible pour un daltonien.
+
+Le sous-panneau s'ouvre au survol **et au focus clavier** : un menu qui ne réagit qu'à la souris
+est inatteignable au clavier.
+
+Toutes les rangées prennent un fond `bg/hover` au survol. La maquette ne décrit que Default et
+Actif / Sélectionné ; sans retour au survol, rien ne distingue une rangée cliquable d'une ligne de
+texte tant qu'on n'a pas cliqué.
+
+<Canvas of={ItemStories.NavItem} />
+
+## Checkbox Item
+
+Multi-sélection : case de 16 (radius `sm`, cochée = fond `primary` + coche blanche), icône de type
+optionnelle, libellé. Le nombre de cases cochées alimente le compteur de la catégorie.
+
+Pas de `<label>` autour de la rangée : le Checkbox d'Ant Design rend déjà le sien, et deux labels
+imbriqués avalent le clic. La rangée est un `div role="menuitemcheckbox"` avec `aria-checked`.
+
+<Canvas of={ItemStories.CheckboxItem} />
+
+## Option Item
+
+Sélection unique, libellé seul. Sélectionné = texte `primary` sur fond `bg/window`. Pour les
+valeurs mutuellement exclusives : Persisted / Not persisted, Today / Last 7 days.
+
+<Canvas of={ItemStories.OptionItem} />
+
+## Label Item
+
+Étiquette de la liste des labels : icône `tag` + libellé. Cliquer ajoute le label aux valeurs
+sélectionnées, affichées en **chips fermables** au-dessus de la liste.
+
+<Canvas of={ItemStories.LabelItem} />
+
+## Footer
+
+Pied de menu, **toujours en dernier**, pleine largeur. Le bloc lui-même n'a plus d'état : c'est le
+Button Type=Link qu'il contient qui porte le survol. C'est le même bouton, icône balai comprise,
+que « Clear all filters » de la barre de filtres actifs — la réinitialisation se reconnaît partout
+au même signe.
+
+Deux compositions :
+
+- **Clear** : un seul bouton centré, **taille L**, sur fond `bg/window`. Réinitialise la dimension
+  courante ou tout le panneau.
+- **Reset + OK** : lien Reset à gauche, OK `primary` à droite, **taille M**, sur fond blanc. Pour
+  les panneaux qui valident une saisie plutôt que d'appliquer au fil de l'eau (plage de dates).
+
+Désactivé quand il n'y a rien à réinitialiser : un bouton actif qui ne fait rien apprend à
+l'utilisateur à s'en méfier.
+
+<Canvas of={ItemStories.Footer} />
+
+## Règles d'usage
+
+- **Ces items valent pour TOUTE sélection dans une liste**, y compris celles rendues par
+  Ant Design. Le Select, le DatePicker et le Cascader héritent des mêmes couleurs via les tokens
+  `controlItemBgActive` (sélectionné, `bg/window`) et `controlItemBgHover` (survolé, `bg/hover`).
+  Aucun écran n'invente sa couleur de sélection.
+- **Un seul type d'items par groupe.** Checkbox = multi, Option = unique. Les mêler rend le
+  comportement imprévisible.
+- Au-delà de huit à dix items, ajouter un champ de recherche en tête plutôt que faire défiler à
+  l'aveugle.
+- Le pied Clear reste **fixe** quand la liste défile : la sortie ne se cache pas en bas d'un scroll.
+- Composer via le slot du `DropdownPanel`, jamais des frames ou des `div` ad hoc.
+
+### À éviter
+
+<Canvas of={ItemStories.Dont} />
+
+## Anatomie
+
+1. **Rangée** : padding 6 × 16, gap 12 (8 pour Label Item), pleine largeur, curseur pointeur.
+2. **Marqueur d'état** : case à cocher (Checkbox Item), fond `bg/window` + texte `primary`
+   (Nav et Option Item), fond `bg/hover` au survol sur toutes les rangées.
+3. **Icône** : 18 px, `text/lighter`, décorative.
+4. **Libellé** : Body/Book 12, `text/normal` — `primary` à l'état actif ou sélectionné.
+5. **Compteur** (Nav Item) : chiffre en `primary`, doublé d'un libellé lecteur d'écran.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        Un rôle par nature d'item : <code>menuitem</code>, <code>menuitemcheckbox</code>,{' '}
+        <code>menuitemradio</code>, avec <code>aria-checked</code> à jour (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Clavier',
+      <>
+        Entrée et Espace activent, les flèches parcourent la liste, Échap ferme et rend le focus au
+        déclencheur. Le Nav Item s'active aussi au <code>focus</code>, pas seulement au survol
+        (RGAA 7.3, 13.x).
+      </>,
+    ],
+    [
+      'Cascade',
+      <>
+        Le Nav Item porte <code>aria-haspopup="true"</code> et <code>aria-expanded</code> ; le
+        sous-panneau est un sous-menu navigable (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "Le compteur est un chiffre, pas une pastille de couleur : l'information ne repose jamais sur la seule couleur (RGAA 3.1).",
+    ],
+    [
+      'Images',
+      "Les icônes de type sont décoratives, aria-hidden ; le libellé porte l'information (RGAA 1.2).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Trois implémentations d'items coexistent (`multi-select`,
+  `table-view-filters`, `labels-selector`), avec trois comportements clavier différents.
+- **Écart assumé, Nav Item.** La pastille verte de la production est remplacée par un compteur.
+- **Ajouté au code, survol.** L'état Hover (`bg/hover`) n'est pas décrit dans la maquette pour les
+  cinq items. Il l'est en code, sur toutes les rangées. À reporter côté maquette.
+- **Écart assumé, Footer.** Le bloc n'a plus d'état de survol : l'interaction est portée par le
+  bouton qu'il contient, comme dans la maquette mise à jour.
+- **À construire.** L'état indéterminé du Checkbox Item (groupe partiellement coché), et le champ
+  de recherche en tête de liste longue.

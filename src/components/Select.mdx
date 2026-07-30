@@ -1,0 +1,129 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SelectStories from './Select.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={SelectStories} />
+
+# Select
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : enveloppé</span>
+  <span><b>Source code</b> : <code>libs/basic popup-container</code> + AntD v5 Select</span>
+  <span><b>Maquette</b> : Figma <code>14:30</code> — 7 états</span>
+</div>
+
+Sélecteur dans une liste fermée de valeurs. Même enveloppe que l'`Input` — label, champ, message —
+et la même anatomie : hauteur 32, `radius/base`, bordure `border/input`, états portés par la
+bordure. **Les deux champs doivent être indiscernables au repos** : c'est ce qui fait qu'un
+formulaire se lit comme une colonne et non comme une collection de contrôles.
+
+<Canvas of={SelectStories.Etats} />
+
+## Props
+
+<Controls of={SelectStories.BacASable} />
+
+## Quel contrôle pour quel choix
+
+C'est la question qui revient à chaque formulaire. Elle se tranche sur le nombre d'options et sur
+l'exclusivité, pas sur la place disponible.
+
+<DocTable
+  headers={['Choix', '2 à 5 options', 'Plus de 5 options']}
+  rows={[
+    ['Un seul (exclusif)', 'Radio', 'Select'],
+    ['Plusieurs', 'Checkbox', 'Select multiple'],
+    ['Oui / non à effet immédiat', 'Switch', '—'],
+  ]}
+/>
+
+Sous cinq options, les afficher toutes coûte moins cher qu'un clic pour les découvrir. Au-delà,
+la liste déroulée sature la page et le Select reprend l'avantage.
+
+## Règles d'usage
+
+- **Largeur alignée sur les autres champs** du formulaire, 600 px au maximum.
+- **Le placeholder annonce le choix attendu** (« Sélectionner un datamart »), pas une consigne
+  (« Veuillez choisir »).
+- **Le panneau fait la largeur du déclencheur.** Une liste plus large déborde de la colonne du
+  formulaire et se lit comme un élément détaché du champ.
+- **Recherche au-delà d'une dizaine d'options.** Faire défiler à l'aveugle une liste de trente
+  datamarts n'est pas une navigation.
+- **L'ouverture se fait au clic sur toute la surface**, pas seulement sur le caret.
+- **La sélection dans une liste passe toujours par les items du Dropdown.** Le Select, le menu
+  Dropdown, le DatePicker et le Cascader partagent les mêmes tokens `controlItemBgActive` et
+  `controlItemBgHover` : un seul endroit à changer, et aucun écran ne peut inventer sa propre
+  couleur de sélection.
+- En **multiple**, les valeurs choisies s'affichent en `Tag` retirables : mêmes chips que partout
+  ailleurs dans le produit.
+
+## Exemples d'usage
+
+**Avec icônes** : l'icône dit le type de la valeur.
+
+<Canvas of={SelectStories.AvecIcones} />
+
+**Sélection multiple** :
+
+<Canvas of={SelectStories.Multiple} />
+
+**Avec recherche** :
+
+<Canvas of={SelectStories.AvecRecherche} />
+
+**Dans un formulaire**, aligné sur les Inputs :
+
+<Canvas of={SelectStories.DansUnFormulaire} />
+
+## Anatomie
+
+1. **Label** : Body/Medium 12 en `text/darker`, gap 4.
+2. **Déclencheur fermé** : hauteur 32, padding horizontal 7, `radius/base`,
+   bordure `border/input`.
+3. **Valeur / placeholder** : Body/Book 12, `text/normal` / `text/lightest`.
+4. **Caret** : `chevron-bottom` de 10 px en `text/lighter`, à droite.
+5. **Panneau ouvert** : les options reprennent les **items du Dropdown** du DS.
+   Sélection simple = Option Item (fond `bg/window`, libellé `primary`). Sélection multiple =
+   Checkbox Item, case à cocher **à gauche** — pas la coche à droite d'Ant Design. Survol
+   `bg/hover` dans les deux cas.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>&lt;select&gt;</code> natif ou combobox WAI-APG (<code>role="combobox"</code> +{' '}
+        <code>aria-expanded</code> + <code>listbox</code>). Jamais une <code>div</code> cliquable
+        (RGAA 7.1, 11.1).
+      </>,
+    ],
+    [
+      'Clavier',
+      "Les flèches parcourent les options, Entrée valide, Échap ferme et rend le focus au déclencheur (RGAA 7.3).",
+    ],
+    [
+      'Formulaires',
+      <>
+        Label relié par <code>&lt;label for&gt;</code> ; en erreur,{' '}
+        <code>aria-invalid</code> et message relié par <code>aria-describedby</code> (RGAA 11.1, 11.10).
+      </>,
+    ],
+    [
+      'Images',
+      "Les icônes d'option sont décoratives : le libellé porte l'information (RGAA 1.2).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté en maquette et en code.** L'enveloppe label + message, les états Hover et Error pour
+  aligner sur l'Input, et le caret pris dans le set d'icônes officiel plutôt qu'un vecteur brut.
+- **Corrigé.** Les couleurs de sélection étaient celles d'Ant Design (cyan clair) au lieu de
+  celles du Dropdown / Option Item. Elles sont désormais pilotées par `controlItemBgActive` et
+  `controlItemBgHover` au niveau du thème, donc communes à tous les composants à liste.
+- **À construire.** L'état ouvert documenté avec son panneau, et le `clearable` / `loading` natifs
+  d'Ant Design décrits en maquette.

@@ -1,0 +1,108 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TabsStories from './Tabs.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={TabsStories} />
+
+# Tabs
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : AntD v5 Tabs (<code>mcs-tabs</code>)</span>
+  <span><b>Maquette</b> : Figma Tab <code>17:61</code>, Tab Bar <code>249:107</code></span>
+</div>
+
+Rangée d'onglets et sa ligne de base pleine largeur. Un onglet donne accès aux **sous-vues d'un
+même contexte** : les onglets d'un segment, d'un board. Ce n'est pas une navigation entre objets,
+c'est le rôle du SideMenu.
+
+Occurrences en production : onglets de segment (4 écrans), de détail (5), de boards (9).
+
+<Canvas of={TabsStories.BacASable} />
+
+## Props
+
+<Controls of={TabsStories.BacASable} />
+
+## Règles d'usage
+
+- **Un seul actif**, et un ordre stable d'un écran à l'autre. Un onglet qui change de place est un
+  onglet qu'on ne retrouve pas.
+- Libellés **courts**, sans ponctuation. Le badge n'apparaît que s'il y a réellement quelque chose
+  à traiter.
+- La ligne de base court sur **toute la largeur** du conteneur, pas seulement sous les onglets :
+  c'est elle qui rattache la barre au contenu.
+- L'actif n'est **pas porté par la couleur seule** : le soulignement de 2 px le double.
+- Listes longues : **défilement horizontal** plutôt qu'un retour à la ligne. Une barre d'onglets
+  sur deux lignes ne se lit plus comme une barre.
+
+<Canvas of={TabsStories.Etats} />
+
+## Débordement
+
+Quand les onglets ne tiennent plus, la rangée défile et un bouton « … » apparaît au bout, sur un
+fond opaque et une ombre : le contenu passe visiblement **dessous**, ce qui dit qu'il en reste.
+
+Sa dropdown liste les onglets **hors écran à cet instant**, pas une liste figée. Au départ ce sont
+ceux de droite ; après avoir défilé jusqu'au bout, ce sont ceux de gauche. Choisir une entrée
+sélectionne l'onglet, affiche son contenu et le ramène dans le champ de vision.
+
+<Canvas of={TabsStories.Debordement} />
+
+## Exemples d'usage
+
+**Avec badge** : un nombre d'éléments à traiter.
+
+<Canvas of={TabsStories.AvecBadge} />
+
+**Onglets de détail** d'un segment.
+
+<Canvas of={TabsStories.OngletsDeDetail} />
+
+## Anatomie
+
+1. **Onglet** : hauteur 44, padding 12 haut / 10 bas, gap 6, libellé Circular Medium 14.
+   Défaut : libellé `text/normal`, trait bas transparent. Actif : libellé et trait de 2 px en
+   `primary`.
+2. **Badge** : pastille ronde de 16, radius 8, fond `warning`, chiffre Circular Medium 10 blanc.
+   Anatomie distincte du `CountBadge` (20 de haut, radius 6) : ne pas les confondre.
+3. **Barre** : gap 35 entre onglets, ligne de base de 1 px en `border/input`.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>role="tablist"</code> sur la barre, <code>role="tab"</code> + <code>aria-selected</code>{' '}
+        sur chaque onglet, <code>role="tabpanel"</code> sur le panneau, relié par{' '}
+        <code>aria-controls</code> (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Clavier',
+      "Un seul onglet dans l'ordre de tabulation (l'actif) ; les flèches gauche et droite déplacent la sélection. C'est le motif WAI-APG : Tab entre dans la barre, les flèches naviguent dedans (RGAA 7.3).",
+    ],
+    [
+      'Information couleur',
+      "L'onglet actif est signalé par le soulignement de 2 px en plus de la couleur (RGAA 3.1).",
+    ],
+    [
+      'Contenu dynamique',
+      "Le badge porte un nom accessible : « Alerts, 2 à traiter », pas « 2 » seul (RGAA 7.4).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté au code.** L'état de survol n'est pas décrit dans la maquette. Sans lui, rien ne
+  distingue un onglet cliquable d'un intertitre tant qu'on n'a pas cliqué. Le libellé passe en
+  `text/darker` au survol.
+- **Écart de mesure.** La description Figma de la Tab Bar annonce un gap de 24, la géométrie du
+  composant en applique 35. Le code suit la géométrie ; à trancher côté maquette.
+- **Construit.** Le débordement en « … », que la maquette listait en évolution. Il était
+  nécessaire pour les neuf onglets de boards.
+- **À construire.** L'onglet désactivé.

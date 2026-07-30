@@ -1,0 +1,74 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as IconStories from './Icon.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={IconStories} />
+
+# Icon
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : remplace <code>McsIcon</code>, qui mélange mcsfont, les icônes AntD et des SVG inline</span>
+  <span><b>Maquette</b> : page « 🖼 Icons » du fichier Figma</span>
+</div>
+
+Glyphe du design system. Les 36 icônes sont **exportées du fichier Figma**, pas de la librairie
+Ant Design : ce sont les glyphes du produit. À l'export, les `fill` sont remplacés par
+`currentColor` et les dimensions par `1em`, si bien que couleur et taille se pilotent en CSS
+comme pour un caractère de police.
+
+<Canvas of={IconStories.Bibliotheque} />
+
+## Props
+
+<Controls of={IconStories.BacASable} />
+
+## Règles d'usage
+
+- Le glyphe est **toujours décoratif** : il porte `aria-hidden`. Une icône seule dans un contrôle
+  exige un `aria-label` sur le contrôle, pas sur l'icône (voir `IconButton`).
+- La couleur n'est jamais imposée sans raison : par défaut l'icône hérite de la couleur du texte
+  parent, ce qui la fait suivre gratuitement les états (survol, sélection, désactivé).
+- Tailles usuelles : 14 dans le corps de texte, 16 dans les menus et les champs, 20 dans la TopBar,
+  40 pour un état vide.
+- Un glyphe manquant rend `null` plutôt qu'un carré vide : pas de bloc fantôme dans la mise en page.
+- Les props DOM restantes sont **transmises au `<span>`**. C'est indispensable dans un slot
+  Ant Design (`closeIcon`, `suffix`, `prefix`) : AntD clone le nœud pour y injecter `onClick` et
+  `className`, et un composant qui n'accepte que ses propres props avale l'injection en silence.
+
+<Canvas of={IconStories.Tailles} />
+
+<Canvas of={IconStories.Couleur} />
+
+## Anatomie
+
+1. **Boîte** : `inline-flex` carrée de `size` × `size`, `flex: 0 0 auto` pour ne jamais se
+   déformer dans une rangée.
+2. **Glyphe** : SVG inline, `viewBox` carré normalisé avec une marge de 1,10, sans
+   `preserveAspectRatio`, tous les fills en `currentColor`.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Images',
+      <>
+        Icône décorative : <code>aria-hidden="true"</code>, aucune alternative (RGAA 1.2). Elle ne
+        doit jamais être le seul porteur d'une information.
+      </>,
+    ],
+    [
+      'Couleurs',
+      "Une icône ne code jamais un statut à elle seule : elle accompagne un libellé ou un intitulé accessible (RGAA 3.1).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** `McsIcon` mélange trois systèmes d'icônes (mcsfont, AntD,
+  SVG inline). Le set exporté de Figma les remplace par une source unique.
+- **À construire.** Le set couvre les écrans traités ; il sera complété au fil des écrans
+  suivants, glyphe par glyphe, depuis la même page Figma.

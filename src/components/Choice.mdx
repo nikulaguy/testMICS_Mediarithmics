@@ -1,0 +1,126 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as C from './Choice.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={C} />
+
+# Choix : Checkbox, Radio, Switch
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : Checkbox et Radio thémés, Switch enveloppé</span>
+  <span><b>Source code</b> : AntD v5 Checkbox, Radio (<code>radio-group-button</code>), Switch</span>
+  <span><b>Maquette</b> : Figma Checkbox <code>14:49</code>, Radio <code>14:60</code>, Switch <code>14:67</code></span>
+</div>
+
+Trois contrôles pour trois questions différentes. Ils sont documentés ensemble parce que **le
+choix entre eux est la seule vraie décision** : une fois le bon contrôle retenu, son usage ne pose
+plus de question.
+
+<Canvas of={C.LesTrois} />
+
+## Choisir le contrôle
+
+<DocTable
+  headers={['La question posée', 'Contrôle', 'Pourquoi']}
+  rows={[
+    ['Plusieurs réponses possibles', 'Checkbox', 'Chaque case est indépendante des autres'],
+    ['Une seule réponse, 2 à 5 options', 'Radio', 'Toutes les options visibles : comparer ne coûte pas un clic'],
+    ['Une seule réponse, plus de 5 options', 'Select', 'Au-delà, la liste sature la page'],
+    ['Oui / non, effet immédiat', 'Switch', "Le réglage s'applique en le basculant, sans validation"],
+    ['Oui / non, soumis avec le formulaire', 'Checkbox', "Un switch qui attend un bouton Enregistrer ment sur son effet"],
+  ]}
+/>
+
+**La distinction Switch / Checkbox est celle qui se rate le plus.** Le critère n'est pas l'aspect,
+c'est le moment où l'action prend effet. Un switch bascule un réglage tout de suite. Une case à
+cocher enregistre une intention qui sera soumise plus tard, avec le reste du formulaire.
+
+<Canvas of={C.LeBonControle} />
+
+## Checkbox
+
+Case de 16, `radius/sm`, bordure `border/input` ; cochée, fond et coche en `primary`. Libellé
+Body/Book 12 à droite, gap 8.
+
+- **Le libellé est toujours cliquable.** Une case de 16 px seule est en dessous de la cible de
+  pointage de 24 px ; le libellé fait partie de la cible.
+- **Indeterminate est réservé au parent d'un groupe partiellement coché.** Ce n'est pas un
+  troisième état de valeur, c'est un résumé.
+- **Alignement vertical dans un groupe**, jamais en ligne : l'œil doit pouvoir descendre une
+  colonne de cases.
+- Au-delà de cinq options, passer au `Select` multiple.
+
+<Canvas of={C.GroupeDeCheckbox} />
+
+## Radio
+
+Anneau de 16, bordure `border/input` ; sélectionné, anneau et point de 8 en `primary`.
+
+- **Toujours en groupe nommé**, avec un défaut sensé présélectionné. Un groupe de radios sans
+  sélection initiale oblige l'utilisateur à choisir même quand une valeur va de soi.
+- **Un choix exclusif ne se dé-sélectionne pas.** Si l'utilisateur doit pouvoir revenir à « aucun »,
+  il faut une option « Aucun » explicite, pas un radio qu'on décoche.
+- **Ordre stable** d'un écran à l'autre, alignement vertical.
+
+<Canvas of={C.GroupeDeRadio} />
+
+## Switch
+
+Piste 44 × 22, `radius` pleine hauteur, grise à l'arrêt, `primary` en marche ; knob blanc de 18.
+
+- **Effet immédiat, pas de bouton Enregistrer.**
+- **Toujours un libellé.** Un interrupteur nu n'a pas de nom accessible, et rien ne dit ce qu'il
+  commande.
+- **Le libellé décrit l'état activé et ne se retourne pas** : « Recevoir les alertes », jamais
+  « Ne pas recevoir les alertes ». Une double négation avec un interrupteur en position basse est
+  illisible.
+- La description sous le libellé sert à dire la **conséquence** : portée, délai, fréquence.
+
+<Canvas of={C.SwitchAvecDescription} />
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Formulaires',
+      <>
+        <code>&lt;input type="checkbox"&gt;</code> / <code>type="radio"</code> natifs, chacun relié à
+        son <code>&lt;label for&gt;</code>. Un groupe est un <code>&lt;fieldset&gt;</code> avec{' '}
+        <code>&lt;legend&gt;</code> (RGAA 11.1, 11.5).
+      </>,
+    ],
+    [
+      'Clavier',
+      "Checkbox : Tab atteint chaque case, Espace coche. Radio : le groupe est UN seul arrêt de tabulation, les flèches déplacent la sélection (RGAA 7.3, 12.8).",
+    ],
+    [
+      'États',
+      <>
+        Indeterminate expose <code>aria-checked="mixed"</code>. Le Switch porte{' '}
+        <code>role="switch"</code> et <code>aria-checked</code> (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "L'état coché ou activé n'est jamais signalé par la seule couleur : la coche, le point et la position du knob le doublent (RGAA 3.1).",
+    ],
+    [
+      'Cible de pointage',
+      'Le contrôle fait 16 px : le libellé cliquable porte la cible au-delà de 24 px (WCAG 2.5.8).',
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Le libellé et la description du Switch sont gérés hors composant
+  en production. L'enveloppe du DS les intègre, ce qui garantit le nom accessible.
+- **Ajouté au code.** Les tokens de thème de ces trois contrôles étaient absents de
+  `micsTheme.ts` : ils tournaient sur les défauts d'Ant Design, qui coïncidaient par chance avec
+  la maquette. Une mise à jour d'AntD aurait suffi à les faire diverger. Ils sont maintenant
+  déclarés.
+- **À construire.** Les états Hover (bordure `primary`) et Focus clavier (halo de 2 px) sur les
+  trois contrôles, décrits comme évolution dans la maquette. Et l'état Loading du Switch, pour
+  les bascules qui déclenchent un appel réseau.

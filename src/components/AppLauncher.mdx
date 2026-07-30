@@ -1,0 +1,90 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as LauncherStories from './AppLauncher.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={LauncherStories} />
+
+# AppLauncher
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : panneau posé à la main dans la TopBar en production</span>
+  <span><b>Maquette</b> : Figma AppLauncher <code>19:148</code></span>
+</div>
+
+Contenu du panneau « Applications » de la TopBar : bandeau de marque, application courante, puis
+les autres applications de la plateforme. C'est le seul endroit du produit où l'on change
+d'application, donc le seul endroit où la marque est rappelée en grand.
+
+Le composant **ne dessine pas sa surface** : il se pose dans un `DropdownPanel`, comme tous les
+panneaux du produit. Une ombre et un radius de plus seraient une ombre et un radius à maintenir.
+
+<Canvas of={LauncherStories.BacASable} />
+
+## Props
+
+<Controls of={LauncherStories.BacASable} />
+
+## Règles d'usage
+
+- L'application courante est **en tête et non cliquable** : y naviguer ne ferait rien, et un item
+  cliquable qui ne fait rien apprend à se méfier de la liste.
+- La **pastille de couleur** identifie l'application. C'est le seul menu du produit où une couleur
+  aide vraiment à reconnaître la cible : les applications sont peu nombreuses et stables.
+- Largeur **300** : plus large que les autres panneaux de la TopBar, parce que le bandeau de marque
+  a besoin d'air. C'est une exception assumée, pas un précédent.
+- Changer d'application **recharge le contexte** : ce n'est pas une navigation interne, ne pas la
+  mélanger avec les entrées du SideMenu.
+
+## Exemples d'usage
+
+**Une seule autre application** : la liste reste une liste.
+
+<Canvas of={LauncherStories.UneSeuleAutreApp} />
+
+**Depuis Navigator** : l'application courante change, la liste aussi.
+
+<Canvas of={LauncherStories.DepuisNavigator} />
+
+## Anatomie
+
+1. **Bandeau de marque** : hauteur 68, logo de 140 centré, bordure basse `border/input`.
+2. **Application courante** : rangée de 40, padding horizontal 16, `text/normal`, non cliquable.
+3. **Applications** : rangées de 40, pastille 18 en radius 4, gap 12, fond `bg/hover` au survol.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        Le panneau porte <code>role="menu"</code> et <code>aria-label="Applications"</code> ; chaque
+        application est un <code>menuitem</code> atteignable au clavier (RGAA 7.1).
+      </>,
+    ],
+    [
+      'États',
+      <>
+        L'application courante porte <code>aria-current</code> : sa position en tête ne suffit pas à
+        l'annoncer (RGAA 9.x).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "La pastille double le nom de l'application, elle ne le remplace jamais (RGAA 3.1).",
+    ],
+    [
+      'Images',
+      "Le logo porte une alternative « mediarithmics » : c'est le nom de la plateforme, pas une décoration (RGAA 1.1).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Le panneau est posé à la main dans la TopBar, sans composant ni
+  états d'items homogènes avec le reste des menus.
+- **À construire.** La navigation clavier complète (flèches) et la recherche d'application, utile
+  seulement si la liste s'allonge.

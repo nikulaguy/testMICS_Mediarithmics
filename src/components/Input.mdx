@@ -1,0 +1,129 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as InputStories from './Input.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={InputStories} />
+
+# Input
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : enveloppé</span>
+  <span><b>Source code</b> : <code>libs/basic form/FormItem</code> + AntD v5 Input</span>
+  <span><b>Maquette</b> : Figma <code>14:16</code> — 6 états</span>
+</div>
+
+Champ de saisie complet : **label + champ + message**. Ant Design rend le champ ; le DS ajoute
+l'enveloppe et impose l'anatomie. En production, label et message sont portés par le `FormItem`
+d'Ant Design, pas par le champ — la maquette les intègre au composant, et cette enveloppe fait de
+même.
+
+<Canvas of={InputStories.Etats} />
+
+## Props
+
+<Controls of={InputStories.BacASable} />
+
+## Les états passent par la bordure
+
+<DocTable
+  headers={['État', 'Bordure', 'Fond', 'Ce qui change en plus']}
+  rows={[
+    ['Default', <code>border/input</code>, <code>bg/container</code>, '—'],
+    ['Hover', <code>primary</code>, <code>bg/container</code>, '—'],
+    ['Focus', <code>primary</code>, <code>bg/container</code>, 'Halo de 2 px en primary à 20 %'],
+    ['Error', <code>error</code>, <code>bg/container</code>, "Message obligatoire sous le champ"],
+    ['Disabled', <code>border/input</code>, <code>bg/window</code>, 'Texte en text/lightest'],
+  ]}
+/>
+
+Le fond ne bouge qu'en Disabled. C'est ce qui permet de lire une colonne de champs d'un coup
+d'œil : un seul signal change, toujours au même endroit.
+
+## Règles d'usage
+
+- **Un label visible au-dessus du champ, toujours.** Le placeholder ne remplace jamais le label :
+  il disparaît dès la première frappe, au moment précis où l'utilisateur en aurait besoin. Seule
+  exception : les patterns de recherche.
+- **La largeur est identique dans tout un formulaire**, et ne dépasse pas 600 px. Des champs de
+  largeurs différentes suggèrent une longueur de saisie attendue qui n'existe pas.
+- **L'état Error s'accompagne toujours du message.** Une bordure rouge seule ne dit ni ce qui ne va
+  pas, ni comment le corriger — et elle est invisible pour un daltonien.
+- **Le placeholder illustre le format** (« ex. jean@acme.com »), jamais une consigne ni la mention
+  d'obligation.
+- **L'icône est cohérente avec la donnée** : loupe pour une recherche, enveloppe pour un email.
+  Jamais décorative. À droite par défaut ; à gauche uniquement pour la recherche.
+
+## Exemples d'usage
+
+**Avec aide** : le message est relié au champ par `aria-describedby`.
+
+<Canvas of={InputStories.AvecAide} />
+
+**Erreur** : bordure et message ensemble.
+
+<Canvas of={InputStories.Erreur} />
+
+**Obligatoire** : astérisque visible et attribut `required`.
+
+<Canvas of={InputStories.Obligatoire} />
+
+**Recherche** : le seul cas sans label visible.
+
+<Canvas of={InputStories.Recherche} />
+
+### À éviter
+
+<Canvas of={InputStories.Dont} />
+
+## Anatomie
+
+1. **Label** : Body/Medium 12 en `text/darker`, au-dessus du champ, gap 4.
+2. **Champ** : hauteur 32, padding horizontal 7, `radius/base`, fond `bg/container`,
+   bordure `border/input`.
+3. **Valeur** : Body/Book 12 en `text/normal`. **Placeholder** en `text/lightest`.
+4. **Icônes** (optionnelles) : 14 × 14, `text/lighter`, à gauche et / ou à droite.
+5. **Message** : Body/Book 12 sous le champ, `text/lighter` en aide, `error` en erreur.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Formulaires',
+      <>
+        <code>&lt;input&gt;</code> natif relié à un <code>&lt;label for&gt;</code>. Le placeholder
+        n'est pas un label (RGAA 11.1, 11.2).
+      </>,
+    ],
+    [
+      'Erreur',
+      <>
+        <code>aria-invalid="true"</code> et message relié par <code>aria-describedby</code>, porté
+        par un <code>role="alert"</code> pour être annoncé dès son apparition (RGAA 11.10, 11.11).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "L'erreur n'est jamais portée par la seule bordure rouge : le message texte la double (RGAA 3.1).",
+    ],
+    [
+      'Focus',
+      "Halo de 2 px visible au clavier. Jamais outline:none sans alternative (RGAA 10.7).",
+    ],
+    [
+      'Contraste',
+      "⚠ Bordure #e0e1e1 = 1,3:1, sous le seuil de 3:1 (RGAA 3.3). Placeholder ≈ 1,8:1 : acceptable uniquement comme exemple non porteur d'information. Valeur saisie 5,7:1, conforme.",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté en maquette et en code.** L'enveloppe label + message : en production, c'est le
+  `FormItem` qui les porte. Les rassembler dans le composant garantit que le lien
+  `label for` / `aria-describedby` ne peut pas être oublié.
+- **Dette héritée.** Le contraste de `border/input` est sous le seuil. Décision produit à prendre :
+  la valeur vient de la production.
+- **À construire.** Le compteur de caractères, et l'état de chargement (validation asynchrone d'un
+  nom déjà pris).

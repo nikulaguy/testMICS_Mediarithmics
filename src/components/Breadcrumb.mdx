@@ -1,0 +1,106 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BreadcrumbStories from './Breadcrumb.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={BreadcrumbStories} />
+
+# Breadcrumb
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : AntD v5 Breadcrumb (ActionBar + sous-header navy New Segment)</span>
+  <span><b>Maquette</b> : Figma <code>29:22142</code> — 2 thèmes × 3 niveaux</span>
+</div>
+
+Fil d'Ariane : les parents en liens, un séparateur `›`, la page courante en texte.
+C'est une **hiérarchie, pas un historique** : il dit où l'on est dans la structure, pas par où
+l'on est passé.
+
+<Canvas of={BreadcrumbStories.TroisNiveaux} />
+
+## Props
+
+<Controls of={BreadcrumbStories.BacASable} />
+
+## Les trois niveaux
+
+<DocTable
+  headers={['Niveau', 'Contenu', 'Rendu']}
+  rows={[
+    ['1', 'Item actif du SideMenu', 'Link taille M, cliquable'],
+    ['2', 'Onglet actif', 'Link taille M, cliquable'],
+    ['3', 'Ressource ouverte', 'Texte, non cliquable'],
+  ]}
+/>
+
+## Les deux thèmes
+
+<DocTable
+  headers={['Thème', 'Liens', 'Courant', 'Contexte']}
+  rows={[
+    ['onLight', <code>link/default</code>, <code>text/normal</code>, 'ActionBar sur fond clair'],
+    ['onDark', <code>link/on-dark</code>, <code>text/on-dark</code>, 'Bandeau navy (New Segment)'],
+  ]}
+/>
+
+<Canvas of={BreadcrumbStories.SurFondSombre} />
+
+## Règles d'usage
+
+- Le thème suit **le fond**, pas la préférence : jamais un lien navy sur un bandeau navy.
+- Le `level` reflète la **profondeur réelle**, trois au maximum. Un fil d'ariane à cinq niveaux
+  ne se lit plus.
+- Le dernier niveau est **toujours** du texte. Un lien vers la page où l'on se trouve n'a pas de
+  destination.
+- Les parents utilisent le composant **`Link` du DS**, pas le lien natif d'Ant Design, qui rend en
+  gris et casse la couleur de lien du produit.
+- Le premier niveau et l'item actif du SideMenu désignent la même chose. Les faire diverger fait
+  mentir l'un des deux.
+
+<Canvas of={BreadcrumbStories.UnNiveau} />
+
+## Anatomie
+
+1. **Liste ordonnée** `<ol>` horizontale, gap 8.
+2. **Parents** : `Link` taille M (Body/Book 12), couleur selon le thème.
+3. **Séparateur** : `›` en `text/lighter` (onLight) ou `link/on-dark` (onDark), décoratif.
+4. **Courant** : texte simple, `text/normal` ou `text/on-dark`.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Navigation',
+      <>
+        L'ensemble est dans un <code>&lt;nav aria-label="Fil d'Ariane"&gt;</code>, structuré en{' '}
+        <code>&lt;ol&gt;</code> : l'ordre des niveaux porte du sens (RGAA 9.3, 12.6).
+      </>,
+    ],
+    [
+      'États',
+      <>
+        Le dernier niveau porte <code>aria-current="page"</code> et n'est pas un lien (RGAA 9.x).
+      </>,
+    ],
+    [
+      'Images',
+      <>
+        Le séparateur <code>›</code> est décoratif : <code>aria-hidden</code>, il n'est pas lu
+        entre chaque niveau (RGAA 1.2).
+      </>,
+    ],
+    [
+      'Contraste',
+      "onDark : link/on-dark (#c5efff) sur navy — rapport à vérifier, il est proche du seuil de 4,5:1 (RGAA 3.2).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Le fil d'ariane navy utilisait un bleu clair codé en dur ; le
+  token `link/on-dark` a été créé pour lui.
+- **À construire.** Le repli des niveaux au-delà de trois (« … »), et la troncature des libellés
+  longs avec infobulle.

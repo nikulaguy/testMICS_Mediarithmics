@@ -1,0 +1,223 @@
+[13:36:07.560] [INFO] This command is running via an AI agent: claude-code_2-1-219_agent. Proceeding with agentic installation flow.
+[13:36:08.358] [INFO] Initializing Storybook
+[13:36:08.849] [DEBUG] Getting package.json info for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:08.849] [INFO] Package manager: npm
+[13:36:08.854] [DEBUG] Getting CLI versions from NPM for storybook...
+[13:36:08.854] [DEBUG] Executing command: npm info storybook version
+[13:36:09.734] [INFO] Adding Storybook version 10.5.5 to your project
+[13:36:09.735] [DEBUG] Executing command: npm config get min-release-age --workspaces=false --include-workspace-root
+[13:36:09.948] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:09.948] [DEBUG] Project type detected: react
+[13:36:09.948] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:09.952] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:09.952] [INFO] Framework detected: react-vite
+[13:36:09.952] [DEBUG] Getting installed version for vitest...
+[13:36:09.952] [DEBUG] Executing command: npm ls --json --depth=99
+[13:36:10.529] [DEBUG] No installations found for vitest
+[13:36:10.529] [DEBUG] Getting installed version for msw...
+[13:36:10.529] [DEBUG] Executing command: npm ls --json --depth=99
+[13:36:10.881] [DEBUG] No installations found for msw
+[13:36:10.892] [INFO] Storybook collects completely anonymous usage telemetry. We use it to shape Storybook's roadmap and prioritize features. You can learn more, including how to opt out, at https://storybook.js.org/telemetry
+[13:36:11.309] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:11.309] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:11.309] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:11.309] [DEBUG] Using cached version for storybook...
+[13:36:11.309] [DEBUG] Getting CLI versions from NPM for @storybook/react-vite...
+[13:36:11.309] [DEBUG] Executing command: npm info @storybook/react-vite version
+[13:36:11.311] [DEBUG] Getting CLI versions from NPM for @chromatic-com/storybook...
+[13:36:11.311] [DEBUG] Executing command: npm info @chromatic-com/storybook version
+[13:36:11.313] [DEBUG] Getting CLI versions from NPM for @storybook/addon-vitest...
+[13:36:11.313] [DEBUG] Executing command: npm info @storybook/addon-vitest version
+[13:36:11.315] [DEBUG] Getting CLI versions from NPM for @storybook/addon-a11y...
+[13:36:11.315] [DEBUG] Executing command: npm info @storybook/addon-a11y version
+[13:36:11.316] [DEBUG] Getting CLI versions from NPM for @storybook/addon-docs...
+[13:36:11.316] [DEBUG] Executing command: npm info @storybook/addon-docs version
+[13:36:11.318] [DEBUG] Getting CLI versions from NPM for @storybook/addon-mcp...
+[13:36:11.318] [DEBUG] Executing command: npm info @storybook/addon-mcp version
+[13:36:12.381] [INFO] - Configuring main.ts
+[13:36:12.382] [INFO] - Configuring preview.ts
+[13:36:12.382] [INFO] - Adding Storybook command to package.json
+[13:36:12.383] [DEBUG] Getting package.json info for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:12.383] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:12.383] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:12.384] [INFO] - Copying framework templates
+[13:36:12.446] [DEBUG] Executing command: npm config get registry --workspaces=false --include-workspace-root
+[13:36:12.835] [INFO] Storybook configuration generated
+[13:36:12.835] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:12.835] [DEBUG] Using cached installed version for vitest...
+[13:36:12.835] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:12.835] [DEBUG] Getting installed version for @vitest/coverage-v8...
+[13:36:12.835] [DEBUG] Executing command: npm ls --json --depth=99
+[13:36:13.320] [DEBUG] No installations found for @vitest/coverage-v8
+[13:36:13.320] [DEBUG] Getting installed version for @vitest/coverage-istanbul...
+[13:36:13.320] [DEBUG] Executing command: npm ls --json --depth=99
+[13:36:13.837] [DEBUG] No installations found for @vitest/coverage-istanbul
+[13:36:13.837] [INFO] Adding devDependencies:
+- storybook@^10.5.5
+- @storybook/react-vite@^10.5.5
+- @chromatic-com/storybook@^5.2.1
+- @storybook/addon-vitest@^10.5.5
+- @storybook/addon-a11y@^10.5.5
+- @storybook/addon-docs@^10.5.5
+- @storybook/addon-mcp@^0.7.0
+- vitest
+- playwright
+- @vitest/browser-playwright
+- @vitest/coverage-v8
+[13:36:13.838] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:13.838] [DEBUG] Using cached version for storybook...
+[13:36:13.838] [DEBUG] Using cached version for @storybook/react-vite...
+[13:36:13.838] [DEBUG] Using cached version for @chromatic-com/storybook...
+[13:36:13.838] [DEBUG] Using cached version for @storybook/addon-vitest...
+[13:36:13.838] [DEBUG] Using cached version for @storybook/addon-a11y...
+[13:36:13.838] [DEBUG] Using cached version for @storybook/addon-docs...
+[13:36:13.838] [DEBUG] Using cached version for @storybook/addon-mcp...
+[13:36:13.838] [DEBUG] Getting CLI versions from NPM for vitest...
+[13:36:13.838] [DEBUG] Executing command: npm info vitest version
+[13:36:14.412] [DEBUG] Getting CLI versions from NPM for playwright...
+[13:36:14.412] [DEBUG] Executing command: npm info playwright version
+[13:36:14.927] [DEBUG] Getting CLI versions from NPM for @vitest/browser-playwright...
+[13:36:14.927] [DEBUG] Executing command: npm info @vitest/browser-playwright version
+[13:36:15.490] [DEBUG] Getting CLI versions from NPM for @vitest/coverage-v8...
+[13:36:15.490] [DEBUG] Executing command: npm info @vitest/coverage-v8 version
+[13:36:15.930] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:15.961] [INFO] Dependencies added to package.json
+[13:36:15.964] [INFO] Configuring @chromatic-com/storybook...
+[13:36:16.010] [WARN] Could not resolve the postinstall hook of @chromatic-com/storybook, skipping its configuration. Run `npx storybook add @chromatic-com/storybook` to set it up manually.
+[13:36:16.010] [INFO] @chromatic-com/storybook configured
+
+[13:36:16.010] [INFO] Configuring @storybook/addon-vitest...
+[13:36:16.012] [DEBUG] Getting package.json info for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:16.012] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:16.012] [DEBUG] Using cached installed version for vitest...
+[13:36:16.012] [DEBUG] Using cached package.json for /Users/nicolasguy/Documents/mics-front-test/package.json...
+[13:36:16.012] [DEBUG] Vitest version specifier: 4.1.10
+[13:36:16.160] [DEBUG] Using cached installed version for vitest...
+[13:36:16.160] [DEBUG] Using cached installed version for msw...
+[13:36:16.180] [INFO] Updating your Vite config file:
+[13:36:16.180] [INFO]   /Users/nicolasguy/Documents/mics-front-test/vite.config.ts
+[13:36:16.186] [INFO] Setting up a11y addon for @storybook/addon-vitest
+[13:36:16.186] [INFO] Setting up a11y addon for @storybook/addon-vitest
+[13:36:16.186] [DEBUG] Executing command: npx storybook@10.5.5 automigrate addon-a11y-addon-test --loglevel silent --yes --skip-doctor --package-manager npm --skip-install
+[13:36:32.664] [INFO] a11y addon setup successfully
+[13:36:32.664] [INFO] a11y addon setup successfully
+[13:36:32.665] [INFO] @storybook/addon-vitest setup completed successfully
+[13:36:32.665] [INFO] @storybook/addon-vitest is now configured and you're ready to run your tests!
+Here are a couple of tips to get you started:
+
+• You can run tests with "npx vitest --project=storybook"
+• Vitest IDE extension shows all stories as tests in your editor!
+
+Check the documentation for more information about its features and options at:
+https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+[13:36:32.672] [INFO] @storybook/addon-vitest configured
+
+[13:36:32.672] [INFO] Configuring @storybook/addon-a11y...
+[13:36:32.672] [DEBUG] Executing command: npx storybook@10.5.5 automigrate addon-a11y-addon-test --loglevel silent --skip-doctor --yes --package-manager npm --config-dir .storybook
+[13:36:36.688] [INFO] @storybook/addon-a11y configured
+
+[13:36:36.688] [INFO] Configuring @storybook/addon-docs...
+[13:36:36.734] [WARN] Could not resolve the postinstall hook of @storybook/addon-docs, skipping its configuration. Run `npx storybook add @storybook/addon-docs` to set it up manually.
+[13:36:36.734] [INFO] @storybook/addon-docs configured
+
+[13:36:36.734] [INFO] Configuring @storybook/addon-mcp...
+[13:36:36.765] [WARN] Could not resolve the postinstall hook of @storybook/addon-mcp, skipping its configuration. Run `npx storybook add @storybook/addon-mcp` to set it up manually.
+[13:36:36.765] [INFO] @storybook/addon-mcp configured
+
+[13:36:36.765] [INFO] Addons configured successfully
+[13:36:36.765] [INFO] ✅ @chromatic-com/storybook
+[13:36:36.765] [INFO] ✅ @storybook/addon-vitest
+[13:36:36.765] [INFO] ✅ @storybook/addon-a11y
+[13:36:36.765] [INFO] ✅ @storybook/addon-docs
+[13:36:36.765] [INFO] ✅ @storybook/addon-mcp
+[13:36:36.766] [INFO] Installing Playwright browser binaries (press "c" to abort)
+[13:36:36.766] [INFO] Installing Playwright browser binaries (press "c" to abort)
+[13:36:36.766] [DEBUG] Executing command: npx playwright install chromium --with-deps
+[13:36:41.295] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Testing 151.0.7922.34 (playwright chromium v1234) from https://cdn.playwright.dev/builds/cft/151.0.7922.34/mac-arm64/chrome-mac-arm64.zip
+
+[13:36:41.295] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Te
+[13:36:42.380] [INFO] Installing Playwright browser binaries (press "c" to abort): |                                                                                |   0% of 178.7 MiB
+
+[13:36:42.380] [INFO] Installing Playwright browser binaries (press "c" to abort): |                        
+[13:36:43.735] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■                                                                        |  10% of 178.7 MiB
+
+[13:36:43.735] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■                
+[13:36:44.556] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■                                                                |  20% of 178.7 MiB
+
+[13:36:44.556] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■        
+[13:36:45.379] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 178.7 MiB
+
+[13:36:45.379] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:46.198] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 178.7 MiB
+
+[13:36:46.198] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:47.011] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 178.7 MiB
+
+[13:36:47.011] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:47.823] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 178.7 MiB
+
+[13:36:47.823] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:48.775] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 178.7 MiB
+
+[13:36:48.775] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:49.598] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 178.7 MiB
+
+[13:36:49.598] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:50.400] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 178.7 MiB
+
+[13:36:50.400] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:51.240] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 178.7 MiB
+
+[13:36:51.240] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:36:53.580] [INFO] Installing Playwright browser binaries (press "c" to abort): Chrome for Testing 151.0.7922.34 (playwright chromium v1234) downloaded to /Users/nicolasguy/Library/Caches/ms-playwright/chromium-1234
+
+[13:36:53.580] [INFO] Installing Playwright browser binaries (press "c" to abort): Chrome for Testing 151.0.
+[13:36:53.580] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome Headless Shell 151.0.7922.34 (playwright chromium-headless-shell v1234) from https://cdn.playwright.dev/builds/cft/151.0.7922.34/mac-arm64/chrome-headless-shell-mac-arm64.zip
+
+[13:36:53.580] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome Headle
+[13:37:00.563] [INFO] Installing Playwright browser binaries (press "c" to abort): |                                                                                |   0% of 94.7 MiB
+
+[13:37:00.563] [INFO] Installing Playwright browser binaries (press "c" to abort): |                        
+[13:37:01.682] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■                                                                        |  10% of 94.7 MiB
+
+[13:37:01.682] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■                
+[13:37:02.064] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■                                                                |  20% of 94.7 MiB
+
+[13:37:02.064] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■        
+[13:37:02.382] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 94.7 MiB
+
+[13:37:02.382] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:02.701] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 94.7 MiB
+
+[13:37:02.701] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:03.010] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 94.7 MiB
+
+[13:37:03.010] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:03.323] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 94.7 MiB
+
+[13:37:03.323] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:03.634] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 94.7 MiB
+
+[13:37:03.634] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:03.968] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 94.7 MiB
+
+[13:37:03.968] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:04.316] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 94.7 MiB
+
+[13:37:04.316] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:04.627] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 94.7 MiB
+
+[13:37:04.627] [INFO] Installing Playwright browser binaries (press "c" to abort): |■■■■■■■■■■■■■■■■■■■■■■■■
+[13:37:05.848] [INFO] Installing Playwright browser binaries (press "c" to abort): Chrome Headless Shell 151.0.7922.34 (playwright chromium-headless-shell v1234) downloaded to /Users/nicolasguy/Library/Caches/ms-playwright/chromium_headless_shell-1234
+
+[13:37:05.848] [INFO] Installing Playwright browser binaries (press "c" to abort): Chrome Headless Shell 151
+[13:37:05.883] [INFO] Playwright browser binaries installed successfully
+[13:37:05.883] [INFO] Playwright browser binaries installed successfully
+[13:37:06.682] [INFO] [38;2;255;71;133mStorybook is installed but is not entirely set up yet.
+To finish setting up, now run `npx storybook ai setup` and follow its instructions precisely.[39m
+[13:37:06.682] [INFO] To run Storybook, run npm run storybook. CTRL+C to stop.
+[13:37:06.682] [INFO] Official documentation reference: https://storybook.js.org/llms.txt
+[13:37:06.683] [INFO] To finalize setting up with AI, paste this prompt to your AI agent:
+
+[38;2;255;71;133mRun `npx storybook ai setup` and follow its instructions precisely.[39m
+[13:37:07.258] [INFO] 

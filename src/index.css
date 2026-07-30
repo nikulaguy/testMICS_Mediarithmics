@@ -1,0 +1,61 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Circular, LLCircularWeb-Book, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+  background: #f0f3f5;
+}
+
+/* TopBar : la recherche est sur fond primary, le texte et le placeholder doivent être clairs */
+.mics-topbar-search.ant-input-affix-wrapper,
+.mics-topbar-search .ant-input {
+  color: #ffffff;
+  background: transparent;
+}
+.mics-topbar-search .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Panneaux de la TopBar : survol des lignes */
+.mics-panel-row:hover {
+  background: #ebeff2;
+}
+
+/* Tag du DS : la croix reprend la couleur du texte de la palette et une cible confortable */
+.ant-tag .ant-tag-close-icon {
+  width: 20px;
+  height: 20px;
+  margin-inline-start: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.43);
+}
+.ant-tag .ant-tag-close-icon:hover {
+  color: inherit;
+}
+
+/* Barre d'onglets : le débordement se pilote par le bouton « … », pas par une
+   barre de défilement système qui ajouterait une seconde façon de faire. */
+.mics-tabbar-scroller {
+  scrollbar-width: none;
+  /* Pas de scroll-behavior: smooth. Le défilement programmé est recalculé à chaque
+     mesure ; une animation en cours serait relancée avant d'aboutir, et l'onglet
+     resterait sous le bouton « … ». */
+  overflow-anchor: none;
+}
+.mics-tabbar-scroller::-webkit-scrollbar {
+  display: none;
+}

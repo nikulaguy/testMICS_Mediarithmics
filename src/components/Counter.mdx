@@ -1,0 +1,96 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CounterStories from './Counter.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={CounterStories} />
+
+# Counter
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : <code>libs/basic/counter</code> + <code>counter-dashboard</code></span>
+  <span><b>Maquette</b> : Figma Counter <code>185:81</code></span>
+</div>
+
+Carte de compteur d'un tableau de bord : intitulé, barre optionnelle, valeur. La barre n'apparaît
+**que s'il y a un plafond** : une progression sans maximum ne veut rien dire. Le chiffre est
+toujours là, la barre ne fait que l'illustrer.
+
+<Canvas of={CounterStories.AvecPlafond} />
+
+## Props
+
+<Controls of={CounterStories.BacASable} />
+
+## Règles d'usage
+
+- **La barre suit `max`.** Passer `max` affiche la barre et le « / N » ; l'omettre donne un KPI
+  simple. Pas de booléen séparé : deux sources de vérité pour une même chose finissent par diverger.
+- La couleur de la barre est **doublée par le chiffre**. Un utilisateur qui ne perçoit pas le vert
+  lit quand même « 82 / 100 ».
+- L'infobulle porte **ce que le titre ne peut pas dire** en trois mots : la période, le périmètre,
+  la règle de calcul. Pas une paraphrase du titre.
+- En rangée, tous les Counters ont la **même largeur et la même hauteur**. Un seul avec barre dans
+  une rangée sans barres décale les valeurs et casse la lecture en colonne.
+
+## Exemples d'usage
+
+**Sans plafond** : pas de barre.
+
+<Canvas of={CounterStories.SansPlafond} />
+
+**En rangée** sur un tableau de bord :
+
+<Canvas of={CounterStories.Rangee} />
+
+**Plafond atteint** :
+
+<Canvas of={CounterStories.PlafondAtteint} />
+
+## Anatomie
+
+1. **Carte** : fond `bg/container`, `radius/card`, padding 24, gap 16.
+2. **Intitulé** : Body/Medium 12 en `text/normal`, icône info 14 en `text/lighter` à droite.
+3. **Barre** (si `max`) : hauteur 16, `radius/card`, piste `bg/window`, remplissage `success`.
+4. **Valeur** : Headline (Circular Medium 24 / 28) en `text/darker`, suivie de « / N » en
+   Body/Book 12 `text/lighter`.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        La barre porte <code>role="progressbar"</code> avec <code>aria-valuenow</code>,{' '}
+        <code>aria-valuemin</code>, <code>aria-valuemax</code> et <code>aria-label</code> = le titre
+        (RGAA 7.1).
+      </>,
+    ],
+    [
+      'Information couleur',
+      "Le remplissage vert est doublé par la valeur chiffrée : la couleur n'est jamais le seul porteur (RGAA 3.1).",
+    ],
+    [
+      'Contraste',
+      "Le remplissage success sur la piste bg/window atteint 3:1 ; la valeur en text/darker dépasse 4,5:1 (RGAA 3.2).",
+    ],
+    [
+      'Aide',
+      <>
+        L'icône info est atteignable au clavier (<code>tabIndex</code>) et porte le texte de
+        l'infobulle en <code>aria-label</code> : une infobulle au survol seul est inaccessible
+        (RGAA 7.3, 10.7).
+      </>,
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart assumé.** La maquette expose une prop `Show progress` distincte de `Max`. Le code déduit
+  la barre de la présence de `max` : un seul champ, pas d'état incohérent possible
+  (barre affichée sans plafond).
+- **À construire.** Les seuils colorés (vert / orange / rouge selon le taux de remplissage) et
+  l'indicateur de tendance (delta par rapport à la période précédente).

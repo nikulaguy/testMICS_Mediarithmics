@@ -1,0 +1,97 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as EmptyBlockStories from './EmptyBlock.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={EmptyBlockStories} />
+
+# EmptyBlock
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : enveloppé</span>
+  <span><b>Source code</b> : remplace <code>empty-records</code>, <code>empty-table-view</code> et <code>Empty</code> d'AntD, trois états vides différents en production</span>
+  <span><b>Maquette</b> : Figma Empty State <code>285:151</code></span>
+</div>
+
+État vide : illustration, **titre**, description optionnelle, action optionnelle. **Centré dans
+son conteneur**, jamais aligné à gauche : un état vide aligné en haut à gauche se lit comme un
+contenu qui a raté son chargement.
+
+Trois compositions, du plus sobre au plus complet :
+
+<Canvas of={EmptyBlockStories.Compositions} />
+
+## Props
+
+<Controls of={EmptyBlockStories.BacASable} />
+
+## Règles d'usage
+
+- Le **titre** dit ce qui est vide, en une ligne : « No segment matches your filters » plutôt que
+  « Aucune donnée », qui laisse l'utilisateur chercher la cause.
+- La **description** est facultative et n'est là que si elle ajoute quelque chose : le détail, ou
+  la marche à suivre. Répéter le titre en plus long est du bruit.
+- L'action est **la sortie du vide** : effacer les filtres, créer la première ressource. S'il n'y a
+  pas de sortie utile, il n'y a pas d'action.
+- Un vide qui est une **bonne nouvelle** (aucune alerte à traiter) n'est ni une erreur ni un appel
+  à l'action : titre et description, pas de bouton.
+- Le composant remplit son conteneur (`flex: 1`) et se centre dedans. Le conteneur porte la carte,
+  pas l'état vide : celui-ci ne dessine ni fond ni bordure.
+
+## Exemples d'usage
+
+**Filtre trop restrictif** : l'action ramène à un état utile.
+
+<Canvas of={EmptyBlockStories.FiltreTropRestrictif} />
+
+**Rien à traiter**, sans action :
+
+<Canvas of={EmptyBlockStories.RienATraiter} />
+
+**Première création**, l'action est la création :
+
+<Canvas of={EmptyBlockStories.PremiereCreation} />
+
+## Anatomie
+
+1. **Illustration** : icône de 44 px en `text/lightest`. Discrète : elle situe, elle n'alerte pas.
+2. **Titre** : Headline 4 (Circular Medium 16 / 24) en `text/lighter`, centré.
+3. **Description** (optionnelle) : Body/Book 12 / 20, même couleur, gap 4 sous le titre.
+4. **Action** (optionnelle) : un Button, jamais plus d'un, gap 12 sous le bloc de texte.
+
+Padding 35 vertical, 24 horizontal, gap 12 entre les trois blocs.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Images',
+      <>
+        L'icône est décorative : <code>aria-hidden</code>, l'information est dans le message
+        (RGAA 1.2).
+      </>,
+    ],
+    [
+      'Contenu dynamique',
+      <>
+        Quand le vide résulte d'un filtrage, le message apparaît dans une zone{' '}
+        <code>aria-live="polite"</code> pour être annoncé sans déplacer le focus (RGAA 7.4).
+      </>,
+    ],
+    [
+      'Contraste',
+      "Le message est en text/lighter : contraste vérifié à 4,5:1 sur bg/container. L'icône, décorative, n'est pas soumise au seuil (RGAA 3.2).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Trois états vides coexistent (`empty-records`, `empty-table-view`,
+  `Empty` d'AntD) avec trois illustrations et trois alignements. Le composant les unifie.
+- **Écart de nommage.** La maquette appelle « Message » ce qui est visuellement un titre
+  (Headline 4). Le code expose `title` et `description` : deux textes de niveaux différents
+  méritent deux noms qui le disent. À arbitrer côté maquette.
+- **À construire.** L'état vide **de chargement** (squelette) est un composant distinct, non
+  encore décrit dans la maquette.

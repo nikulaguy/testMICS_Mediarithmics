@@ -1,0 +1,98 @@
+import { Meta, Canvas, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as TagStories from './Tag.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={TagStories} />
+
+# Tag
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : enveloppé (rend un Tag Ant Design en dessous)</span>
+  <span><b>Source code</b> : <code>frontend/libs/basic</code> + AntD v5 Tag (mention-tag, labels-selector, statuts de liste)</span>
+  <span><b>Maquette</b> : Figma <code>15:18</code>, doc <code>90:8</code></span>
+</div>
+
+Étiquette compacte. Affiche un statut, une catégorie ou un label. Fond rampe/100, bordure
+rampe/300, texte rampe/700 ; radius `radius/base`, padding 2×8, texte Body/Book 12.
+Les couleurs sont les rampes de marque.
+
+<Canvas of={TagStories.Couleurs} />
+
+## Props
+
+<Controls of={TagStories.BacASable} />
+
+## Règles d'usage
+
+- La couleur **porte un sens** (statut, catégorie) et reste cohérente dans toute l'application.
+  Jamais décorative, jamais aléatoire.
+- Le sens ne repose **pas sur la seule couleur** : le texte du tag est explicite (« Actif », « Erreur »).
+- Texte court, un à deux mots, sans ponctuation.
+- Limiter le nombre de couleurs simultanées dans une même vue pour préserver la lisibilité.
+
+### À faire
+
+<Canvas of={TagStories.Do} />
+
+### À éviter
+
+<Canvas of={TagStories.Dont} />
+
+## Exemples d'usage
+
+Les trois cas réels rencontrés dans le produit.
+
+**Statuts et catégories**, non fermables :
+
+<Canvas of={TagStories.StatutsEtCategories} />
+
+**Chips de filtre sélectionnés**, fermables (menu Labels, barre de filtres actifs) :
+
+<Canvas of={TagStories.ChipsDeFiltre} />
+
+**Avec logo de société** :
+
+<Canvas of={TagStories.AvecLogo} />
+
+## Anatomie
+
+1. **Conteneur** : fond rampe/100, bordure 1 px rampe/300, radius `radius/base`, padding 2×8,
+   hauteur 26, gap 4.
+2. **Libellé** : Body/Book 12 en rampe/700, contraste suffisant sur le fond /100.
+3. **Croix de retrait** (si `closable`) : glyphe `icon/close` de **8 px**, comme dans la maquette.
+   La cible de pointage fait 20 px grâce à un calque transparent en position absolue : hors flux,
+   il n'élargit pas le tag. Confort de pointage sans écart visuel.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>&lt;span&gt;</code> pour l'étiquette ; la version fermable expose un{' '}
+        <code>&lt;button aria-label="Retirer {'{label}'}"&gt;</code>.
+      </>,
+    ],
+    [
+      'Information couleur',
+      <>
+        La couleur porte une catégorie : elle est <b>toujours</b> doublée par le libellé texte
+        (RGAA 3.1).
+      </>,
+    ],
+    ['Contraste', "Le rapport texte/fond de chaque rampe est d'au moins 4,5:1 (RGAA 3.2)."],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Résolu, croix de retrait.** Le glyphe est à 8 px comme dans la maquette ; la cible de pointage
+  de 20 px est obtenue par un calque transparent hors flux. Il n'y a plus d'écart à arbitrer.
+- **Piège corrigé.** Ant Design **clone** le nœud passé en `closeIcon` pour y injecter `onClick`,
+  `onKeyDown`, `role`, `tabIndex` et `className`. Un composant React qui ne transmet pas ses props
+  DOM restantes les avale en silence : la croix s'affiche, et ne ferme rien. La règle générale est
+  dans « Le modèle d'une page composant » et dans `ARCHITECTURE.md`.
+- **À construire : tag à point de statut.** Variante avec pastille de couleur et texte neutre,
+  pour les statuts où le fond coloré est trop présent.

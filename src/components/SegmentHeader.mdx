@@ -1,0 +1,96 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SH from './SegmentHeader.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={SH} />
+
+# SegmentHeader
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : <code>libs/basic/counter-dashboard</code> + <code>dashboard-header</code></span>
+  <span><b>Maquette</b> : Figma « Segment Header », écran <code>239:3843</code></span>
+</div>
+
+En-tête du tableau de bord d'un segment. Carte navy à gauche pour la métrique principale, liste
+des métriques secondaires à droite. **La hiérarchie est le message** : le UserPoint est la seule
+valeur qui dit la taille de l'audience, les cinq autres disent par quels chemins on y accède.
+
+<Canvas of={SH.BacASable} />
+
+## Props
+
+<Controls of={SH.BacASable} />
+
+## Ce que comptent les métriques
+
+Définitions de la documentation développeur mediarithmics. Elles sont reprises en infobulle sur
+chaque libellé, parce qu'aucun de ces termes ne se devine.
+
+<DocTable
+  headers={['Métrique', 'Ce qu’elle compte']}
+  rows={[
+    ['UserPoint', "L'entité sur laquelle l'appartenance au segment est évaluée. C'est la taille de l'audience."],
+    ['User Accounts', 'Utilisateurs identifiés dans vos systèmes (CRM, fidélité, authentification), toujours rattachés à un compartiment.'],
+    ['User Profiles', "Données de profil attachées à un UserPoint. Pas un identifiant autonome : elles s'accrochent à un compte, un email haché ou un user agent."],
+    ['User Device Points', 'Appareils rattachés au UserPoint. Un UserPoint peut en avoir plusieurs, chacun avec plusieurs identifiants techniques.'],
+    ['Installation IDs', 'Cookies first-party générés par mediarithmics, au format ins:<registry>:<valeur>.'],
+    ['Vector IDs', 'Cookies third-party mediarithmics, au format vec:<valeur> ou mum:<valeur>.'],
+  ]}
+/>
+
+Chaque identifiant est **un chemin différent vers le même UserPoint**. Les additionner n'a pas de
+sens : c'est pour cela qu'ils sont listés et non totalisés.
+
+## Règles d'usage
+
+- **Les valeurs sont celles du dernier calcul**, pas du temps réel. La date sous la carte n'est pas
+  décorative : c'est elle qui dit à quel point le chiffre est frais. Ne jamais la masquer.
+- **Zéro s'affiche.** Une métrique à zéro est une information — aucun Installation ID veut dire que
+  le segment ne touche personne par ce canal.
+- La métrique principale reste **seule** dans la carte navy. Y en ajouter une seconde détruit la
+  hiérarchie.
+- Les icônes sont **décoratives** : le libellé porte l'information.
+
+## Exemples d'usage
+
+**Grande audience** :
+
+<Canvas of={SH.GrandeAudience} />
+
+**Métriques à zéro** :
+
+<Canvas of={SH.AZero} />
+
+## Anatomie
+
+1. **Carte principale** : 500 de large, fond `info` (navy), icône `server` de 60, « UserPoint » en
+   Headline 3, valeur en Headline. Gap 12, centré.
+2. **Liste** : fond `bg/container`, padding 24, gap 12. Chaque rangée fait 24 : icône 20 en
+   `primary`, libellé et valeur en Headline 4 `text/normal`, valeur alignée à droite.
+3. **Date de calcul** : Caption en `text/lighter`, alignée à droite sous la carte.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    ['Images', 'Les icônes sont décoratives : aria-hidden. Le libellé porte l’information (RGAA 1.2).'],
+    [
+      'Aide',
+      "Les infobulles de définition sont atteignables au clavier : le libellé porte tabIndex, une infobulle au survol seul est inaccessible (RGAA 10.7).",
+    ],
+    ['Contraste', 'Blanc sur navy : 12,6:1. Conforme (RGAA 3.2).'],
+    [
+      'Contenu dynamique',
+      "Après un recalcul, la nouvelle valeur et sa date sont annoncées dans une zone aria-live=\"polite\" (RGAA 7.4).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté au code.** Les infobulles de définition n'existent ni en production ni en maquette. Sans
+  elles, « Vector IDs » ne veut rien dire pour un utilisateur métier.
+- **À construire.** La tendance (delta par rapport au calcul précédent) et l'état de chargement en
+  squelette, tous deux décrits comme évolutions dans la maquette.

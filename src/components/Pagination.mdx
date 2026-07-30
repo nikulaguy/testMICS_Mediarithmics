@@ -1,0 +1,99 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as PaginationStories from './Pagination.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={PaginationStories} />
+
+# Pagination
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : enveloppé</span>
+  <span><b>Source code</b> : AntD v5 Pagination (<code>table-view</code>, <code>collection-view</code>)</span>
+  <span><b>Maquette</b> : Figma Pagination <code>16:34</code></span>
+</div>
+
+Navigation de pages. Ant Design gère déjà l'ellipsis, le clavier et les extrémités désactivées :
+le DS garde son rendu et impose la **position** et les réglages. Structure : précédent · pages ·
+ellipsis · dernière · suivant · sélecteur de taille.
+
+<Canvas of={PaginationStories.BacASable} />
+
+## Props
+
+<Controls of={PaginationStories.BacASable} />
+
+## Règles d'usage
+
+- **En bas à droite de la liste**, toujours. C'est là que finit la lecture du tableau ; la
+  pagination y est sur le chemin du regard, nulle part ailleurs.
+- Sélecteur de taille **si les volumes le justifient**. Sur 24 éléments, il ajoute un contrôle
+  pour rien.
+- Précédent et suivant **désactivés aux extrémités** plutôt que masqués : la barre garde la même
+  largeur d'une page à l'autre, les autres contrôles ne bougent pas.
+- La page courante est **conservée au tri** et **réinitialisée au filtre** : trier ne change pas
+  l'ensemble des résultats, filtrer si.
+- `total` compte des **éléments**, pas des pages. C'est l'erreur la plus fréquente sur ce composant.
+
+## Exemples d'usage
+
+**Première page** : « précédent » désactivé.
+
+<Canvas of={PaginationStories.PremierePage} />
+
+**Dernière page** : « suivant » désactivé.
+
+<Canvas of={PaginationStories.DernierePage} />
+
+**Petit volume** : pas de sélecteur de taille.
+
+<Canvas of={PaginationStories.PetitVolume} />
+
+**Sous un tableau**, sa seule position.
+
+<Canvas of={PaginationStories.SousUnTableau} />
+
+## Anatomie
+
+1. **Boutons de page** : 32 × 32, `radius/base`, fond `bg/container`, bordure `border/input`.
+   Page courante : bordure et chiffre en `primary`, Circular Medium 12.
+2. **Ellipsis** : « ••• » en `text/lighter`, non cliquable.
+3. **Sélecteur de taille** : hauteur 32, padding horizontal 10, « n / page ».
+4. Gap 8 entre tous les éléments.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Navigation',
+      <>
+        L'ensemble est dans un <code>&lt;nav aria-label="Pagination"&gt;</code> : c'est un repère de
+        navigation à part entière (RGAA 12.6).
+      </>,
+    ],
+    [
+      'États',
+      <>
+        La page courante porte <code>aria-current="page"</code> ; la bordure colorée seule ne
+        l'annonce pas (RGAA 3.1, 9.x).
+      </>,
+    ],
+    [
+      'Liens et boutons',
+      "Précédent et suivant ont un intitulé explicite (« Page précédente »), pas un chevron nu (RGAA 6.1, 7.3).",
+    ],
+    [
+      'Contenu dynamique',
+      <>
+        Le changement de page met à jour le tableau sans recharger : annoncer le nouvel intervalle
+        dans une zone <code>aria-live="polite"</code> (RGAA 7.4).
+      </>,
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Conforme à la production.** Le composant reprend le rendu AntD thémé, sans écart de maquette.
+- **À construire.** Le saut direct « Aller à la page », utile au-delà d'une vingtaine de pages.

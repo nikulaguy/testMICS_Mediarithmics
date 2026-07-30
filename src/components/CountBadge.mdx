@@ -1,0 +1,83 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CountBadgeStories from './CountBadge.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={CountBadgeStories} />
+
+# CountBadge
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : à ne pas confondre avec <code>Badge</code> d'Ant Design, qui est une pastille flottante en position absolue</span>
+  <span><b>Maquette</b> : Figma Badge Type=Count <code>15:38</code></span>
+</div>
+
+Pastille de comptage : hauteur 20, radius 6, chiffre en `text/on-dark`. Elle se pose **dans le flux**,
+à côté d'un libellé, et non en exposant sur une icône. La couleur porte le sens : `info` pour un
+état neutre (nombre de filtres actifs), `warning` pour des éléments à traiter, `success` pour
+« rien à traiter ».
+
+<Canvas of={CountBadgeStories.Tons} />
+
+## Props
+
+<Controls of={CountBadgeStories.BacASable} />
+
+## Règles d'usage
+
+- **Jamais la pastille seule.** Elle accompagne toujours un libellé lisible : le nombre sans son
+  objet ne veut rien dire, et un lecteur d'écran annoncerait « 3 » sans contexte.
+- Le ton est **sémantique**. Un compteur d'alertes non traitées est `warning`, pas `info` parce
+  que le bleu s'accorde mieux avec la barre.
+- La pastille disparaît quand le compte vaut zéro, sauf si l'absence est l'information (`success`
+  sur un tableau de bord de conformité).
+- `flex: 0 0 auto` : la pastille ne se comprime jamais dans une rangée serrée, contrairement au
+  libellé qui peut être tronqué.
+
+## Exemples d'usage
+
+**Nombre de filtres actifs** sur le bouton Filters :
+
+<Canvas of={CountBadgeStories.SurBoutonFiltre} />
+
+**Éléments à traiter** sur un onglet :
+
+<Canvas of={CountBadgeStories.SurOnglet} />
+
+## Anatomie
+
+1. **Conteneur** : hauteur 20, largeur minimale 20, padding horizontal 6, radius 6, fond
+   sémantique selon le ton.
+2. **Chiffre** : Body/Book 12 en `text/on-dark`, centré.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Information couleur',
+      "Le ton n'est jamais le seul porteur du sens : le libellé adjacent dit de quoi il s'agit (RGAA 3.1).",
+    ],
+    [
+      'Contraste',
+      'Chiffre blanc sur fond sémantique : rapport minimal 4,5:1 vérifié sur les trois tons (RGAA 3.2).',
+    ],
+    [
+      'Contenu dynamique',
+      <>
+        Quand le compte change sans action de l'utilisateur, la zone qui le contient porte un{' '}
+        <code>aria-live="polite"</code> — au niveau du conteneur, pas de la pastille (RGAA 7.4).
+      </>,
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart assumé.** Le `Badge` d'Ant Design n'a pas la même anatomie : positionnement absolu,
+  radius pleine hauteur, palette propre. D'où un composant construit plutôt qu'une enveloppe.
+  Conséquence directe : **`Badge` n'est pas réexporté par `src/ui.ts`**. Tant qu'il l'était, un
+  écran a rendu la pastille flottante d'AntD sur le bouton Filters au lieu du compteur dans le
+  flux. Un besoin, une entrée.
+- **À construire.** Le format des grands nombres (« 99+ ») n'est pas décrit dans la maquette.

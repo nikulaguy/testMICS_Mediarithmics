@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mics-front-test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "/Users/nicolasguy/Downloads/mics-front-test"],
+      "port": 5173
+    }
+  ]
+}

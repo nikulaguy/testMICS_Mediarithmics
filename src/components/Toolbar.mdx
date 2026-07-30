@@ -1,0 +1,114 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ToolbarStories from './Toolbar.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={ToolbarStories} />
+
+# Toolbar
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : <code>libs/basic/table-view-filters</code></span>
+  <span><b>Maquette</b> : Figma Table / Toolbar <code>21:65</code>, règle ActionBar/Toolbar <code>617:2</code></span>
+</div>
+
+Barre d'outils d'un tableau. Recherche à gauche, actions à droite, **ordre stable d'un écran à
+l'autre**. Elle se pose en haut du panneau qui contient le tableau, jamais ailleurs.
+
+<Canvas of={ToolbarStories.Standard} />
+
+## Props
+
+<Controls of={ToolbarStories.Standard} />
+
+Les booléens de visibilité de la maquette (`Show search`, `Show filter`, `Show edit view`,
+`Show export`, `Show primary`) deviennent en code deux emplacements que la page remplit ou non :
+`search` et `actions`. Ne pas passer un emplacement revient à mettre son booléen à `false`.
+
+## Ce qui va dans la Toolbar, et ce qui n'y va pas
+
+<DocTable
+  headers={['', 'Toolbar', 'ActionBar']}
+  rows={[
+    ['Portée', 'Le tableau et son contenu', 'La page ou la ressource entière'],
+    ['Exemples', 'Recherche, Filters, Edit view, actions de sélection', 'New segment, Export, Edit, Delete'],
+    ['Position', 'Au-dessus du tableau', "En haut de l'écran, à droite du fil d'ariane"],
+  ]}
+/>
+
+**Le test qui tranche** : si l'action garde du sens quand le tableau est vide, elle est de page.
+« New segment » crée une ressource indépendante de tout filtre : sa place est dans l'ActionBar.
+« Edit view » configure les colonnes du tableau : sa place est ici, à côté de ce qu'elle modifie.
+
+Sur une liste standard, cela veut dire `Show export` et `Show primary` à **false**.
+
+## Règles d'usage
+
+- **Ordre fixe** : recherche à gauche, puis Filters, puis Edit view. Une action au même endroit
+  d'un écran à l'autre s'atteint sans la chercher.
+- **Jeu d'icônes normé** : Filters = `filter`, Edit view = `view`, Export = `download`, création =
+  `plus`. Pas de substitution.
+- **Icônes sur tous les boutons de la rangée, ou sur aucun.** Un mélange donne une rangée bancale.
+- La Toolbar se **dose par module** : Experiments n'a pas d'action primaire, Feeds Overview n'a
+  qu'une recherche. Un emplacement vide se retire, il ne se remplit pas pour faire symétrique.
+- Le champ de recherche est **le seul Input du DS sans label visible** : la loupe et le placeholder
+  suffisent à en dire la fonction. Il porte quand même un `aria-label`.
+
+## Exemples d'usage
+
+**Recherche seule** : un tableau court, sans dimension à filtrer.
+
+<Canvas of={ToolbarStories.RechercheSeule} />
+
+**Actions seules** : le tableau se lit d'un coup d'œil, la recherche serait du décor.
+
+<Canvas of={ToolbarStories.ActionsSeules} />
+
+### À éviter
+
+<Canvas of={ToolbarStories.Dont} />
+
+## Anatomie
+
+1. **Rangée** : `space-between`, gap 12, alignée sur la largeur du tableau.
+2. **Recherche** : Input de 400, suffixe loupe 14 en `text/lighter`, effaçable.
+3. **Actions** : Buttons `Default` de 32, gap 12, icône 14 à gauche du libellé.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        La rangée porte <code>role="toolbar"</code> ; la recherche est un{' '}
+        <code>&lt;input type="search"&gt;</code> avec <code>aria-label</code>, le placeholder ne
+        tenant pas lieu de label (RGAA 11.1).
+      </>,
+    ],
+    [
+      'Navigation',
+      "Ordre de tabulation identique à l'ordre visuel : recherche, puis actions de gauche à droite (RGAA 12.8).",
+    ],
+    [
+      'Contenu dynamique',
+      <>
+        La recherche filtre au fil de la frappe : le nombre de résultats est annoncé dans une zone{' '}
+        <code>aria-live="polite"</code> (RGAA 7.4).
+      </>,
+    ],
+    [
+      'Images',
+      "Les icônes des boutons sont décoratives : le libellé texte porte l'information (RGAA 1.2).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Écart avec la production.** Les actions de page et les actions de tableau sont mélangées écran
+  par écran. La règle de portée est la réponse à l'incohérence remontée par le client ; l'avant /
+  après est dans la page Audit du fichier Figma.
+- **À construire.** La barre d'actions groupées qui remplace la Toolbar quand des lignes sont
+  sélectionnées (« 3 sélectionnés · Supprimer · Exporter »).

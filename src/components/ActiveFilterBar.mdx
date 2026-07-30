@@ -1,0 +1,96 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ActiveFilterBarStories from './ActiveFilterBar.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={ActiveFilterBarStories} />
+
+# ActiveFilterBar
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : n'existe pas en production, d'où l'incohérence de filtrage relevée par le client</span>
+  <span><b>Maquette</b> : Figma, test de filtres <code>631:1093</code></span>
+</div>
+
+Barre de rappel des filtres appliqués : fond `bg/subtle`, `radius/card`, padding 8. **Une chip par
+valeur appliquée**, jamais de regroupement du type « Labels (3) ». Le regroupement économise de la
+place au prix de la seule chose que cette barre sert à faire : dire ce qui est filtré, et permettre
+de retirer une valeur précise sans rouvrir un panneau.
+
+Elle n'apparaît que **s'il existe au moins un filtre actif non lisible dans la barre d'outils**.
+Un filtre déjà visible dans un sélecteur exposé n'a pas besoin d'être rappelé : le répéter apprend
+à l'utilisateur que la barre est du bruit.
+
+<Canvas of={ActiveFilterBarStories.Repliee} />
+
+## Props
+
+<Controls of={ActiveFilterBarStories.Repliee} />
+
+## Deux modes, décidés par la mesure
+
+Par défaut la barre tient **sur une ligne**. Le dépliage n'apparaît que si ça déborde vraiment : la
+largeur réelle de chaque chip est mesurée dans une rangée hors écran avant de décider combien en
+afficher. Un seuil arbitraire (« au-delà de 5 chips ») afficherait « +0 autres » sur des libellés
+courts et tronquerait des libellés longs bien avant le débordement.
+
+<Canvas of={ActiveFilterBarStories.AvecDebordement} />
+
+## Règles d'usage
+
+- **Une chip = une valeur.** Trois labels sélectionnés donnent trois chips, pas une chip « Labels (3) ».
+- La chip porte **la dimension et la valeur** (« Type : User query »). Une chip « User query » seule
+  oblige à deviner à quelle colonne elle se rapporte.
+- « Clear all filters » reste **toujours visible**, à droite, hors de la zone qui se replie : c'est
+  la sortie de secours, elle ne se cache pas derrière un dépliage.
+- Retirer une chip applique le filtre immédiatement. Pas de bouton « Appliquer » : la barre montre
+  l'état courant, elle n'édite pas un brouillon.
+- Zéro filtre actif : le composant rend `null`. Il ne laisse pas une bande vide qui décale la page
+  à chaque filtrage.
+
+<Canvas of={ActiveFilterBarStories.Vide} />
+
+## Anatomie
+
+1. **Conteneur** : fond `bg/subtle`, `radius/card`, padding 8, gap 12.
+2. **Rangée de chips** : `Tag` fermables, gap 8, `nowrap` replié, `wrap` déplié.
+3. **Bascule** : lien « +n autres » / « Réduire », affiché seulement en cas de débordement réel.
+4. **Sortie** : lien « Clear all filters », toujours à droite, jamais compressé.
+5. **Rangée de mesure** : copie invisible des chips, hors flux, qui sert au calcul de débordement.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        Chaque chip expose un bouton de retrait avec un intitulé explicite :{' '}
+        <code>aria-label="Retirer Type : User query"</code>, pas « Fermer » (RGAA 7.3, 11.9).
+      </>,
+    ],
+    [
+      'Contenu dynamique',
+      <>
+        La bascule porte <code>aria-expanded</code>. Le résultat filtré est annoncé dans une zone{' '}
+        <code>aria-live="polite"</code> : « 12 segments » (RGAA 7.4).
+      </>,
+    ],
+    [
+      'Focus',
+      "Retirer la dernière chip fait disparaître la barre : le focus est replacé sur le bouton Filters, jamais perdu sur le body (RGAA 7.3).",
+    ],
+    [
+      'Images',
+      "La rangée de mesure porte aria-hidden : elle est invisible pour tous, y compris les technologies d'assistance (RGAA 10.13).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté en maquette.** En production, aucun rappel des filtres appliqués : l'utilisateur doit
+  rouvrir chaque panneau pour savoir ce qui filtre sa liste. C'est la cause directe de
+  l'incohérence remontée par le client.
+- **À construire.** L'enregistrement d'un jeu de filtres en vue nommée, évoqué mais non spécifié.

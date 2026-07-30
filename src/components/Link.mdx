@@ -1,0 +1,89 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as LinkStories from './Link.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={LinkStories} />
+
+# Link
+
+**Catégorie** : construit. Ant Design n'a pas d'équivalent : son lien de typographie ne connaît ni
+les deux tailles, ni le thème sur fond sombre, ni l'état désactivé.
+
+**Source code** : `<a>` / `Typography.Link` stylés au cas par cas en production. Le composant
+unifie ces usages. **Maquette** : Figma `567:140`, doc `572:2`.
+
+Lien textuel cliquable, seul ou en fin de phrase, avec icônes optionnelles de part et d'autre.
+C'est le **seul atome de lien du système** : niveaux du fil d'ariane, liens de tableau, actions
+légères. Une action principale d'écran reste un Button.
+
+<Canvas of={LinkStories.Tailles} />
+
+## Props
+
+<Controls of={LinkStories.Defaut} />
+
+## Couleurs par thème et par état
+
+<DocTable
+  headers={['Thème', 'Défaut', 'Survol', 'Désactivé']}
+  rows={[
+    ['onLight', <code>link/default</code>, <code>link/hover</code>, <code>text/lightest</code>],
+    ['onDark', <code>link/on-dark</code>, <code>text/on-dark</code>, <code>text/on-dark-disabled</code>],
+  ]}
+/>
+
+## Règles d'usage
+
+- Action légère ou navigation inline (Refresh, See more, niveaux du fil d'ariane). L'action
+  principale d'un écran reste un **Button**.
+- **M (12)** par défaut dans les composants et le corps de texte ; **L (14)** pour un lien isolé
+  ou mis en avant.
+- Sur une surface navy (Actionbar d'édition, tooltip), le thème **onDark est obligatoire** :
+  jamais le navy `link/default` sur fond sombre.
+- À ne pas confondre avec `Button type="link"`, qui est un bouton à paddings pour les zones
+  d'action. Link est l'atome texte nu, sans padding.
+
+<Canvas of={LinkStories.SurFondSombre} />
+
+## Anatomie
+
+1. **Libellé** : Body/Book 12 en taille M, Body/Large 14 en taille L. La couleur dépend du thème
+   et de l'état.
+2. **Icônes optionnelles** (swap) de part et d'autre, calées sur la taille du texte, même couleur
+   que le libellé, gap 4.
+
+<Canvas of={LinkStories.AvecIcones} />
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>&lt;a href&gt;</code> si le lien navigue, <code>&lt;button&gt;</code> s'il agit dans la
+        page (ex. Refresh). Jamais une <code>div</code> cliquable (RGAA 7.1, 7.3).
+      </>,
+    ],
+    [
+      'Liens',
+      "Intitulé explicite hors contexte : pas de « cliquez ici », et l'icône seule ne suffit pas (RGAA 6.1, 6.2).",
+    ],
+    [
+      'Information couleur',
+      'Dans un paragraphe, distinguer le lien autrement que par la couleur seule (soulignement au survol) et garantir un contraste de 4,5:1 (RGAA 3.1, 3.2).',
+    ],
+  ]}
+/>
+
+<Canvas of={LinkStories.Desactive} />
+
+## Écarts et évolutions
+
+- **Ajouté en maquette.** En production, les liens sont des `<a>` ou des `Typography.Link` stylés
+  au cas par cas. Le composant unifie tailles, thèmes et états. Les tokens `link/on-dark` et
+  `text/on-dark-disabled` ont été créés pour le fond sombre : l'ancien fil d'ariane utilisait un
+  bleu clair codé en dur.
+- **À construire.** L'état Focus visible au clavier, distinct du survol, n'est pas encore décrit
+  dans la maquette.
