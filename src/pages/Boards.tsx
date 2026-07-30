@@ -152,8 +152,17 @@ export function Boards({ board, onBoardChange }: Props) {
       {/*
         Barre de filtres. En comparaison elle se réduit : « Stop comparing » remplace
         Compare et Export, et c'est la seule sortie — relevé sur les écrans de prod.
+        16 de plus sous les onglets : la barre de base les touchait presque.
       */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: scale.space8 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap: scale.space8,
+          marginTop: scale.space16,
+        }}
+      >
         {comparedSegment ? (
           // Comparaison en cours : une seule sortie, et elle est explicite. Même barre
           // que l'onglet « Features and adoption » du détail d'un segment.
