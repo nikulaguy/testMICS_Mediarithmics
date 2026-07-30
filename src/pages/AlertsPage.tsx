@@ -12,24 +12,23 @@ interface AlertRow {
   userPoints: number;
 }
 
-interface Section {
+export interface AlertSection {
   key: string;
   title: string;
   icon: string;
   iconColor: string;
-  count: number;
   description: string;
   rows: AlertRow[];
   link?: string;
 }
 
-const SECTIONS: Section[] = [
+/** Données de départ. L'état vit dans App : la pastille de l'onglet en dépend aussi. */
+export const ALERT_SECTIONS: AlertSection[] = [
   {
     key: 'definition',
     title: 'Segment definition errors',
     icon: 'cluster',
     iconColor: primitives.redMain,
-    count: 1,
     description:
       "We couldn't compute some of your segments. This is usually due to an issue in your segment definition (obsolete OTQL for instance). You can edit them to check the query.",
     rows: [
@@ -41,7 +40,6 @@ const SECTIONS: Section[] = [
     title: 'Volume drops',
     icon: 'chart-line',
     iconColor: semantic.textNormal,
-    count: 0,
     description:
       "Those query segments' volumes dropped by more than 10% in a day. Please check this is normal and not due to integration issues or a schema change.",
     rows: [],
@@ -51,7 +49,6 @@ const SECTIONS: Section[] = [
     title: 'Initial loading errors',
     icon: 'feeds',
     iconColor: semantic.warning,
-    count: 0,
     description:
       "The following segments have some initial loading errors. Head to the segment's details and click on the feeds to troubleshoot issues.",
     rows: [],
@@ -61,7 +58,6 @@ const SECTIONS: Section[] = [
     title: 'Segment computation errors',
     icon: 'cloud',
     iconColor: primitives.redMain,
-    count: 0,
     description:
       "We couldn't compute some of your segments. This could be due to infrastructure issue. We will automatically recompute those segments in the next 24 hours.",
     rows: [],
@@ -69,21 +65,43 @@ const SECTIONS: Section[] = [
   },
 ];
 
+interface Props {
+  sections: AlertSection[];
+  /** Ferme les alertes désignées. L'état vit dans App, la pastille de l'onglet en dépend. */
+  onClose: (sectionKey: string, rowKeys: string[]) => void;
+}
+
 /**
  * Onglet « Alerts ».
  * Tout est replié à l'arrivée ; la barre d'en-tête entière est cliquable pour déplier.
  * Dans une carte dépliée : d'abord la rangée [texte … bouton à droite], puis le
  * tableau (ou l'état vide centré) sur toute la largeur en dessous.
+ *
+ * Le compteur d'une carte se déduit du nombre de lignes, jamais d'un champ à part :
+ * deux sources pour le même nombre, c'est la garantie qu'elles finiront par diverger.
  */
-export function AlertsPage() {
+export function AlertsPage({ sections, onClose }: Props) {
   const [open, setOpen] = useState<string[]>([]);
+  /** Sélection par section : fermer dans l'une ne touche pas aux autres. */
+  const [selection, setSelection] = useState<Record<string, string[]>>({});
 
   const toggle = (key: string) => setOpen((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
 
+  const closeSelected = (sectionKey: string) => {
+    const keys = selection[sectionKey] ?? [];
+    if (!keys.length) return;
+    onClose(sectionKey, keys);
+    // Vider la sélection : sans ça, elle désignerait des lignes disparues et le
+    // bouton resterait actif sur du vide.
+    setSelection((prev) => ({ ...prev, [sectionKey]: [] }));
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
-      {SECTIONS.map((s) => {
+      {sections.map((s) => {
         const isOpen = open.includes(s.key);
+        const selected = selection[s.key] ?? [];
+        const count = s.rows.length;
         return (
           <section
             key={s.key}
@@ -104,7 +122,7 @@ export function AlertsPage() {
             >
               <Icon name={s.icon} size={16} color={s.iconColor} />
               <span style={{ fontWeight: 500, color: semantic.textDarker }}>{s.title}</span>
-              <CountBadge count={s.count} tone={s.count ? 'warning' : 'success'} />
+              <CountBadge count={count} tone={count ? 'warning' : 'success'} />
               <span style={{ flex: 1 }} />
               {isOpen ? <UpOutlined style={{ color: semantic.textLighter }} /> : <DownOutlined style={{ color: semantic.textLighter }} />}
             </div>
@@ -120,7 +138,22 @@ export function AlertsPage() {
                       </div>
                     )}
                   </div>
-                  <Button disabled style={{ flex: '0 0 auto' }}>
+                  {/*
+                    Désactivé tant que rien n'est coché : l'action porte sur la
+                    sélection, un bouton actif sans sélection ne saurait pas sur quoi
+                    agir. Le nombre est dans le nom accessible, pas dans le libellé
+                    visible qui reste celui de la maquette.
+                  */}
+                  <Button
+                    disabled={selected.length === 0}
+                    onClick={() => closeSelected(s.key)}
+                    aria-label={
+                      selected.length
+                        ? `Close selected alerts (${selected.length})`
+                        : 'Close selected alerts'
+                    }
+                    style={{ flex: '0 0 auto' }}
+                  >
                     Close selected alerts
                   </Button>
                 </div>
@@ -130,7 +163,12 @@ export function AlertsPage() {
                     size="small"
                     rowKey="key"
                     pagination={false}
-                    rowSelection={{ type: 'checkbox' }}
+                    rowSelection={{
+                      type: 'checkbox',
+                      selectedRowKeys: selected,
+                      onChange: (keys) =>
+                        setSelection((prev) => ({ ...prev, [s.key]: keys as string[] })),
+                    }}
                     dataSource={s.rows}
                     columns={[
                       {

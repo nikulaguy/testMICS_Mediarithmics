@@ -4,7 +4,7 @@ import { micsTheme, scale, semantic } from './theme/micsTheme';
 import { AppShell, Button, Icon, TabBar, type Crumb } from './ui';
 import { SegmentsList } from './pages/SegmentsList';
 import { UsageOverview } from './pages/UsageOverview';
-import { AlertsPage } from './pages/AlertsPage';
+import { AlertsPage, ALERT_SECTIONS } from './pages/AlertsPage';
 import { SegmentDetail } from './pages/SegmentDetail';
 import type { Segment } from './data/segments';
 
@@ -21,6 +21,20 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('segments');
   const [detail, setDetail] = useState<Segment | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  /*
+    Les alertes vivent ici et non dans AlertsPage : la pastille de l'onglet compte les
+    mêmes lignes que les cartes. En la laissant en dur, fermer la dernière alerte
+    affichait « Alerts 1 » au-dessus de quatre cartes à zéro.
+  */
+  const [alertSections, setAlertSections] = useState(ALERT_SECTIONS);
+  const alertCount = alertSections.reduce((n, s) => n + s.rows.length, 0);
+
+  const closeAlerts = (sectionKey: string, rowKeys: string[]) =>
+    setAlertSections((prev) =>
+      prev.map((s) =>
+        s.key === sectionKey ? { ...s, rows: s.rows.filter((r) => !rowKeys.includes(r.key)) } : s,
+      ),
+    );
 
   // Cmd/Ctrl + K ouvre la palette de recherche globale, quel que soit l'écran.
   useEffect(() => {
@@ -118,13 +132,13 @@ export default function App() {
                   items={[
                     { key: 'segments', label: 'Segments' },
                     { key: 'usage', label: 'Usage overview' },
-                    { key: 'alerts', label: 'Alerts', badge: 1 },
+                    { key: 'alerts', label: 'Alerts', badge: alertCount },
                   ]}
                 />
               </div>
               {tab === 'segments' && <SegmentsList onOpenDetail={setDetail} />}
               {tab === 'usage' && <UsageOverview />}
-              {tab === 'alerts' && <AlertsPage />}
+              {tab === 'alerts' && <AlertsPage sections={alertSections} onClose={closeAlerts} />}
             </>
           )}
         </AppShell>
