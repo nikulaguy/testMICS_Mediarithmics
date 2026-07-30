@@ -479,7 +479,9 @@ interface Column {
  * En-tête de ressource, Segment Header, onglets internes, puis colonnes de comparaison.
  */
 export function SegmentDetail({ segment }: { segment: Segment }) {
-  const [tab, setTab] = useState('features');
+  // Stats à l'arrivée, comme en production : la première question devant un segment
+  // est « combien, et depuis quand », pas l'adoption des features.
+  const [tab, setTab] = useState('stats');
   // « Volume Drop Alerts Disabled » est posé par la plateforme : tag non fermable.
   const [labels, setLabels] = useState<ResourceLabel[]>([
     { key: 'vda', label: 'Volume Drop Alerts Disabled', system: true },
