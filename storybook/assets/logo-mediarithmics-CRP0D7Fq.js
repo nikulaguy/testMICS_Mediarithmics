@@ -1,0 +1,1 @@
+import{i as e}from"./preload-helper-BdFrVu1K.js";var t,n=e((()=>{t=``+new URL(`logo-mediarithmics-18gef1NE.png`,import.meta.url).href}));export{t as n,n as t};

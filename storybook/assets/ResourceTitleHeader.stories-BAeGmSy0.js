@@ -1,0 +1,32 @@
+import{a as e,i as t,s as n}from"./preload-helper-BdFrVu1K.js";import{a as r,c as i,gt as a,o,r as s,t as c,w as l}from"./iframe-BvD6eUld.js";import{n as u,t as d}from"./Icon-Mm64d0bh.js";import{n as f,t as p}from"./Tag-Bwdv1cnz.js";function m({title:e,type:t,typeIcon:n=`plug`,created:i,labels:a,onAddLabel:s,onRemoveLabel:c,as:u=`h1`}){return(0,h.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:r.space12},children:[(0,h.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:r.space12},children:[(0,h.jsx)(u,{style:{margin:0,flex:1,fontSize:16,lineHeight:`24px`,fontWeight:500,color:o.textDarker},children:e}),t&&(0,h.jsxs)(`span`,{style:g,children:[(0,h.jsx)(d,{name:n,size:14}),` `,t]}),i&&(0,h.jsxs)(`span`,{style:g,children:[(0,h.jsx)(d,{name:`calendar`,size:14}),` `,i]})]}),a&&(0,h.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:r.space8,flexWrap:`wrap`},children:[(0,h.jsx)(l,{size:`small`,icon:(0,h.jsx)(d,{name:`plus`,size:10}),onClick:s,children:`Add label`}),a.map(e=>(0,h.jsx)(p,{closable:!!c,onClose:()=>c?.(e.key),children:e.label},e.key))]})]})}var h,g,_=t((()=>{i(),u(),f(),s(),h=c(),g={display:`inline-flex`,alignItems:`center`,gap:6,color:o.textLighter,flex:`0 0 auto`},m.__docgenInfo={description:`Resource Title Header (Figma 250:88) — bloc titre d'une page de détail.
+Ligne 1 : titre à gauche, métadonnées à droite. Ligne 2 : labels.
+Un seul titre principal par écran ; les métadonnées ne se mettent jamais
+à gauche, sinon elles concurrencent le nom de la ressource.`,methods:[],displayName:`ResourceTitleHeader`,props:{title:{required:!0,tsType:{name:`string`},description:``},type:{required:!1,tsType:{name:`string`},description:`Type de la ressource, affiché à droite du titre.`},typeIcon:{required:!1,tsType:{name:`string`},description:`Icône du type. Nom du set Icon ; par défaut le glyphe « plug ».`,defaultValue:{value:`'plug'`,computed:!1}},created:{required:!1,tsType:{name:`string`},description:`Date de création, déjà formatée.`},labels:{required:!1,tsType:{name:`Array`,elements:[{name:`ResourceLabel`}],raw:`ResourceLabel[]`},description:"Labels de la ressource. `undefined` masque la ligne entière."},onAddLabel:{required:!1,tsType:{name:`signature`,type:`function`,raw:`() => void`,signature:{arguments:[],return:{name:`void`}}},description:``},onRemoveLabel:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(key: string) => void`,signature:{arguments:[{type:{name:`string`},name:`key`}],return:{name:`void`}}},description:``},as:{required:!1,tsType:{name:`union`,raw:`'h1' | 'h2'`,elements:[{name:`literal`,value:`'h1'`},{name:`literal`,value:`'h2'`}]},description:`Niveau de titre. h1 sur une page de détail, h2 dans une carte.`,defaultValue:{value:`'h1'`,computed:!1}}}}})),v=e({AvecLabels:()=>C,BacASable:()=>S,LabelsVides:()=>T,SansLabels:()=>w,TitreSeul:()=>E,__namedExportsOrder:()=>D,default:()=>x}),y,b,x,S,C,w,T,E,D,O=t((()=>{y=n(a(),1),_(),s(),b=c(),x={title:`Composants/ResourceTitleHeader`,component:m,argTypes:{title:{control:`text`,description:`Nom de la ressource. Headline 4 (16/24).`},type:{control:`text`,description:`Type de la ressource, à droite du titre. Facultatif.`},typeIcon:{control:`text`,description:`Nom du glyphe du set Icon pour le type.`},created:{control:`text`,description:`Date de création, déjà formatée. Facultative.`},labels:{control:!1,description:"Labels. `undefined` masque la ligne entière (Show labels)."},onAddLabel:{control:!1},onRemoveLabel:{control:!1},as:{control:`inline-radio`,options:[`h1`,`h2`],description:`Niveau de titre.`}},args:{title:`Copy of Copy of Test_max_230426`,type:`User Query`,typeIcon:`user-query`,created:`Created on 16/07/2026 - 11:11:49`},decorators:[e=>(0,b.jsx)(`div`,{style:{background:o.bgContainer,borderRadius:r.radiusCard,padding:r.space24},children:(0,b.jsx)(e,{})})]},S={},C={render:()=>{let[e,t]=(0,y.useState)([{key:`a`,label:`Volume Drop Alerts Disabled`},{key:`b`,label:`e-commerce`}]);return(0,b.jsx)(m,{title:`Copy of Copy of Test_max_230426`,type:`User Query`,typeIcon:`user-query`,created:`Created on 16/07/2026 - 11:11:49`,labels:e,onAddLabel:()=>t(e=>[...e,{key:String(e.length),label:`Nouveau label`}]),onRemoveLabel:e=>t(t=>t.filter(t=>t.key!==e))})}},w={args:{labels:void 0}},T={args:{labels:[]}},E={args:{type:void 0,created:void 0,labels:void 0}},S.parameters={...S.parameters,docs:{...S.parameters?.docs,source:{originalSource:`{}`,...S.parameters?.docs?.source}}},C.parameters={...C.parameters,docs:{...C.parameters?.docs,source:{originalSource:`{
+  render: () => {
+    const [labels, setLabels] = useState<ResourceLabel[]>([{
+      key: 'a',
+      label: 'Volume Drop Alerts Disabled'
+    }, {
+      key: 'b',
+      label: 'e-commerce'
+    }]);
+    return <ResourceTitleHeader title="Copy of Copy of Test_max_230426" type="User Query" typeIcon="user-query" created="Created on 16/07/2026 - 11:11:49" labels={labels} onAddLabel={() => setLabels(l => [...l, {
+      key: String(l.length),
+      label: 'Nouveau label'
+    }])} onRemoveLabel={key => setLabels(l => l.filter(x => x.key !== key))} />;
+  }
+}`,...C.parameters?.docs?.source},description:{story:`Avec labels : la ligne 2 apparaît, avec son bouton d'ajout et les chips.`,...C.parameters?.docs?.description}}},w.parameters={...w.parameters,docs:{...w.parameters?.docs,source:{originalSource:`{
+  args: {
+    labels: undefined
+  }
+}`,...w.parameters?.docs?.source},description:{story:`Sans labels : la ligne 2 disparaît entièrement, elle ne laisse pas un vide.`,...w.parameters?.docs?.description}}},T.parameters={...T.parameters,docs:{...T.parameters?.docs,source:{originalSource:`{
+  args: {
+    labels: []
+  }
+}`,...T.parameters?.docs?.source},description:{story:`Aucun label encore posé : le bouton d'ajout reste, seul.`,...T.parameters?.docs?.description}}},E.parameters={...E.parameters,docs:{...E.parameters?.docs,source:{originalSource:`{
+  args: {
+    type: undefined,
+    created: undefined,
+    labels: undefined
+  }
+}`,...E.parameters?.docs?.source},description:{story:`Sans métadonnées : un titre suffit quand le type se lit dans le fil d'ariane.`,...E.parameters?.docs?.description}}},D=[`BacASable`,`AvecLabels`,`SansLabels`,`LabelsVides`,`TitreSeul`]}));O();export{C as AvecLabels,S as BacASable,T as LabelsVides,w as SansLabels,E as TitreSeul,D as __namedExportsOrder,x as default,O as n,v as t};

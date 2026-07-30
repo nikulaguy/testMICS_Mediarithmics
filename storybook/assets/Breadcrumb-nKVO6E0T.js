@@ -1,0 +1,8 @@
+import{i as e}from"./preload-helper-BdFrVu1K.js";import{a as t,o as n,r,t as i}from"./iframe-BvD6eUld.js";import{n as a,t as o}from"./Link-C5vjU2c-.js";function s({items:e,theme:r=`onLight`}){let i=r===`onDark`?n.textOnDark:n.textNormal,a=r===`onDark`?n.linkOnDark:n.textLighter;return(0,c.jsx)(`nav`,{"aria-label":`Fil d'Ariane`,children:(0,c.jsx)(`ol`,{style:{display:`flex`,alignItems:`center`,gap:t.space8,margin:0,padding:0,listStyle:`none`},children:e.map((n,s)=>{let l=s===e.length-1;return(0,c.jsxs)(`li`,{style:{display:`inline-flex`,alignItems:`center`,gap:t.space8},children:[s>0&&(0,c.jsx)(`span`,{"aria-hidden":!0,style:{color:a},children:`›`}),l||!n.onClick?(0,c.jsx)(`span`,{"aria-current":l?`page`:void 0,style:{color:i},children:n.label}):(0,c.jsx)(o,{size:`M`,theme:r,onClick:n.onClick,children:n.label})]},`${n.label}-${s}`)})})})}var c,l=e((()=>{a(),r(),c=i(),s.__docgenInfo={description:`Breadcrumb (Figma 29:22142) — fil d'Ariane, catégorie CONSTRUIT.
+Deux thèmes selon le fond : on-light (liens navy) et on-dark (liens bleu clair
+sur bandeau navy). Trois niveaux au maximum : item du SideMenu, onglet actif,
+ressource ouverte.
+
+Les parents sont des instances du composant Link du DS, pas le lien natif d'AntD
+qui rend en gris. Le dernier niveau est du texte : un lien vers la page où l'on
+se trouve n'a pas de destination. C'est une hiérarchie, pas un historique.`,methods:[],displayName:`Breadcrumb`,props:{items:{required:!0,tsType:{name:`Array`,elements:[{name:`Crumb`}],raw:`Crumb[]`},description:``},theme:{required:!1,tsType:{name:`union`,raw:`'onLight' | 'onDark'`,elements:[{name:`literal`,value:`'onLight'`},{name:`literal`,value:`'onDark'`}]},description:``,defaultValue:{value:`'onLight'`,computed:!1}}}}}));export{l as n,s as t};

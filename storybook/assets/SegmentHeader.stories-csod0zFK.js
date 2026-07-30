@@ -1,0 +1,27 @@
+import{a as e,i as t}from"./preload-helper-BdFrVu1K.js";import{E as n,a as r,c as i,o as a,r as o,s,t as c}from"./iframe-BvD6eUld.js";import{n as l,t as u}from"./Icon-Mm64d0bh.js";function d({userPoint:e,metrics:t,computedAt:i}){return(0,f.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:r.space4},children:[(0,f.jsxs)(`div`,{style:{display:`flex`,borderRadius:r.radiusCard,overflow:`hidden`},children:[(0,f.jsxs)(`div`,{style:{width:500,flex:`0 0 auto`,background:a.info,color:a.textOnDark,display:`flex`,flexDirection:`column`,alignItems:`center`,justifyContent:`center`,gap:r.space12,padding:r.space24},children:[(0,f.jsx)(u,{name:`server`,size:60}),(0,f.jsx)(`span`,{style:{...s.headline3},children:`UserPoint`}),(0,f.jsx)(`span`,{style:{...s.headline},children:e.toLocaleString(`en-US`)})]}),(0,f.jsx)(`div`,{style:{flex:1,background:a.bgContainer,padding:r.space24,display:`flex`,flexDirection:`column`,justifyContent:`center`,gap:r.space12},children:t.map(e=>(0,f.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:r.space12,minHeight:24},children:[(0,f.jsx)(u,{name:e.icon,size:20,color:a.primary}),(0,f.jsx)(`span`,{style:{...s.headline4,flex:1,minWidth:0,color:a.textNormal},children:e.hint?(0,f.jsx)(n,{title:e.hint,children:(0,f.jsx)(`span`,{tabIndex:0,style:{cursor:`help`},children:e.label})}):e.label}),(0,f.jsx)(`span`,{style:{...s.headline4,color:a.textNormal,flex:`0 0 auto`,whiteSpace:`nowrap`},children:e.value.toLocaleString(`en-US`)})]},e.key))})]}),i&&(0,f.jsxs)(`span`,{style:{...s.caption,color:a.textLighter,textAlign:`right`},children:[`Last computed on `,i]})]})}var f,p=t((()=>{i(),l(),o(),f=c(),d.__docgenInfo={description:`Segment Header (Figma « Segment Header », page 🏷 Data Display).
+Carte navy à gauche (icône server 60, « UserPoint », grande valeur) et liste de
+métriques à droite. La métrique principale est mise en avant, les secondaires sont
+alignées à droite de leur libellé.
+
+Les valeurs sont celles du DERNIER CALCUL, pas du temps réel : la date sous la carte
+n'est pas décorative, c'est elle qui dit à quel point le chiffre est frais.`,methods:[],displayName:`SegmentHeader`,props:{userPoint:{required:!0,tsType:{name:`number`},description:``},metrics:{required:!0,tsType:{name:`Array`,elements:[{name:`SegmentMetric`}],raw:`SegmentMetric[]`},description:``},computedAt:{required:!1,tsType:{name:`string`},description:`Date du dernier calcul, affichée sous la carte.`}}}})),m=e({AZero:()=>b,BacASable:()=>v,GrandeAudience:()=>y,SansDateDeCalcul:()=>x,__namedExportsOrder:()=>S,default:()=>_}),h,g,_,v,y,b,x,S,C=t((()=>{p(),o(),h=c(),g=[{key:`accounts`,icon:`users`,label:`User Accounts`,value:36,hint:`Utilisateurs identifiés dans vos systèmes (CRM, fidélité, authentification).`},{key:`profiles`,icon:`user`,label:`User Profiles`,value:28,hint:`Données de profil attachées à un UserPoint. Ce n'est pas un identifiant autonome.`},{key:`devices`,icon:`display`,label:`User Device Points`,value:81,hint:`Appareils rattachés au UserPoint. Un UserPoint peut en avoir plusieurs.`},{key:`installations`,icon:`display`,label:`Installation IDs`,value:0,hint:`Cookies first-party mediarithmics, format ins:<registry>:<valeur>.`},{key:`vectors`,icon:`display`,label:`Vector IDs`,value:7,hint:`Cookies third-party mediarithmics, format vec:<valeur> ou mum:<valeur>.`}],_={title:`Composants/SegmentHeader`,component:d,argTypes:{userPoint:{control:`number`,description:`Métrique principale : la taille de l’audience.`},metrics:{control:!1,description:`Les cinq métriques secondaires, avec leur infobulle.`},computedAt:{control:`text`,description:`Date du dernier calcul. Dit la fraîcheur du chiffre.`}},args:{userPoint:5,metrics:g,computedAt:`22/07/2026 - 12:21:19`},decorators:[e=>(0,h.jsx)(`div`,{style:{background:a.bgWindow,padding:r.space24},children:(0,h.jsx)(e,{})})]},v={},y={args:{userPoint:1284e3,metrics:g.map(e=>({...e,value:e.value*12480}))}},b={args:{userPoint:0,metrics:g.map(e=>({...e,value:0}))}},x={args:{computedAt:void 0}},v.parameters={...v.parameters,docs:{...v.parameters?.docs,source:{originalSource:`{}`,...v.parameters?.docs?.source}}},y.parameters={...y.parameters,docs:{...y.parameters?.docs,source:{originalSource:`{
+  args: {
+    userPoint: 1284000,
+    metrics: METRICS.map(m => ({
+      ...m,
+      value: m.value * 12480
+    }))
+  }
+}`,...y.parameters?.docs?.source},description:{story:`Grande audience : les valeurs restent lisibles, séparateur de milliers français.`,...y.parameters?.docs?.description}}},b.parameters={...b.parameters,docs:{...b.parameters?.docs,source:{originalSource:`{
+  args: {
+    userPoint: 0,
+    metrics: METRICS.map(m => ({
+      ...m,
+      value: 0
+    }))
+  }
+}`,...b.parameters?.docs?.source},description:{story:`Métriques à zéro : le chiffre s'affiche, il n'est pas masqué. Zéro est une information.`,...b.parameters?.docs?.description}}},x.parameters={...x.parameters,docs:{...x.parameters?.docs,source:{originalSource:`{
+  args: {
+    computedAt: undefined
+  }
+}`,...x.parameters?.docs?.source},description:{story:`Sans date de calcul : à éviter, on ne sait plus si le chiffre date d'hier ou du mois dernier.`,...x.parameters?.docs?.description}}},S=[`BacASable`,`GrandeAudience`,`AZero`,`SansDateDeCalcul`]}));C();export{b as AZero,v as BacASable,y as GrandeAudience,x as SansDateDeCalcul,S as __namedExportsOrder,_ as default,C as n,m as t};
