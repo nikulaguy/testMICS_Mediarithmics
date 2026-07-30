@@ -65,6 +65,7 @@ export { SearchPalette } from './components/SearchPalette';
 export { AppShell } from './components/AppShell';
 export type { Crumb } from './components/Breadcrumb';
 export { TopBar, SideMenu } from './components/Shell';
+export { SideMenuItem } from './components/SideMenuItem';
 
 // --- TOKENS -----------------------------------------------------------------
 export { micsTheme, primitives, semantic, scale, elevation, typography } from './theme/micsTheme';

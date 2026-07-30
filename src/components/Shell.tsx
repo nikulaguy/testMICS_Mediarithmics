@@ -3,6 +3,7 @@ import { Icon } from './Icon';
 import { IconButton } from './IconButton';
 import { DropdownPanel } from './DropdownPanel';
 import { AppLauncher } from './AppLauncher';
+import { SideMenuItem } from './SideMenuItem';
 import logoUrl from '../assets/logo-mediarithmics.png';
 import { scale, semantic } from '../theme/micsTheme';
 
@@ -229,52 +230,6 @@ const MENU: Array<{ group?: string; items: Array<{ label: string; icon: string }
   { group: 'DATA STUDIO', items: [{ label: 'Query Tool', icon: 'terminal' }] },
 ];
 
-/** Item de SideMenu : Default transparent, Hover bg/hover, Active bg/selected (Figma 19:31). */
-function MenuItem({
-  label,
-  icon,
-  active,
-  onSelect,
-}: {
-  label: string;
-  icon: string;
-  active: boolean;
-  onSelect: () => void;
-}) {
-  const [hover, setHover] = useState(false);
-  const background = active ? semantic.bgSelected : hover ? semantic.bgHover : 'transparent';
-  return (
-    <div
-      role="link"
-      tabIndex={0}
-      aria-current={active ? 'page' : undefined}
-      onClick={onSelect}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onSelect();
-        }
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: scale.space12,
-        margin: `2px ${scale.space8}px`,
-        padding: `6px ${scale.space8}px`,
-        borderRadius: scale.radiusCard,
-        background,
-        color: active ? semantic.primary : semantic.textNormal,
-        cursor: 'pointer',
-      }}
-    >
-      <Icon name={icon} size={16} />
-      <span>{label}</span>
-    </div>
-  );
-}
-
 /** SideMenu : 200 fixe, un seul item actif. */
 export function SideMenu({ active, onSelect }: { active: string; onSelect: (entry: string) => void }) {
   return (
@@ -318,13 +273,15 @@ export function SideMenu({ active, onSelect }: { active: string; onSelect: (entr
             </div>
           )}
           {section.items.map((item) => (
-            <MenuItem
-              key={item.label}
-              label={item.label}
-              icon={item.icon}
-              active={item.label === active}
-              onSelect={() => onSelect(item.label)}
-            />
+            // Gouttière de la liste : 15 horizontaux, 2 de gap vertical (Figma « row »).
+            <div key={item.label} style={{ display: 'flex', padding: '1px 15px' }}>
+              <SideMenuItem
+                label={item.label}
+                icon={item.icon}
+                active={item.label === active}
+                onSelect={() => onSelect(item.label)}
+              />
+            </div>
           ))}
         </div>
       ))}

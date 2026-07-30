@@ -27,6 +27,9 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
 
 ## Règles d'usage
 
+- Les entrées sont des **`SideMenuItem`**, le composant des entrées du menu latéral. C'est le choix
+  de la maquette, et il évite d'entretenir un second item avec son propre survol, sa propre hauteur
+  et son propre radius. Seul le rôle change : `menuitem` ici, `link` dans le SideMenu.
 - Chaque entrée porte la **marque de son application**, pas un glyphe du set. C'est le seul menu du
   produit qui fait quitter l'application courante : le logo rend la cible reconnaissable avant même
   la lecture du libellé. Les marques gardent leurs couleurs, la prop `color` de l'`Icon` n'a aucun
@@ -34,8 +37,8 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
 - **Deux groupes, un filet.** Les applications d'abord, les ressources documentaires ensuite. Les
   premières changent de contexte, les secondes ouvrent un autre site : ce ne sont pas les mêmes
   conséquences, elles ne se mélangent pas dans une liste plate.
-- Pas de **filet sous le dernier groupe** : il ferait un trait au ras du bord du panneau, qui
-  doublerait son propre contour.
+- Le **filet est en retrait de 16** de chaque côté, en `border/default`. Pas de filet sous le
+  dernier groupe : il ferait un trait au ras du bord du panneau, qui doublerait son contour.
 - Les groupes viennent du **code produit** (`getAppMenuSections`), pas d'une liste figée : Computing
   Console n'apparaît que sur une organisation `core_cdp`, Platform Admin que sur l'organisation mics.
 - Changer d'application **recharge le contexte** : ce n'est pas une navigation interne, ne pas la
@@ -54,9 +57,9 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
 1. **Panneau** : largeur 260, surface du `DropdownPanel` (fond `bg/container`, radius/base, ombre
    Dropdown).
 2. **Bandeau de marque** : hauteur 101, padding 20 haut / 16 bas, logo de 140 centré.
-3. **Entrée** : padding 10 vertical / 20 horizontal, gap 10, marque 20 × 20, libellé Body/Book 12 en
-   `text/normal`, fond `bg/hover` au survol.
-4. **Filet** : 1 px `border/input` entre deux groupes, jamais après le dernier.
+3. **Entrée** : un `SideMenuItem` (hauteur 32, radius 6, padding horizontal 10, gap 10, marque
+   16 × 16, libellé Body/Book 12), dans une gouttière de 15 horizontaux et 4 verticaux.
+4. **Filet** : 1 px `border/default` en retrait de 16, entre deux groupes seulement.
 
 ## Accessibilité (RGAA)
 

@@ -1,0 +1,94 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ItemStories from './SideMenuItem.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={ItemStories} />
+
+# SideMenuItem
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : <code>SideMenu.tsx</code> + <code>sideMenu.less</code> (libs/advanced)</span>
+  <span><b>Maquette</b> : Figma SideMenu / Item <code>19:31</code></span>
+</div>
+
+Entrée de navigation : icône, libellé, trois états. Elle sert à **deux endroits**, comme dans la
+maquette : les entrées du `SideMenu` et celles de l'`AppLauncher`. Une entrée de navigation reste
+une entrée de navigation ; en refaire une variante locale pour le launcher, c'était deux survols,
+deux hauteurs et deux radius à maintenir.
+
+<Canvas of={ItemStories.BacASable} />
+
+## Props
+
+<Controls of={ItemStories.BacASable} />
+
+## Règles d'usage
+
+- **Un seul actif** par liste. L'actif combine `bg/selected`, le libellé en `primary` et la graisse
+  Medium : trois signaux, dont deux qui ne dépendent pas de la couleur.
+- Le composant **ne porte pas sa gouttière**. Le SideMenu l'encadre de 15 px horizontaux avec
+  2 px de gap, l'AppLauncher de 15 horizontaux et 4 verticaux. La marge appartient à la liste, pas
+  à l'entrée : c'est ce qui permet de la poser dans un panneau de 260 comme dans un menu de 200.
+- **Le survol est obligatoire.** Sans lui, rien ne distingue une entrée cliquable d'un intertitre.
+- Libellé **court**, tronqué en fin de ligne plutôt que replié : une entrée de menu sur deux lignes
+  casse le rythme de la liste.
+- L'icône est **décorative** (`aria-hidden`) : c'est le libellé qui porte le sens.
+
+<Canvas of={ItemStories.Etats} />
+
+## Exemples d'usage
+
+**Dans le SideMenu** : rôle `link`, l'actif porte `aria-current="page"`.
+
+<Canvas of={ItemStories.DansUneListe} />
+
+**Dans l'AppLauncher** : rôle `menuitem`, et l'icône est une marque d'application.
+
+<Canvas of={ItemStories.DansLAppLauncher} />
+
+## Anatomie
+
+1. **Entrée** : hauteur 32, radius 6, padding horizontal 10, gap 10.
+2. **Icône** : 16 × 16, couleur héritée du libellé.
+3. **Libellé** : Body/Book 12 en `text/normal`. Actif : Body/Medium 12 en `primary`.
+4. **Fonds** : Default transparent · Hover `bg/hover` · Active `bg/selected`.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Sémantique',
+      <>
+        <code>role="link"</code> dans une navigation, <code>role="menuitem"</code> dans un menu
+        ouvert depuis un bouton. Le rôle suit le contexte, pas l'apparence (RGAA 7.1).
+      </>,
+    ],
+    [
+      'États',
+      <>
+        L'entrée en cours porte <code>aria-current="page"</code> dans le SideMenu : la couleur de
+        fond ne s'annonce pas (RGAA 9.1).
+      </>,
+    ],
+    [
+      'Clavier',
+      "L'entrée est atteignable au clavier et s'active à Entrée comme à Espace (RGAA 7.3).",
+    ],
+    [
+      'Information couleur',
+      "L'actif ne repose pas sur la seule couleur : la graisse du libellé et le fond le doublent (RGAA 3.1).",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Corrigé côté maquette.** La variante Default portait un radius de 5 quand Hover et Active en
+  portaient 6 : le coin changeait au survol. Les trois états sont passés à 6.
+- **Écart avec la production.** `sideMenu.less` écrit ses valeurs en dur ; ici elles viennent
+  du module de thème.
+- **À construire.** Le sous-menu en accordéon, le badge sur une entrée, et l'état replié
+  (icône seule + infobulle), tous trois listés en évolution dans la maquette.
