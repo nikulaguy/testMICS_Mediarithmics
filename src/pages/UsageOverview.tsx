@@ -1,52 +1,16 @@
-import { Icon, Select } from '../ui';
+import { Card, Counter, Select } from '../ui';
 import { scale, semantic } from '../theme/micsTheme';
 
-function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return (
-    <section
-      style={{
-        background: semantic.bgContainer,
-        borderRadius: scale.radiusCard,
-        padding: scale.space20,
-        ...style,
-      }}
-    >
-      {children}
-    </section>
-  );
-}
+/*
+  Cet écran redessinait sa propre Card, son propre titre de carte et son propre
+  Counter. Les trois viennent maintenant du DS : c'est la seule façon qu'une
+  correction de surface se propage sans qu'on repasse écran par écran.
+*/
 
-function CardTitle({ children, info }: { children: React.ReactNode; info?: boolean }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: scale.space8 }}>
-      <span style={{ fontWeight: 500, color: semantic.textDarker }}>{children}</span>
-      {info && <Icon name="info" size={14} color={semantic.textLightest} />}
-    </div>
-  );
-}
-
-/** Compteur avec barre de progression (Counter du DS). */
-function Counter({ label, value, max }: { label: string; value: number; max: number }) {
-  return (
-    <Card style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: scale.space16 }}>
-      <CardTitle info>{label}</CardTitle>
-      <div style={{ height: 8, borderRadius: 4, background: semantic.bgWindow, overflow: 'hidden' }}>
-        <div
-          style={{
-            width: `${Math.min((value / max) * 100, 100)}%`,
-            height: '100%',
-            background: semantic.success,
-            borderRadius: 4,
-          }}
-        />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: scale.space8 }}>
-        <span style={{ fontSize: 24, fontWeight: 500, color: semantic.textDarker }}>{value}</span>
-        <span style={{ color: semantic.textLighter }}>/ {max}</span>
-      </div>
-    </Card>
-  );
-}
+/*
+  L'icône info des titres de carte est passée dans l'infobulle du Counter, là où
+  elle appartient : c'est la métrique qui a besoin d'être expliquée, pas la carte.
+*/
 
 const BREAKDOWN = [
   { label: 'Cohort lookalike', value: 0 },
@@ -70,12 +34,16 @@ export function UsageOverview() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 1fr) 2fr', gap: scale.space16 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
-          <Counter label="Number of activated segments" value={6} max={100} />
-          <Counter label="Total number of segments" value={168} max={100} />
+          {/* Une carte par compteur : la maquette leur donne chacun sa surface. */}
+          <Card style={{ flex: 1, justifyContent: 'center' }}>
+            <Counter title="Number of activated segments" value={6} max={100} hint="Quota de votre offre." />
+          </Card>
+          <Card style={{ flex: 1, justifyContent: 'center' }}>
+            <Counter title="Total number of segments" value={168} max={100} hint="Tous types confondus." />
+          </Card>
         </div>
 
-        <Card style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
-          <CardTitle>Breakdown of segments by type</CardTitle>
+        <Card title="Breakdown of segments by type">
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: scale.space16, height: 240 }}>
             {BREAKDOWN.map((b) => (
               <div key={b.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: scale.space8 }}>
@@ -97,32 +65,35 @@ export function UsageOverview() {
         </Card>
       </div>
 
-      <Card style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: scale.space16 }}>
-          <span style={{ fontWeight: 500, color: semantic.textDarker }}>Segments created over time</span>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: scale.space8,
-              height: scale.sizeControl,
-              paddingInline: scale.space12,
-              border: `1px solid ${semantic.borderInput}`,
-              borderRadius: scale.radiusBase,
-              color: semantic.textNormal,
-            }}
-          >
-            2018-10 <span style={{ color: semantic.textLighter }}>→</span> 2026-07
-          </div>
-          <Select
-            defaultValue="monthly"
-            width={120}
-            options={[
-              { value: 'monthly', label: 'Monthly' },
-              { value: 'weekly', label: 'Weekly' },
-            ]}
-          />
-        </div>
+      <Card
+        title="Segments created over time"
+        actions={
+          <>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: scale.space8,
+                height: scale.sizeControl,
+                paddingInline: scale.space12,
+                border: `1px solid ${semantic.borderInput}`,
+                borderRadius: scale.radiusBase,
+                color: semantic.textNormal,
+              }}
+            >
+              2018-10 <span style={{ color: semantic.textLighter }}>→</span> 2026-07
+            </div>
+            <Select
+              defaultValue="monthly"
+              width={120}
+              options={[
+                { value: 'monthly', label: 'Monthly' },
+                { value: 'weekly', label: 'Weekly' },
+              ]}
+            />
+          </>
+        }
+      >
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 200 }}>
           {OVER_TIME.map((v, i) => (
             <div

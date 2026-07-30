@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Card } from './Card';
 import { Counter } from './Counter';
 import { scale, semantic } from '../theme/micsTheme';
 
@@ -16,9 +17,13 @@ const meta = {
   },
   args: { title: 'Number of activated segments', value: 6, max: 100 },
   decorators: [
+    // Le Counter ne dessine pas de surface : c'est la Card qui la porte. Le
+    // montrer nu dans le Storybook laisserait croire l'inverse.
     (Story) => (
       <div style={{ background: semantic.bgWindow, padding: scale.space24 }}>
-        <Story />
+        <Card>
+          <Story />
+        </Card>
       </div>
     ),
   ],
@@ -44,13 +49,13 @@ export const SansPlafond: Story = {
   args: { title: 'Executions in the last 30 days', value: 12480, max: undefined, hint: undefined },
 };
 
-/** En rangée sur un tableau de bord : même largeur, même hauteur, gap 16. */
-export const Rangee: Story = {
+/** Trois compteurs dans UNE carte : c'est ce que fait le board « Activities ». */
+export const PlusieursDansUneCarte: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: scale.space16 }}>
-      <Counter title="Number of activated segments" value={6} max={100} hint="Quota de votre offre." />
-      <Counter title="User points" value={1284000} />
-      <Counter title="Storage used" value={82} max={100} hint="Espace du datamart." />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
+      <Counter title="# user points" value={20388} />
+      <Counter title="Active users" value={1941} />
+      <Counter title="Average number of events per session" value="6.17" />
     </div>
   ),
 };

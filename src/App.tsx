@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ConfigProvider, App as AntApp } from 'antd';
 import { micsTheme, scale, semantic } from './theme/micsTheme';
 import { AppShell, Button, Icon, TabBar, type Crumb } from './ui';
+import { Boards } from './pages/Boards';
 import { SegmentsList } from './pages/SegmentsList';
 import { UsageOverview } from './pages/UsageOverview';
 import { AlertsPage, ALERT_SECTIONS } from './pages/AlertsPage';
@@ -106,7 +107,9 @@ export default function App() {
           menuActive={section}
           onMenuSelect={selectMenu}
         >
-          {section !== 'Segments' ? (
+          {section === 'Boards' ? (
+            <Boards />
+          ) : section !== 'Segments' ? (
             <section
               style={{
                 background: semantic.bgContainer,

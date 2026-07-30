@@ -12,9 +12,13 @@ import { DocTable } from '../docs/DocTable';
   <span><b>Maquette</b> : Figma Counter <code>185:81</code></span>
 </div>
 
-Carte de compteur d'un tableau de bord : intitulé, barre optionnelle, valeur. La barre n'apparaît
-**que s'il y a un plafond** : une progression sans maximum ne veut rien dire. Le chiffre est
-toujours là, la barre ne fait que l'illustrer.
+Métrique d'un tableau de bord : intitulé, barre optionnelle, valeur. La barre n'apparaît **que
+s'il y a un plafond** : une progression sans maximum ne veut rien dire. Le chiffre est toujours là,
+la barre ne fait que l'illustrer.
+
+Le composant **ne dessine pas de surface**. C'est la `Card` qui la porte — et une carte ne se pose
+pas dans une carte. Plusieurs compteurs partagent souvent la même, comme sur le board
+« Activities » : leur donner chacun un fond ferait trois cartes là où l'écran n'en montre qu'une.
 
 <Canvas of={CounterStories.AvecPlafond} />
 
@@ -32,6 +36,8 @@ toujours là, la barre ne fait que l'illustrer.
   la règle de calcul. Pas une paraphrase du titre.
 - En rangée, tous les Counters ont la **même largeur et la même hauteur**. Un seul avec barre dans
   une rangée sans barres décale les valeurs et casse la lecture en colonne.
+- C'est **la page qui décide** du découpage en cartes : trois compteurs dans une carte, ou une carte
+  par compteur. Le composant ne tranche pas à sa place.
 
 ## Exemples d'usage
 
@@ -39,9 +45,9 @@ toujours là, la barre ne fait que l'illustrer.
 
 <Canvas of={CounterStories.SansPlafond} />
 
-**En rangée** sur un tableau de bord :
+**Trois compteurs dans une carte**, comme le board « Activities » :
 
-<Canvas of={CounterStories.Rangee} />
+<Canvas of={CounterStories.PlusieursDansUneCarte} />
 
 **Plafond atteint** :
 
@@ -49,9 +55,9 @@ toujours là, la barre ne fait que l'illustrer.
 
 ## Anatomie
 
-1. **Carte** : fond `bg/container`, `radius/card`, padding 24, gap 16.
+1. **Bloc** : colonne, gap 8. Aucune surface — elle vient de la `Card` qui l'entoure.
 2. **Intitulé** : Body/Medium 12 en `text/normal`, icône info 14 en `text/lighter` à droite.
-3. **Barre** (si `max`) : hauteur 16, `radius/card`, piste `bg/window`, remplissage `success`.
+3. **Barre** (si `max`) : hauteur 8, radius 4, piste `bg/window`, remplissage `success`.
 4. **Valeur** : Headline (Circular Medium 24 / 28) en `text/darker`, suivie de « / N » en
    Body/Book 12 `text/lighter`.
 
@@ -92,5 +98,12 @@ toujours là, la barre ne fait que l'illustrer.
 - **Écart assumé.** La maquette expose une prop `Show progress` distincte de `Max`. Le code déduit
   la barre de la présence de `max` : un seul champ, pas d'état incohérent possible
   (barre affichée sans plafond).
+- **Écart avec la production, tranché en faveur du DS.** Le board « Activities » affiche l'intitulé
+  en 14 px régulier et la valeur en 23 px. Le 23 n'existe pas dans l'échelle typographique — c'est
+  une dérive, au même titre que les 11 et 13 px que la page Fondations écarte. On garde
+  Body/Medium 12 et Headline 24.
+- **Surface retirée.** Le composant dessinait sa propre carte, ce qui en faisait le douzième
+  endroit du produit à redéfinir fond + radius + padding, et interdisait de poser trois compteurs
+  dans une même carte comme le fait la production.
 - **À construire.** Les seuils colorés (vert / orange / rouge selon le taux de remplissage) et
   l'indicateur de tendance (delta par rapport à la période précédente).
