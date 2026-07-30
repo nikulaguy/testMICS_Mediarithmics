@@ -87,12 +87,19 @@ onglet d'une page de détail en est une.
 
 ## Écarts et évolutions
 
-- **Écart avec la maquette, tranché en faveur de la production.** Le fichier Figma contient onze
-  composants qui redessinent cette surface avec un padding de **24** et parfois une bordure de 1 px
-  (`Counter`, `Metrics Column`, `Chart / Bar`, `Chart / Stats Line`, `Chart / Scatter`,
-  `Chart / Stacked Bar`, `Chart / Adoption Funnel`, `Alert Row`, `Funnel / Step Card`,
-  `Builder / Criteria Group`, `Spin`), plus un `Chart / Card` qui applique le bon padding mais un
-  radius de 0. La production applique **15 / 20 et un radius de 6, sans bordure** : c'est cette
-  valeur qui fait foi. La migration des onze composants reste à planifier.
+- **Slots.** Côté Figma, `Content` et `Actions` sont des **slots natifs exposés en propriétés** du
+  composant. Ils ne l'étaient pas au premier jet : les nœuds SLOT existaient dans l'arbre sans être
+  enregistrés comme propriétés, donc rien n'était injectable sur une instance. Piège à retenir —
+  cloner un slot copie le nœud mais pas la propriété.
+- **Migration faite.** Huit composants Figma redessinaient cette surface avec un padding de 24 et
+  parfois une bordure de 1 px. Ils l'**instancient** désormais et injectent leur contenu dans le
+  slot : `Counter`, `Metrics Column`, `Chart / Bar`, `Chart / Adoption Funnel`, `Chart / Scatter`,
+  `Chart / Stacked Bar`, `Chart / Stats Line`, `Funnel / Step Card`. Leur racine est devenue un
+  cadre transparent. La production applique **15 / 20, radius 6, sans bordure** : c'est elle qui
+  tranche.
+- **Reste à arbitrer.** Quatre composants ne se migrent pas mécaniquement : `Alert Row` (quatre
+  variants avec états dépliés), `Builder / Criteria Group` (accent coloré par variant), `Spin`
+  (petite boîte de chargement, pas une carte de contenu) et `Chart / Card` — doublon direct de
+  cette Card, avec en plus une variante `Legend`.
 - **À construire.** Une variante sans padding, pour une carte qui ne contient qu'un tableau pleine
   largeur.

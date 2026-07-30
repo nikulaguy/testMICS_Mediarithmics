@@ -1,5 +1,20 @@
-import { useState } from 'react';
-import { Button, Card, Counter, Icon, Select, TabBar, TabPanel } from '../ui';
+import { useMemo, useState } from 'react';
+import {
+  Button,
+  Card,
+  Counter,
+  DropdownGroup,
+  DropdownOptionItem,
+  EmptyState,
+  Icon,
+  Input,
+  Overlay,
+  Select,
+  TabBar,
+  TabPanel,
+  Tag,
+} from '../ui';
+import { SEGMENTS } from '../data/segments';
 import { scale, semantic, typography } from '../theme/micsTheme';
 
 /*
@@ -290,6 +305,20 @@ function ActivitiesBoard() {
 
 export function Boards() {
   const [board, setBoard] = useState('activities');
+  /** Segment de comparaison choisi dans le drawer. Un seul à la fois. */
+  const [compared, setCompared] = useState<string | null>(null);
+  const [appliedCompared, setAppliedCompared] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerSearch, setPickerSearch] = useState('');
+
+  const comparedSegment = SEGMENTS.find((s) => s.id === compared);
+
+  const pickerResults = useMemo(() => {
+    const q = pickerSearch.trim().toLowerCase();
+    return SEGMENTS.filter(
+      (s) => !q || s.name.toLowerCase().includes(q) || s.technicalName.toLowerCase().includes(q),
+    );
+  }, [pickerSearch]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
@@ -298,24 +327,53 @@ export function Boards() {
 
       {/* Barre de filtres : deux actions séparées de filets, puis la portée et Apply. */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: scale.space8 }}>
-        <Button>Compare to segment…</Button>
+        <Button
+          onClick={() => {
+            setPickerSearch('');
+            setPickerOpen(true);
+          }}
+        >
+          Compare to segment…
+        </Button>
         <Separator />
         <Button icon={<Icon name="download" size={14} />}>Export</Button>
         <Separator />
-        <Select
-          width={162}
-          placeholder="User segments"
-          options={[
-            { value: 'all', label: 'All users' },
-            { value: 'active', label: 'Active users' },
-          ]}
-          aria-label="Segment de comparaison"
-        />
-        {/* Désactivé tant qu'aucun segment n'est choisi : appliquer quoi, sinon ? */}
-        <Button type="primary" disabled>
+        {/*
+          Le segment choisi s'affiche en Tag fermable, à la place du Select tant qu'il
+          n'est pas retiré : la portée du board n'est pas une liste à parcourir, c'est
+          une décision prise, et on doit pouvoir la défaire d'un clic.
+        */}
+        {comparedSegment ? (
+          <Tag closable onClose={() => setCompared(null)}>
+            {comparedSegment.name}
+          </Tag>
+        ) : (
+          <Select
+            width={162}
+            placeholder="User segments"
+            options={[
+              { value: 'all', label: 'All users' },
+              { value: 'active', label: 'Active users' },
+            ]}
+            aria-label="Portée de la comparaison"
+          />
+        )}
+        {/* Désactivé quand il n'y a rien de nouveau à appliquer : appliquer quoi, sinon ? */}
+        <Button
+          type="primary"
+          disabled={compared === appliedCompared}
+          onClick={() => setAppliedCompared(compared)}
+        >
           Apply
         </Button>
       </div>
+
+      {appliedCompared && comparedSegment && (
+        <span style={{ ...typography.body, color: semantic.textLighter, textAlign: 'right' }}>
+          Comparaison appliquée : « {comparedSegment.name} ». Les chiffres ci-dessous restent ceux du
+          périmètre global — le calcul comparé n'est pas branché dans ce prototype.
+        </span>
+      )}
 
       <TabPanel tabKey={board} idPrefix="board">
         {board === 'activities' ? (
@@ -329,6 +387,56 @@ export function Boards() {
           </Card>
         )}
       </TabPanel>
+
+      {/*
+        Drawer et non modale, pour la même raison que sur le détail d'un segment :
+        choisir un segment de comparaison dépend de ce qui est affiché derrière. Une
+        modale masquerait précisément les cartes qui servent à décider.
+      */}
+      <Overlay
+        open={pickerOpen}
+        mode="drawer"
+        title="Compare to segment"
+        headerTheme="light"
+        onClose={() => setPickerOpen(false)}
+        width={520}
+      >
+        <p style={{ color: semantic.textNormal, margin: `0 0 ${scale.space16}px` }}>
+          Un seul segment de comparaison à la fois. Le clic choisit et referme ; c'est
+          « Apply » qui déclenche le recalcul.
+        </p>
+
+        <Input
+          type="search"
+          placeholder="Search segments"
+          rightIcon="magnifier"
+          value={pickerSearch}
+          onChange={setPickerSearch}
+        />
+
+        <div style={{ marginTop: scale.space8 }}>
+          {pickerResults.length > 0 ? (
+            <DropdownGroup>
+              {pickerResults.map((s) => (
+                <DropdownOptionItem
+                  key={s.id}
+                  label={s.name}
+                  selected={compared === s.id}
+                  onSelect={() => {
+                    setCompared(s.id);
+                    setPickerOpen(false);
+                  }}
+                />
+              ))}
+            </DropdownGroup>
+          ) : (
+            <EmptyState
+              title="Aucun segment ne correspond"
+              description="Essayez un autre terme de recherche."
+            />
+          )}
+        </div>
+      </Overlay>
     </div>
   );
 }
