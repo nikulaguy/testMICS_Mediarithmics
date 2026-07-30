@@ -214,6 +214,70 @@ export function BarChart({ data }: { data: Array<[string, number]> }) {
 }
 
 /**
+ * « Daily users by channel » : deux séries sur un axe temporel, légende à droite.
+ * Les données de production sont creuses — deux points — donc la production n'affiche
+ * que des marqueurs, sans courbe. On rend la même chose.
+ */
+export function ChannelChart({
+  series,
+  max = 4000,
+}: {
+  series: Array<{ label: string; points: Array<[number, number]> }>;
+  max?: number;
+}) {
+  const ticks = [0, max / 4, max / 2, (max * 3) / 4, max];
+  return (
+    <div style={{ display: 'flex', gap: scale.space24, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: scale.space8, flex: 1, minWidth: 200, height: 243 }}>
+        <Axis ticks={ticks} width={30} />
+        <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+          {ticks.map((t) => (
+            <span
+              key={t}
+              aria-hidden
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: `${(t / max) * 100}%`,
+                borderTop: `1px dotted ${semantic.borderDefault}`,
+              }}
+            />
+          ))}
+          {series.map((s, si) =>
+            s.points.map(([x, y]) => (
+              <span
+                key={`${s.label}-${x}`}
+                title={`${s.label} : ${y.toLocaleString('en-US')}`}
+                style={{
+                  position: 'absolute',
+                  left: `${x * 100}%`,
+                  bottom: `${(y / max) * 100}%`,
+                  width: 8,
+                  height: 8,
+                  marginLeft: -4,
+                  marginBottom: -4,
+                  borderRadius: 4,
+                  background: SERIES_COLORS[si % SERIES_COLORS.length],
+                }}
+              />
+            )),
+          )}
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: scale.space4 }}>
+        {series.map((s, i) => (
+          <span key={s.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: semantic.textNormal }}>
+            <span aria-hidden style={{ width: 8, height: 8, borderRadius: 4, background: SERIES_COLORS[i % SERIES_COLORS.length] }} />
+            <span style={{ ...typography.bodyMedium }}>{s.label}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
  * Camembert. Le chiffre est TOUJOURS dans la légende : sur un camembert on compare
  * des angles, ce qui ne permet pas de lire une valeur — la couleur seule ne dit rien.
  */

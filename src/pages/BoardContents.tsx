@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Card, Counter, Table, type TableColumnsType } from '../ui';
-import { BarChart, ColumnChart, Legend, PieChart, SERIES_COLORS } from './BoardCharts';
+import { BarChart, ChannelChart, ColumnChart, Legend, PieChart, SERIES_COLORS } from './BoardCharts';
 import { scale, semantic, typography } from '../theme/micsTheme';
 
 /*
@@ -20,6 +20,7 @@ type Block =
   | { kind: 'pie'; title?: string; data: Array<[string, number]> }
   | { kind: 'metric'; title: string; value: number | string }
   | { kind: 'table'; title?: string; columns: string[]; rows: string[][] }
+  | { kind: 'channel'; title?: string; series: Array<{ label: string; points: Array<[number, number]> }>; max?: number }
   | { kind: 'error'; title?: string; message: string };
 
 interface CardSpec {
@@ -46,6 +47,82 @@ const serie = (label: string, n: number, base: number, decay = 0.72) => ({
 });
 
 const BOARDS: Record<string, Row[]> = {
+  activities: [
+    {
+      cards: [
+        {
+          span: 1,
+          blocks: [
+            { kind: 'metric', title: '# user points', value: 20388 },
+            { kind: 'metric', title: 'Active users', value: 1941 },
+            { kind: 'metric', title: 'Average number of events per session', value: '6.17' },
+          ],
+        },
+        {
+          span: 2,
+          title: 'Daily users by channel',
+          blocks: [
+            {
+              kind: 'channel',
+              series: [
+                { label: 'navigator', points: [[0.5, 3100]] },
+                { label: 'computing console', points: [[0.5, 900]] },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      cards: [
+        {
+          side: true,
+          blocks: [
+            {
+              kind: 'columns',
+              title: 'Browsers (last 30 days)',
+              categories: ['OTHER', 'CHROME', 'FIREFOX', 'SAFARI', 'MICROSOFT_EDGE'],
+              series: [{ label: 'Sessions', values: [120, 4200, 210, 20, 260] }],
+            },
+            {
+              kind: 'columns',
+              title: 'Form factors (last 30 days)',
+              categories: ['OTHER', 'PERSONAL_COMPUTER', 'SMARTPHONE'],
+              series: [{ label: 'Sessions', values: [30, 4400, 40] }],
+            },
+            {
+              kind: 'columns',
+              title: 'Device OS (last 30 days)',
+              categories: ['OTHER', 'WINDOWS', 'MAC_OS', 'LINUX', 'ANDROID'],
+              series: [{ label: 'Sessions', values: [20, 900, 220, 3900, 25] }],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      subtitle: 'Retrieved events',
+      cards: [
+        {
+          side: true,
+          blocks: [
+            { kind: 'metric', title: 'Number of different event names retrieved', value: 494 },
+            {
+              kind: 'columns',
+              title: 'Events per name',
+              rotate: true,
+              categories: [
+                'PageView', 'RunQuery', 'SearchBar', 'CreateSegment', 'SaveChart', 'CreateExport',
+                '$cleaned_ref', '$app_open', 'confirm(1)', 'prompt(1)', 'console.log', 'return "a"',
+              ],
+              series: [{ label: 'Events', values: [2650000, 320000, 210000, 90000, 60000, 40000, 30000, 22000, 11000, 9000, 7000, 5500] }],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
   builders: [
     {
       subtitle: 'Section',
@@ -368,6 +445,8 @@ function BlockView({ block }: { block: Block }) {
       return <BarChart data={block.data} />;
     case 'pie':
       return <PieChart data={block.data} />;
+    case 'channel':
+      return <ChannelChart series={block.series} max={block.max} />;
     case 'metric':
       return <Counter title={block.title} value={block.value} />;
     case 'table':
@@ -405,47 +484,118 @@ function TitledBlock({ block }: { block: Block }) {
   );
 }
 
-export function BoardContent({ board }: { board: string }): ReactNode {
+/**
+ * Met les valeurs d'un bloc à l'échelle du segment comparé. Le facteur est le même
+ * pour toute la colonne : c'est la FORME des distributions qu'on compare, et un
+ * facteur par bloc la déformerait.
+ */
+function scaleBlock(block: Block, factor: number): Block {
+  switch (block.kind) {
+    case 'columns':
+      return { ...block, series: block.series.map((s) => ({ ...s, values: s.values.map((v) => Math.round(v * factor)) })) };
+    case 'bars':
+      return { ...block, data: block.data.map(([l, v]) => [l, Math.round(v * factor)] as [string, number]) };
+    case 'pie':
+      return { ...block, data: block.data.map(([l, v]) => [l, Math.round(v * factor)] as [string, number]) };
+    case 'channel':
+      return { ...block, series: block.series.map((s) => ({ ...s, points: s.points.map(([x, y]) => [x, Math.round(y * factor)] as [number, number]) })) };
+    case 'metric':
+      return typeof block.value === 'number'
+        ? { ...block, value: Math.round(block.value * factor) }
+        : { ...block, value: (Number(block.value) * factor).toFixed(2) };
+    default:
+      return block;
+  }
+}
+
+/** En-tête de colonne : le périmètre, en capitales, comme en production. */
+function ColumnHeader({ children }: { children: string }) {
+  return (
+    <span
+      style={{
+        ...typography.caption,
+        letterSpacing: scale.trackingCaps,
+        textTransform: 'uppercase',
+        color: semantic.textLighter,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      }}
+      title={children}
+    >
+      {children}
+    </span>
+  );
+}
+
+function CardsGrid({ row, factor, stack }: { row: Row; factor: number; stack: boolean }) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: row.cards.map((c) => `${c.span ?? 1}fr`).join(' '),
+        gap: scale.space16,
+        alignItems: 'start',
+      }}
+    >
+      {row.cards.map((c, ci) => (
+        <Card key={ci} title={c.title}>
+          <div
+            style={
+              // En comparaison la colonne fait la moitié de la largeur : les blocs
+              // côte à côte s'empilent, sinon les graphiques deviennent illisibles.
+              c.side && !stack
+                ? { display: 'grid', gridTemplateColumns: `repeat(${c.blocks.length}, minmax(0, 1fr))`, gap: scale.space24 }
+                : { display: 'flex', flexDirection: 'column', gap: scale.space16 }
+            }
+          >
+            {c.blocks.map((b, bi) => (
+              <TitledBlock key={bi} block={factor === 1 ? b : scaleBlock(b, factor)} />
+            ))}
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+export function BoardContent({ board, compared }: { board: string; compared?: string | null }): ReactNode {
   const rows = BOARDS[board];
   if (!rows) return null;
+
+  /*
+    Le segment comparé est plus petit que le périmètre global : la colonne de droite
+    est mise à l'échelle. Chaque graphique garde SA propre échelle d'axe — comparer
+    deux ordres de grandeur sur une échelle commune écraserait le plus petit à zéro.
+  */
+  const FACTOR = 0.11;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
       {rows.map((row, ri) => (
         <div key={ri} style={{ display: 'flex', flexDirection: 'column', gap: scale.space16 }}>
-          {row.subtitle && (
+          {!compared && row.subtitle && (
             <h2 style={{ margin: 0, ...typography.bodyLarge, color: semantic.textNormal }}>{row.subtitle}</h2>
           )}
-          {row.cards.length > 0 && (
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: row.cards.map((c) => `${c.span ?? 1}fr`).join(' '),
-                gap: scale.space16,
-                alignItems: 'start',
-              }}
-            >
-              {row.cards.map((c, ci) => (
-                <Card key={ci} title={c.title}>
-                  <div
-                    style={
-                      c.side
-                        ? {
-                            display: 'grid',
-                            gridTemplateColumns: `repeat(${c.blocks.length}, minmax(0, 1fr))`,
-                            gap: scale.space24,
-                          }
-                        : { display: 'flex', flexDirection: 'column', gap: scale.space16 }
-                    }
-                  >
-                    {c.blocks.map((b, bi) => (
-                      <TitledBlock key={bi} block={b} />
-                    ))}
+
+          {row.cards.length > 0 &&
+            (compared ? (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: scale.space24, alignItems: 'start' }}>
+                {[
+                  // Première rangée : le périmètre de chaque colonne. Ensuite, chaque
+                  // colonne reprend le sous-titre de sa section — c'est la production.
+                  { label: ri === 0 ? 'Current scope' : row.subtitle ?? '', factor: 1 },
+                  { label: ri === 0 ? compared : row.subtitle ?? '', factor: FACTOR },
+                ].map((col, i) => (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: scale.space8, minWidth: 0 }}>
+                    {col.label && <ColumnHeader>{col.label}</ColumnHeader>}
+                    <CardsGrid row={{ ...row, cards: row.cards }} factor={col.factor} stack />
                   </div>
-                </Card>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            ) : (
+              <CardsGrid row={row} factor={1} stack={false} />
+            ))}
         </div>
       ))}
     </div>
