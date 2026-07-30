@@ -310,11 +310,20 @@ function ExportsTab() {
   return (
     <Card actions={<Button>New export</Button>}>
       {/*
-        Aucun export sur ce segment en production : c'est le « No data » natif du
-        Table qui s'affiche, pas l'état vide du DS. Un tableau vide garde ses
-        en-têtes — elles disent ce qu'on verra quand il se remplira.
+        `locale.emptyText` remplace le « No data » natif du Table par l'état vide du
+        DS. La production laisse celui d'Ant Design, mais deux états vides sur la
+        même page — l'un ici, l'autre dans Overlap — ne s'expliquent par rien.
+        Un seul, avec son propre message. Le tableau garde ses en-têtes : elles
+        disent ce qu'on verra quand il se remplira.
       */}
-      <Table<ExportRow> size="small" rowKey="key" columns={EXPORT_COLUMNS} dataSource={[]} pagination={false} />
+      <Table<ExportRow>
+        size="small"
+        rowKey="key"
+        columns={EXPORT_COLUMNS}
+        dataSource={[]}
+        pagination={false}
+        locale={{ emptyText: <EmptyState title="There is no export for this segment." /> }}
+      />
     </Card>
   );
 }
