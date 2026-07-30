@@ -32,6 +32,9 @@ concurrenceraient le nom, qui est la seule chose que l'utilisateur cherche en ar
   d'ajout. Les deux cas existent : une ressource sans labels possibles, et une ressource qui n'en
   a pas encore.
 - Les chips sont des **Tag** du DS, fermables si `onRemoveLabel` est fourni. Pas de chip maison.
+- Un label marqué `system` n'est **jamais fermable**, même avec `onRemoveLabel`. « Volume Drop
+  Alerts Disabled » est posé par la plateforme, pas par l'utilisateur : une croix y promettrait une
+  action que l'écran ne sait pas tenir. C'est `Closable=false` dans la maquette.
 - Le titre est du texte, pas un lien : on y est déjà.
 
 ## Ajout d'un label
@@ -73,7 +76,7 @@ déplacent une rangée active désignée par `aria-activedescendant`, Entrée ch
 1. **Ligne 1** : titre Headline 4 (Circular Medium 16 / 24) en `text/darker`, `flex: 1` ; puis le
    type et la date, gap 12, chacun icône 14 + libellé.
 2. **Ligne 2** (si `labels`) : bouton « Add label » taille M avec le glyphe `plus`, puis les Tag,
-   gap 8, retour à la ligne autorisé.
+   gap 8, retour à la ligne autorisé. Tags système sans croix, tags utilisateur avec.
 3. **Ligne 2 en ajout** : le bouton devient un champ de 240 × 32 à loupe, et la liste de
    suggestions se pose à `top: 100%`, même largeur, sur la surface du `DropdownPanel`.
 4. Gap 12 entre les deux lignes.

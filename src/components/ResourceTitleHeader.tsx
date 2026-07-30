@@ -8,6 +8,12 @@ import { scale, semantic } from '../theme/micsTheme';
 export interface ResourceLabel {
   key: string;
   label: string;
+  /**
+   * Label posé par la plateforme, pas par l'utilisateur (« Volume Drop Alerts
+   * Disabled »). Tag NON fermable : la croix promettrait une action que l'écran
+   * ne sait pas tenir. Maquette : Closable=false sur ce tag.
+   */
+  system?: boolean;
 }
 
 interface Props {
@@ -111,8 +117,13 @@ export function ResourceTitleHeader({
               Add label
             </Button>
           )}
+          {/* Les labels système ne sont pas fermables : c'est la plateforme qui les pose. */}
           {labels.map((l) => (
-            <Tag key={l.key} closable={Boolean(onRemoveLabel)} onClose={() => onRemoveLabel?.(l.key)}>
+            <Tag
+              key={l.key}
+              closable={Boolean(onRemoveLabel) && !l.system}
+              onClose={() => onRemoveLabel?.(l.key)}
+            >
               {l.label}
             </Tag>
           ))}

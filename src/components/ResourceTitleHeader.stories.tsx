@@ -64,7 +64,7 @@ export const AvecLabels: Story = {
   render: () => (
     <Editable
       initial={[
-        { key: 'a', label: 'Volume Drop Alerts Disabled' },
+        { key: 'a', label: 'Volume Drop Alerts Disabled', system: true },
         { key: 'b', label: 'e-commerce' },
       ]}
     />
@@ -77,7 +77,7 @@ export const AvecLabels: Story = {
  * parcourent, Entrée choisit, Échap annule.
  */
 export const AjoutDeLabel: Story = {
-  render: () => <Editable initial={[{ key: 'vda', label: 'Volume Drop Alerts Disabled' }]} />,
+  render: () => <Editable initial={[{ key: 'vda', label: 'Volume Drop Alerts Disabled', system: true }]} />,
 };
 
 /** Sans labels : la ligne 2 disparaît entièrement, elle ne laisse pas un vide. */

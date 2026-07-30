@@ -271,7 +271,10 @@ interface Column {
  */
 export function SegmentDetail({ segment }: { segment: Segment }) {
   const [tab, setTab] = useState('features');
-  const [labels, setLabels] = useState<ResourceLabel[]>([{ key: 'vda', label: 'Volume Drop Alerts Disabled' }]);
+  // « Volume Drop Alerts Disabled » est posé par la plateforme : tag non fermable.
+  const [labels, setLabels] = useState<ResourceLabel[]>([
+    { key: 'vda', label: 'Volume Drop Alerts Disabled', system: true },
+  ]);
   const [scope, setScope] = useState('organisation');
   const [appliedScope, setAppliedScope] = useState('organisation');
   /**
