@@ -24,8 +24,7 @@ npm install
 npm run dev
 ```
 
-Le serveur écoute sur **http://localhost:5199** (port dédié : `5173` est occupé par un autre
-projet local dont le service worker détournait le titre et le manifeste de cette page).
+Le serveur écoute sur **http://localhost:5199** 
 
 ## Ce que le prototype démontre
 
