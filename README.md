@@ -94,8 +94,6 @@ et les **52 icônes**, exportées du Figma.
 - Les surfaces flottantes d'AntD (calendrier, select, filtre de colonne) sont rendues dans un
   portail attaché au body : le détecteur de clic extérieur doit les exclure, sinon choisir une date
   de début referme tout avant la date de fin.
-- La croix du Tag est dessinée à 8 px dans la maquette, sous toute recommandation de cible de
-  pointage : le dev utilise un glyphe de 12 px dans une cible de 20 px.
 
 Les écarts propres à un composant sont écrits dans sa page de documentation, section
 « Écarts et évolutions ».
