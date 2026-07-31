@@ -63,22 +63,17 @@ Utile si vous travaillez toujours fichier ouvert dans l'application :
    claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
    ```
 
-### Option C — `figma-console`, pour passer outre le quota
+### Option C — `figma-console` / Desktop Bridge, pour passer outre le quota
 
 Le serveur officiel applique un **quota d'appels par siège Figma**. Une session d'écriture soutenue l'atteint, et il n'existe alors aucun moyen de continuer : ni réessai, ni changement de fichier. C'est le seul point où le dispositif s'arrête net.
 
-`figma-console` contourne le problème : il passe par le plugin **Desktop Bridge** de Figma Desktop et exécute le code dans le contexte plugin, en local. Même API Figma, pas de quota.
+`figma-console` contourne le problème en exécutant le code dans le bac à sable plugin de Figma Desktop, en local : même API, pas de quota, et l'API plugin complète en prime.
 
 ```bash
 claude mcp add figma-console --env FIGMA_ACCESS_TOKEN=votre_jeton -- npx -y figma-console-mcp@latest
 ```
 
-Le jeton se crée dans Figma : **Paramètres → Sécurité → Personal access tokens**. C'est un secret personnel qui ouvre l'accès à tous vos fichiers : ne le commitez jamais, ne le collez pas dans un ticket.
-
-Deux différences à connaître avant de l'utiliser :
-
-- Les opérations ne sont **pas atomiques**. Un script qui échoue à mi-parcours laisse le fichier dans un état intermédiaire. `figma.triggerUndo()` permet de revenir en arrière — on s'en est servi deux fois pour récupérer du contenu détruit par un script trop pressé — mais c'est un filet, pas une garantie.
-- Il faut **Figma Desktop ouvert** sur le bon fichier, avec le plugin Desktop Bridge lancé.
+Cela ne suffit pas : il faut aussi créer un jeton d'accès personnel avec les bonnes portées, et importer le plugin dans Figma Desktop. **Tout est dans [`DESKTOP-BRIDGE.md`](DESKTOP-BRIDGE.md)** — installation en cinq étapes, vérification, et surtout le piège à connaître : contrairement à l'option A, les opérations n'y sont **pas atomiques**.
 
 Règle pratique : lecture et petites écritures avec l'option A, gros lots de production avec l'option C.
 

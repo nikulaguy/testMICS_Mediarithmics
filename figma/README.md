@@ -7,14 +7,19 @@ de production, et le mode d'emploi pour produire des maquettes conformes avec Cl
 figma/
   README.md              ce fichier — le fichier Figma, son contenu, l'accès
   SETUP.md               installation : Claude Code, le MCP Figma, les skills
+  DESKTOP-BRIDGE.md      le second accès à Figma : sans quota, API plugin complète
   skills/                les 22 skills de production + les 14 références RGAA
   variables.json         les 121 variables exportées, avec leur cible de code
   export-variables.js    le script qui régénère variables.json
 ```
 
 **Vous n'avez encore rien installé ?** Tout est dans **[`SETUP.md`](SETUP.md)** : Claude Code, la
-connexion du MCP Figma (trois options, dont le contournement du quota), les skills, un premier test
-de bout en bout et le dépannage.
+connexion du MCP Figma, les skills, un premier test de bout en bout et le dépannage.
+
+**Vous produisez en lot, ou le quota vous bloque ?** Lisez
+**[`DESKTOP-BRIDGE.md`](DESKTOP-BRIDGE.md)**. C'est ce qui a servi à construire l'essentiel du
+fichier, et le seul chemin qui ouvre l'API plugin complète — propriétés SLOT, annotations natives,
+annulation.
 
 La moitié aval — les composants React, leur documentation, les écrans — est à la racine du dépôt.
 Voir le [README principal](../README.md).

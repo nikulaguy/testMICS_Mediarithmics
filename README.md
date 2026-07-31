@@ -116,8 +116,12 @@ rarement utile.
 **Prérequis** : un compte Figma avec accès en édition et un siège payant, la police Circular
 disponible, et le **MCP Figma** connecté — c'est le pont qui permet à Claude de lire et d'écrire
 dans le fichier. L'installation complète part de zéro dans
-**[`figma/SETUP.md`](figma/SETUP.md)** : Claude Code, les trois options de connexion du MCP (dont
-le contournement du quota par siège), les skills, un premier test de bout en bout et le dépannage.
+**[`figma/SETUP.md`](figma/SETUP.md)** : Claude Code, les trois options de connexion du MCP, les
+skills, un premier test de bout en bout et le dépannage.
+
+Pour la production en lot, le serveur officiel bute sur un quota par siège. Le second accès —
+plugin **Desktop Bridge**, exécution locale, API plugin complète — est documenté dans
+**[`figma/DESKTOP-BRIDGE.md`](figma/DESKTOP-BRIDGE.md)**.
 
 Le contenu du fichier, les conditions d'accès et l'export des 121 variables
 ([`figma/variables.json`](figma/variables.json)) sont décrits dans
