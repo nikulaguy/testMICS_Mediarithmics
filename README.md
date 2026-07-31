@@ -139,16 +139,21 @@ que le package demande.
 
 | | mediarithmics-platform | Ici |
 |---|---|---|
-| Ant Design | 5.22 | **6.5** |
-| React | 18.3 | **19.2** |
+| **Ant Design** | `^5.22.7` | **la même plage** |
+| **React** | `18.3.1` | **la même version** |
+| **@ant-design/icons** | `^5.5.2` | **la même plage** |
 | Build | Nx (monorepo) | Vite |
-| Storybook | aucun | 9 |
+| Storybook | aucun | 10 |
 | Graphiques | Highcharts 7 | SVG écrit à la main |
 | Tokens | LESS v3 **et** AntD v5 en parallèle, `primary`/`info` inversés entre les deux | un seul module |
 
-Deux majeures d'écart sur AntD et sur React : les composants thémés et enveloppés demanderont une
-passe d'adaptation. Les composants construits (`Card`, `Counter`, `Link`, `Overlay`, `TabBar`,
-`DropdownPanel`, `Icon`…) ne dépendent presque pas d'AntD et se reprennent directement.
+**Le socle est aligné sur la production.** Les versions de React, d'Ant Design et du paquet
+d'icônes reprennent exactement les plages déclarées dans `frontend/package.json`. Un composant
+copié depuis ce dépôt compile dans le produit sans passe d'adaptation liée aux versions.
+
+Ce qui reste à traiter au cas par cas : les **imports** (`../ui` ici, chemins Nx là-bas), les
+**tokens** (le produit lit encore deux systèmes en parallèle) et les **graphiques**, écrits en SVG
+plutôt qu'en Highcharts.
 
 Le code de production a été **lu** pour comprendre structure et comportements ; rien n'en a été
 copié. Ce qui vient de chez le client : les **valeurs** de tokens, transcrites de `defaultTheme.ts`,

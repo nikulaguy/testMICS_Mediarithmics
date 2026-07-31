@@ -6,7 +6,7 @@ import { DocTable } from './DocTable';
 # Passation
 
 Cette page s'adresse aux équipes produit et front de mediarithmics. Elle dit **ce qu'est ce dépôt**,
-**ce qu'il n'est pas**, et **les trois façons de s'en servir**.
+**ce qu'il n'est pas**, et **les façons de s'en servir**.
 
 ## Ce que c'est
 
@@ -38,36 +38,52 @@ a été **lu** pour comprendre la structure et les comportements, jamais copié.
 
 Les données affichées sont **fausses et en dur**. Aucune API n'est appelée.
 
-## Ce qu'il faut savoir avant de parler réutilisation
+## Le socle est le vôtre
 
-Le prototype a été monté sur des versions plus récentes que les vôtres. Ce n'est pas un détail :
-c'est ce qui décide si le code se reprend tel quel ou s'il sert de modèle.
+Le prototype tourne sur **exactement les mêmes versions que votre production**. C'est ce qui
+décide si le code se reprend tel quel ou s'il sert seulement de modèle.
 
 <DocTable
   headers={['', 'mediarithmics-platform', 'Ce prototype']}
   rows={[
-    ['Ant Design', '5.22', <b>6.5</b>],
-    ['React', '18.3', <b>19.2</b>],
-    ['Storybook', <i>aucun</i>, '9'],
+    ['Ant Design', <code>^5.22.7</code>, <b>la même plage</b>],
+    ['React', <code>18.3.1</code>, <b>la même version</b>],
+    ['@ant-design/icons', <code>^5.5.2</code>, <b>la même plage</b>],
+    ['Storybook', <i>aucun</i>, '10'],
     ['Graphiques', 'Highcharts 7', 'SVG écrit à la main'],
     ['Tokens', 'LESS v3 + AntD v5, en parallèle', 'un seul module'],
   ]}
 />
 
-**Deux majeures d'écart** sur Ant Design et sur React. Les composants *thémés* et *enveloppés*
-demanderont une passe d'adaptation ; ce qui se reprend sans discussion, c'est **l'architecture, les
-règles et la documentation**.
+Le prototype avait d'abord été monté sur AntD 6 et React 19. Les versions ont été **ramenées sur
+les vôtres** précisément pour lever l'objection : un composant copié depuis ce dépôt compile chez
+vous sans passe d'adaptation liée aux versions.
 
-## Trois façons de s'en servir
+Le socle n'était d'ailleurs retenu par rien : aucune API propre à React 19 n'était utilisée — ni
+`use()`, ni `forwardRef`, ni les nouveaux hooks — et les seules API AntD un peu récentes
+(`popupMatchSelectWidth`, `optionRender`) existent depuis la 5.5 et la 5.11.
+
+Ce qui reste à traiter, au cas par cas : les **imports** (`../ui` ici, chemins Nx chez vous), les
+**tokens** — votre produit lit encore deux systèmes en parallèle — et les **graphiques**.
+
+## Les façons de s'en servir
 
 ### 1 — Reprendre la couche telle quelle
 
-Vous alignez les versions et vous importez `src/ui.ts` dans le produit. C'est l'option la plus
-rapide vers le bénéfice visé, et la plus engageante : elle suppose une montée de version d'AntD et
-de React.
+Vous importez `src/ui.ts` dans le produit. Plus rien ne s'y oppose côté versions : c'est le même
+React, le même Ant Design, le même paquet d'icônes.
 
-Ce qui se reprend directement : les tokens, les icônes, les composants *construits* (`Link`,
-`Card`, `Counter`, `Overlay`, `TabBar`, `DropdownPanel`…) qui ne dépendent presque pas d'AntD.
+Reste à faire : réécrire les chemins d'import, et décider ce que devient votre double système de
+tokens — c'est le vrai chantier, pas les versions.
+
+### 1 bis — Prendre quelques composants seulement
+
+Le corollaire de l'alignement : vous pouvez copier **un seul fichier**. Les composants *construits*
+(`Card`, `Counter`, `Link`, `Overlay`, `TabBar`, `DropdownPanel`, `StatusBadge`, `Icon`…) ne
+dépendent presque que du module de thème. Un `Card.tsx` déposé dans votre arborescence compile.
+
+C'est l'option d'entrée la moins risquée : elle se teste sur un composant, en une heure, sans rien
+engager.
 
 ### 2 — Reprendre le modèle, garder vos composants
 
