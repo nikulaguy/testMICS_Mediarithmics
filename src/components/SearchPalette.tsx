@@ -123,7 +123,12 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
             placeholder="Search your workspace"
             style={{ flex: 1, border: 0, outline: 'none', font: 'inherit', color: semantic.textNormal }}
           />
-          <Icon name="options" size={16} color={semantic.textLighter} />
+          {/*
+            info, et non options : la maquette (Search / Modal 515:589, calque
+            « infoIcon ») met ici un point d'information, pas un réglage. Un
+            glyphe de réglages promet un panneau de configuration qui n'existe pas.
+          */}
+          <Icon name="info" size={16} color={semantic.textLighter} />
         </div>
 
         <div style={{ maxHeight: 420, overflowY: 'auto' }}>
