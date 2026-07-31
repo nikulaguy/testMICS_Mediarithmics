@@ -33,7 +33,7 @@ Le Storybook écoute sur **http://localhost:6006**, l'application sur **http://l
 | | |
 |---|---|
 | Composants de DS | **30**, exposés par `src/ui.ts` |
-| Pages de documentation | **31** MDX, une par composant plus les transverses |
+| Pages de documentation | **32** MDX : 28 pages de composant, 4 transverses |
 | Fichiers de stories | 28 |
 | Icônes SVG | 52, exportées du Figma client et normalisées |
 | Écrans de démonstration | Boards (9 tableaux de bord), Segments (liste, usage, alertes, détail) |
