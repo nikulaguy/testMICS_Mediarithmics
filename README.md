@@ -46,7 +46,7 @@ src/
   pages/           les écrans de démonstration
   docs/            Introduction, Fondations, Comparaison, Passation
   assets/icons/    les 52 SVG
-mics-skills/       les règles de production, réutilisables par un agent
+mics-skills/       les 22 skills de production Figma (voir plus bas)
 ARCHITECTURE.md    la règle des trois catégories, la correspondance Figma → dev
 ```
 
@@ -61,6 +61,65 @@ Elles sont détaillées dans `Design System / Introduction` ; en résumé :
 Chaque composant relève d'une des trois catégories : **thémé** (AntD tel quel, habillé par les
 tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **construit** (aucun
 équivalent AntD).
+
+## Les skills — produire des maquettes conformes avec Claude Code
+
+`mics-skills/` contient **22 skills** plus un pack de 14 références RGAA. Ce sont les règles de
+production du design system, écrites dans un format que Claude Code charge automatiquement :
+règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma, accessibilité.
+
+**Ce qu'ils font, et ce qu'ils ne font pas.** Ils pilotent la production dans **Figma** — un PM
+décrit un écran, Claude le construit avec les vrais composants du fichier, tokens liés, autolayout
+partout, et refuse d'improviser une frame quand un composant existe déjà. Ils **ne génèrent pas de
+code** : la traduction en React reste le travail du dev, ce dépôt en est le résultat.
+
+C'est la moitié amont de la passation. Sans eux, une maquette part en dérive et le dev hérite de
+l'arbitrage ; avec eux, ce qui arrive au dev est déjà exprimé dans le vocabulaire du DS.
+
+### Installer
+
+Depuis la racine du dépôt :
+
+```bash
+for f in mics-skills/md-*.md; do n=$(basename "$f" .md); mkdir -p ~/.claude/skills/"$n"; cp "$f" ~/.claude/skills/"$n"/SKILL.md; done && cp -R mics-skills/md-a11y-rgaa ~/.claude/skills/
+```
+
+Chaque skill doit finir dans son propre dossier, sous le nom exact `SKILL.md` — c'est la seule
+convention à respecter. Pour un partage d'équipe versionné, remplacez `~/.claude/skills` par
+`<votre-repo>/.claude/skills`.
+
+Vérification : dans une session `claude`, tapez `/md-` — l'autocomplétion doit proposer la liste.
+
+### Utiliser
+
+Un seul point d'entrée, avec votre spec et l'URL du fichier Figma :
+
+```bash
+claude "/md-produce-screen Écran de liste des Creatives, avec recherche, filtres par statut et pagination. Fichier : https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/"
+```
+
+Claude enchaîne alors seul : vocabulaire métier → choix du template → production en instances →
+*pre-flight check* (screenshot et auto-contrôle, zéro défaut exigé avant de rendre la main).
+Les autres skills se chargent d'eux-mêmes selon le besoin ; les appeler à la main est possible mais
+rarement utile.
+
+| Famille | Skills |
+|---|---|
+| Point d'entrée | `md-produce-screen` |
+| Fondation | `md-ds-rules` (chargé avant tout), `md-business`, `md-figma-api` |
+| Templates d'écran | `md-template-` `list` · `detail` · `board` · `edition` · `selection` · `settings` · `overlay` · `analytics` · `lookup` |
+| Familles de composants | `md-navigation`, `md-forms`, `md-data-display`, `md-overlays`, `md-charts`, `md-icons` |
+| Création et documentation | `md-new-component`, `md-component-doc`, `md-a11y-specs` (+ `md-a11y-rgaa/`) |
+
+**Prérequis** : un compte Figma avec accès en édition et un siège payant, la police Circular
+disponible, et le MCP Figma connecté. L'installation complète, la connexion du MCP et le dépannage
+sont détaillés dans **[`mics-skills/README.md`](mics-skills/README.md)**.
+
+### Les faire vivre
+
+Un skill est un texte : quand une correction en revue vous apprend une règle, ajoutez-la au skill
+concerné et commitez. C'est ce qui empêche la même erreur de revenir, et c'est la seule maintenance
+que le package demande.
 
 ## Écarts avec `mediarithmics-platform`
 
