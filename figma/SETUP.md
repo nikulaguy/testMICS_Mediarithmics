@@ -133,7 +133,45 @@ Si les deux passent, l'installation est complète.
 
 ---
 
-## 5 · Produire un écran : le workflow nominal
+## 5 · Aspirer une page de production dans Figma
+
+Reproduire un écran de mémoire ou d'après une capture, c'est en réinventer les valeurs. Importer la page réelle depuis le navigateur donne les bonnes couleurs, les bons espacements et le vrai contenu du premier coup. C'est ce qui a servi à produire la plupart des écrans du fichier : on aspire, puis on **nettoie** en remplaçant chaque bloc par le composant du DS.
+
+### Installer
+
+Deux moitiés qui vont ensemble, **html.to.design** :
+
+| Où | Quoi |
+|---|---|
+| Chrome | l'extension **html.to.design**, depuis le Chrome Web Store |
+| Figma | le plugin **html.to.design**, depuis la Community |
+
+L'extension sert à capturer une page derrière une authentification — ce qui est le cas de `navigator.mediarithmics.com`. Sans elle, le plugin ne voit qu'une page de connexion.
+
+### Aspirer
+
+1. Ouvrir la page à reproduire dans Chrome, **connecté**, et la mettre dans l'état voulu : bon onglet, filtres posés, dropdown ouvert si c'est cet état qu'on veut.
+2. Lancer l'extension, qui produit un lien d'import.
+3. Dans Figma, ouvrir le plugin et coller ce lien. L'import se pose sur la page **Aspiration**, jamais directement dans une section « ✅ Clean ».
+
+### Nettoyer — c'est là que tout se joue
+
+Un import est une photographie du DOM : des centaines de calques nommés `div`, `Body`, `Container`, aucun composant, aucune variable, des autolayouts approximatifs. **Il n'est pas livrable en l'état.** Le nettoyage consiste à :
+
+- remplacer chaque bloc par une **instance** du composant correspondant (TopBar, SideMenu, Table, Tag…) ;
+- rebrancher couleurs, radius et espacements sur les **variables** ;
+- refaire les autolayouts, renommer les calques, supprimer les nœuds vides ;
+- reposer l'écran dans sa section, à sa place, **sans le déplacer**.
+
+Le skill **`/md-produce-screen`** encadre ce travail, et `/md-ds-rules` en donne les règles. Ne pas nettoyer à la main hors de ce cadre : l'import est volumineux, et un script qui supprime avant d'avoir vérifié détruit du contenu.
+
+L'intérêt de la méthode est là : l'aspiration donne la **vérité de la production**, le nettoyage la traduit dans le **vocabulaire du design system**. Les deux séparément ne servent à rien.
+
+> **À confirmer** : le nom de l'outil est déduit des calques importés (frames nommées d'après le titre de la page, puis `Body` et `Container`, c'est-à-dire la structure du DOM). Si l'aspiration a été faite avec un autre plugin, corriger ici.
+
+---
+
+## 6 · Produire un écran : le workflow nominal
 
 Point d'entrée unique : **`/md-produce-screen`**, avec votre spec et l'URL du fichier. Exemple :
 
@@ -152,7 +190,7 @@ Deux cas particuliers :
 
 ---
 
-## 6 · Les 3 règles d'or (jamais négociables)
+## 7 · Les 3 règles d'or (jamais négociables)
 
 1. **Aucune valeur en dur** : toute couleur, tout radius, tout espacement vient d'une variable ; tout texte porte un style du fichier.
 2. **Composants = instances** : on n'édite jamais un master pour un besoin d'écran, on instancie et on override.
@@ -165,7 +203,7 @@ Et trois habitudes du fichier :
 
 ---
 
-## 7 · Dépannage
+## 8 · Dépannage
 
 | Symptôme | Cause / remède |
 |---|---|
@@ -179,7 +217,7 @@ Et trois habitudes du fichier :
 
 ---
 
-## 8 · Check-list de fin de session
+## 9 · Check-list de fin de session
 
 - [ ] Pre-flight passé (screenshot conforme, zéro valeur en dur, zéro calque au nom par défaut).
 - [ ] Nouveaux composants : doc + description native + états complets + carte au Sommaire.

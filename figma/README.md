@@ -6,11 +6,12 @@ de production, et le mode d'emploi pour produire des maquettes conformes avec Cl
 ```
 figma/
   README.md              ce fichier — le fichier Figma, son contenu, l'accès
-  SETUP.md               installation : Claude Code, le MCP Figma, les skills
+  SETUP.md               installation : Claude Code, le MCP Figma, l'aspiration, les skills
   DESKTOP-BRIDGE.md      le second accès à Figma : sans quota, API plugin complète
   skills/                les 22 skills de production + les 14 références RGAA
   variables.json         les 121 variables exportées, avec leur cible de code
   export-variables.js    le script qui régénère variables.json
+  *.fig                  instantané du fichier — voir plus bas, il périme
 ```
 
 **Vous n'avez encore rien installé ?** Tout est dans **[`SETUP.md`](SETUP.md)** : Claude Code, la
@@ -70,18 +71,26 @@ script est en lecture seule et signale les variables sans cible de code et les a
 La table de correspondance composant Figma → composant React est dans
 [`ARCHITECTURE.md`](../ARCHITECTURE.md), section 3.
 
-## Pourquoi le `.fig` n'est pas versionné ici
+## Le `.fig` versionné
 
-Un export « Save local copy » est un binaire opaque : git ne sait ni le différencier ni le
-fusionner, chaque version en rajoute une copie entière dans l'historique, et un fichier de cette
-taille approche la limite de 100 Mo par fichier de GitHub. Surtout, il périme dès la première
-modification en ligne, et un dépôt qui contient une copie périmée d'une source vivante fait
-travailler quelqu'un sur la mauvaise version.
+`Mediarithmics - MICS DS — Rebuild.fig` est un export « Enregistrer une copie locale », déposé ici
+comme instantané de référence. **Le lien ci-dessus reste la source de vérité** : le `.fig` est une
+photographie, pas une copie synchronisée.
 
-Le lien ci-dessus est donc la référence. Si vous voulez malgré tout un instantané — archivage,
-reprise hors ligne, transfert de propriété — l'export se fait à la main depuis l'application Figma
-(menu **Fichier → Enregistrer une copie locale**), et se dépose dans `figma/snapshot/`, en datant
-le nom : `MICS-DS-Rebuild-2026-07-31.fig`.
+Trois choses à savoir avant de s'en servir :
+
+- **Il périme.** Dès la première modification en ligne, il ne décrit plus le fichier réel.
+  Vérifiez sa date de commit avant de conclure quoi que ce soit à partir de lui.
+- **Git ne sait pas le lire.** Aucun diff, aucune fusion possible : chaque nouvelle version ajoute
+  une copie entière à l'historique du dépôt. Le remplacer souvent le fait grossir vite.
+- **Il ne remplace pas [`variables.json`](variables.json)**, qui lui se relit en revue et se compare
+  d'une version à l'autre.
+
+À quoi il sert : archivage, reprise hors ligne, transfert de propriété du fichier — les cas où
+l'accès Figma n'est pas garanti. Pour travailler, ouvrez le lien.
+
+Pour le remplacer : **Fichier → Enregistrer une copie locale** depuis l'application Figma, puis
+écraser celui-ci en gardant le même nom (un nom stable évite d'accumuler les versions côte à côte).
 
 ## Produire une maquette
 

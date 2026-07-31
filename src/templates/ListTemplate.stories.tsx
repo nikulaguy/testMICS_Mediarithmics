@@ -1,8 +1,20 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ListTemplate } from './ListTemplate';
-import { Button, EmptyState, Icon, Pagination, Select, Table, Tag } from '../ui';
-import { semantic } from '../theme/micsTheme';
+import {
+  Button,
+  CountBadge,
+  DropdownCheckboxItem,
+  DropdownFooter,
+  DropdownPanel,
+  EmptyState,
+  Icon,
+  Pagination,
+  Select,
+  Table,
+  Tag,
+} from '../ui';
+import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
   title: 'Templates/Liste',
@@ -120,6 +132,126 @@ export const SansResultat: Story = {
         <EmptyState
           title="Aucun segment ne correspond"
           description="Retirez un filtre ou élargissez la recherche."
+        />
+      </ListTemplate>
+    );
+  },
+};
+
+/**
+ * Les deux actions de barre d'outils que porte tout écran de liste, **réellement
+ * ouvrables**. À gauche le bouton Filters et sa cascade, à droite Edit view et sa
+ * liste de colonnes. Le template ne les fournit pas : il fournit leur place.
+ */
+export const FiltersEtEditView: Story = {
+  render: function Rendu() {
+    const [filtersOpen, setFiltersOpen] = useState(false);
+    const [viewOpen, setViewOpen] = useState(false);
+    const [filtres, setFiltres] = useState<{ key: string; label: string }[]>([]);
+    const [colonnes, setColonnes] = useState(['name', 'type', 'points']);
+
+    const basculerFiltre = (key: string, label: string) =>
+      setFiltres((f) => (f.some((x) => x.key === key) ? f.filter((x) => x.key !== key) : [...f, { key, label }]));
+
+    return (
+      <ListTemplate
+        search=""
+        onSearchChange={() => {}}
+        searchPlaceholder="Search segments"
+        activeFilters={filtres}
+        onRemoveFilter={(key) => setFiltres((f) => f.filter((x) => x.key !== key))}
+        onClearFilters={() => setFiltres([])}
+        actions={
+          <>
+            {/*
+              Chaque déclencheur porte SON panneau, en position absolue dans un
+              parent relatif. Le template ne connaît pas ces panneaux : il ne
+              fournit que la rangée où poser les boutons.
+            */}
+            <div style={{ position: 'relative' }}>
+              <Button
+                icon={<Icon name="filter" size={14} />}
+                aria-haspopup="true"
+                aria-expanded={filtersOpen}
+                onClick={() => {
+                  setFiltersOpen((v) => !v);
+                  setViewOpen(false);
+                }}
+              >
+                Filters
+                {filtres.length > 0 && <CountBadge count={filtres.length} />}
+              </Button>
+              {filtersOpen && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: scale.zDropdown }}>
+                  <DropdownPanel width={240}>
+                    <div role="menu" aria-label="Filtres" style={{ paddingBlock: scale.space8 }}>
+                      {[
+                        ['type:query', 'Type : Query'],
+                        ['type:campaign', 'Type : Campaign'],
+                        ['labels:test', 'Labels : test'],
+                      ].map(([key, label]) => (
+                        <DropdownCheckboxItem
+                          key={key}
+                          label={label}
+                          checked={filtres.some((f) => f.key === key)}
+                          onToggle={() => basculerFiltre(key, label)}
+                        />
+                      ))}
+                    </div>
+                    <DropdownFooter
+                      label="Clear all filters"
+                      disabled={!filtres.length}
+                      onClick={() => setFiltres([])}
+                    />
+                  </DropdownPanel>
+                </div>
+              )}
+            </div>
+
+            <div style={{ position: 'relative' }}>
+              <Button
+                icon={<Icon name="view" size={14} />}
+                aria-haspopup="true"
+                aria-expanded={viewOpen}
+                onClick={() => {
+                  setViewOpen((v) => !v);
+                  setFiltersOpen(false);
+                }}
+              >
+                Edit view
+              </Button>
+              {viewOpen && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: scale.zDropdown }}>
+                  <DropdownPanel width={220}>
+                    <div role="menu" aria-label="Colonnes affichées" style={{ paddingBlock: scale.space8 }}>
+                      {COLONNES.map((c) => (
+                        <DropdownCheckboxItem
+                          key={c.key}
+                          label={c.title}
+                          checked={colonnes.includes(c.key)}
+                          onToggle={() =>
+                            setColonnes((v) =>
+                              v.includes(c.key) ? v.filter((x) => x !== c.key) : [...v, c.key],
+                            )
+                          }
+                        />
+                      ))}
+                    </div>
+                  </DropdownPanel>
+                </div>
+              )}
+            </div>
+          </>
+        }
+      >
+        <Table
+          rowKey="id"
+          columns={COLONNES.filter((c) => colonnes.includes(c.key))}
+          dataSource={LIGNES.filter(
+            (l) => !filtres.length || filtres.some((f) => f.label.endsWith(l.type)),
+          )}
+          pagination={false}
+          size="small"
         />
       </ListTemplate>
     );

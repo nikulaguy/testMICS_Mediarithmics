@@ -45,6 +45,43 @@ filtrage, que le template ignore.
 
 <Canvas of={ListStories.AvecFiltresActifs} />
 
+## Les deux actions de barre d'outils
+
+Tout écran de liste porte les mêmes deux actions à droite : **Filters** et **Edit view**. Le
+template ne les fournit pas — il fournit leur **place**. C'est volontaire : les dimensions de
+filtrage et les colonnes disponibles changent à chaque écran, les imposer ici reviendrait à
+recoder Segments dans le template.
+
+La story ci-dessous les rend **réellement ouvrables** : cocher un filtre incrémente le compteur du
+bouton, fait apparaître la chip et filtre le tableau ; Edit view retire une colonne. C'est le
+montage à recopier.
+
+<Canvas of={ListStories.FiltersEtEditView} />
+
+<DocTable
+  headers={['', 'Filters', 'Edit view']}
+  rows={[
+    ['Icône', <code>filter</code>, <code>view</code>],
+    ['Contenu', 'Le FilterPanel en cascade, ou une liste de cases quand il y a peu de dimensions', 'Une case à cocher par colonne disponible'],
+    ['Compteur', <>Un <code>CountBadge</code> portant le nombre de <b>filtres</b>, pas de dimensions</>, 'Aucun'],
+    ['Pied', '« Clear all filters », icône balai', 'Aucun'],
+    ['Application', 'Immédiate, sans bouton de validation', 'Immédiate'],
+  ]}
+/>
+
+Trois points de montage à respecter, visibles dans le code de la story :
+
+- **Chaque déclencheur porte son panneau**, en position absolue dans un parent `position: relative`.
+  Le template ne connaît pas ces panneaux, il ne les positionne pas.
+- **Ouvrir l'un ferme l'autre.** Deux panneaux ouverts en même temps se recouvrent, et le second
+  clic devient imprévisible.
+- **`aria-haspopup` et `aria-expanded` sur le bouton**, sinon rien n'annonce qu'il ouvre quelque
+  chose.
+
+Le compteur compte les **filtres**, jamais les dimensions : trois types cochés dans « Segment
+type », c'est 3 — le même nombre que les chips affichées juste en dessous. Compter les dimensions
+donnerait 1, et le badge contredirait la barre.
+
 ## Règles d'usage
 
 - **Un écran de liste passe par ce template.** Recomposer la surface à la main, c'est réintroduire

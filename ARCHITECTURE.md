@@ -57,57 +57,85 @@ ombres viennent de `src/theme/micsTheme.ts`, qui est la seule source de valeurs 
 | Composant Figma | Fichier | Ce que l'enveloppe impose |
 |---|---|---|
 | Tag `15:18` | `components/Tag.tsx` | Les six palettes (fond 100, bordure 300, texte 700), hauteur 26, padding 2/8, radius/base, croix du set d'icônes |
-| Empty State `285:151` | `components/EmptyBlock.tsx` | Icône et libellé du DS, centrage dans la carte |
+| Empty State `285:151` | `components/EmptyState.tsx` | Icône et libellé du DS, centrage dans la carte |
 
 ### Construits (aucun équivalent AntD)
 
 | Composant Figma | Fichier |
 |---|---|
-| Link `567:140` | `components/Link.tsx` (2 tailles × 2 thèmes × 3 états) |
+| Link `567:140` | `components/Link.tsx` |
 | buttonIcon `666:110318` | `components/IconButton.tsx` |
-| Dropdown / Container `145:69` | `components/DropdownPanel.tsx` (+ `panelSurface` pour les mises en page spécifiques) |
-| Badge Type=Count `15:38` | `components/CountBadge.tsx` |
-| Icônes (page 🖼 Icons) | `components/Icon.tsx` + 34 SVG dans `assets/icons/` |
-| TopBar `17:26` | `components/Shell.tsx` |
-| SideMenu `19:32` + SideMenu / Item `19:31` | `components/Shell.tsx` |
-| Actionbar `245:4156` | `components/AppShell.tsx` |
-| Search / Modal `515:589` et ses items | `components/SearchPalette.tsx` |
-| Barre de filtres actifs (validée en maquette de test) | `components/ActiveFilterBar.tsx` |
-| Panneau de filtres en cascade | `components/FilterPanel.tsx` |
-| Dropdown / Nav Item `142:71`, Checkbox Item `143:76`, Option Item `142:76`, Label Item `143:77`, Clear `193:2804` | `components/DropdownItems.tsx` |
-| Table / Toolbar `21:65` | `components/Toolbar.tsx` |
+| Dropdown / Container `145:69` | `components/DropdownPanel.tsx` (+ `panelSurface`) |
+| Dropdown / Nav Item, Checkbox Item, Option Item, Label Item, Clear | `components/DropdownItems.tsx` |
+| Badge `15:38` Type=Count | `components/CountBadge.tsx` |
+| Badge `15:38` Type=Dot/Success/Processing/Warning/Error | `components/StatusBadge.tsx` |
+| Active Filter Bar `712:132327` | `components/ActiveFilterBar.tsx` |
+| Card `706:116913` | `components/Card.tsx` |
 | Counter `185:81` | `components/Counter.tsx` |
+| Segment Header `237:92` | `components/SegmentHeader.tsx` |
 | Resource Title Header `250:88` | `components/ResourceTitleHeader.tsx` |
-| AppLauncher `19:148` | `components/AppLauncher.tsx` |
-
-| Tab `17:61` + Tab Bar `249:107` | `components/Tabs.tsx` |
-| Pagination `16:34` | `components/Pagination.tsx` |
-| Breadcrumb `29:22142` | `components/Breadcrumb.tsx` |
 | Overlay `212:169` + Header `190:198` + Footer `202:198` | `components/Overlay.tsx` |
-| Input `14:16` | `components/Input.tsx` (+ `Field.tsx`) |
-| Select `14:30` | `components/Select.tsx` (+ `Field.tsx`) |
-| Checkbox `14:49`, Radio `14:60` | AntD thémés, doc `Choice.mdx` |
-| Switch `14:67` | `components/Switch.tsx` |
+| Search / Modal `515:589` et ses items | `components/SearchPalette.tsx` |
+| Table / Toolbar `21:65` | `components/Toolbar.tsx` |
+| Tab `17:61` + Tab Bar `249:107` | `components/Tabs.tsx` |
+| TopBar `17:26`, SideMenu `19:32` | `components/Shell.tsx` |
+| SideMenu / Item `19:31` | `components/SideMenuItem.tsx` |
+| AppLauncher `19:148` | `components/AppLauncher.tsx` |
+| Actionbar `245:4156` | `components/AppShell.tsx` |
 | Section Toggle `111:39` | `components/SectionToggle.tsx` |
+| Switch `14:67` | `components/Switch.tsx` |
+| Panneau de filtres en cascade (composition d'écran) | `components/FilterPanel.tsx` |
+| Sélecteur de label (Resource Title Header `status=adding`) | `components/LabelPicker.tsx` |
+| Icônes (page 🖼 Icons) | `components/Icon.tsx` + **52** SVG dans `assets/icons/` |
+
+### Divergences de nom, assumées
+
+Vérifiées le 2026-07-31 en comparant les définitions Figma aux props des fichiers.
+
+| Figma | Dev | Pourquoi |
+|---|---|---|
+| `Badge` (6 variantes) | `CountBadge` + `StatusBadge` | Un compteur et un état ne partagent ni forme, ni API. Sous une prop `type` unique, chaque appel devrait ignorer la moitié des props. |
+| `Dropdown / Container` | `DropdownPanel` | « Container » ne dit rien ; le composant rend une surface flottante. |
+| `Dropdown / Clear` | `DropdownFooter` | Le pied ne sert pas qu'à réinitialiser. |
+| `Table / Toolbar` | `Toolbar` | Elle sert aussi des écrans sans tableau. |
+| `Search / Modal` | `SearchPalette` | C'est une palette de commandes, pas une modale de recherche. |
+| `buttonIcon` | `IconButton` | Nommage cohérent avec le reste du code. |
+| `SideMenu / Item` | `SideMenuItem` | Le composant est aussi utilisé par l'AppLauncher. |
+| — | `DropdownActionItem` | Rangée d'action d'un menu ⋮, sans équivalent Figma. **À créer côté maquette.** |
+| — | `ListTemplate` | Coque d'écran, pas un composant Figma. |
+
+### Divergences de props, assumées
+
+| Composant | Figma | Dev | Pourquoi |
+|---|---|---|---|
+| `Counter` | `Show progress` (booléen) | dérivé de `max` | Un booléen indépendant du plafond autorise l'état contradictoire « barre affichée, pas de maximum ». La barre suit le plafond, elle ne se règle pas à part. |
+| `Empty State` | `Message`, `Illustration` | `title`, `icon` | `Message` désigne en fait le titre, et l'illustration est une icône du set. Les noms Figma décrivent mal ce qu'ils portent. |
+| `Tag` | `Label`, `Show logo` | `children`, `logo` | `children` est l'idiome React pour un contenu textuel ; le booléen d'affichage est déduit de la présence de la valeur. |
+| `Breadcrumb` | `Current`, `Level` (1-3) | `crumbs` (tableau) | Trois niveaux figés en maquette, un nombre libre en code. |
+| Tous les `Show …` | booléens explicites | présence de la prop | Une maquette doit pouvoir masquer un calque ; du code n'affiche pas ce qu'on ne lui donne pas. |
+
+Ces écarts sont des **choix**, pas des oublis. Un écart non listé ici est un défaut à corriger.
 
 ### Couverture réelle du fichier Figma
 
-Le fichier compte **83 composants** hors icônes et charts, répartis sur 6 pages. Vingt-et-un sont
-développés et documentés. Le reste est identifié, pas encore fait — inventaire à jour au
-2026-07-29, obtenu par `findAllWithCriteria` sur chaque page du fichier :
+Recompté le 2026-07-31 par `findAllWithCriteria` sur chaque page, hors icônes et modules de
+graphiques : **88 composants**, dont **31 développés**.
 
-| Page Figma | Fait | Reste à faire |
-| --- | --- | --- |
-| 🔘 Button | Link, buttonIcon | Button (thémé AntD, page de doc à écrire) |
-| 📝 Form Inputs | Input, Select, Checkbox, Radio, Switch, Section Toggle | — |
-| 🏷 Data Display | Tag, Badge → CountBadge, Counter, Resource Title Header, Empty State | Alert, Progress, Spin, Tooltip, Segment Header, Alert Row, Metrics Column, Timeline / Event Row, Timeline / Session Header, Lookup / Device Item, 8 composants Chart |
-| 💬 Feedback & Overlays | Dropdown ×7, Search / Modal, Overlay + Header + Footer | Feed Card, Selection Card, Funnel / Step Card, Funnel / Result Column, Builder / Criterion, Builder / Criteria Group, Search / Result Item, Search / Section Header |
-| 🧭 Navigation & Shell | TopBar, SideMenu + Item, AppLauncher, Actionbar, Tab, Tab Bar, Pagination, Breadcrumb | SearchBar, Step Nav / Item, Actionbar/Light with actions, Settings Bar, Settings Nav / Item, Board Action Bar, Analytics Action Bar |
-| 📊 Table & Lists | Table / Toolbar | Table / HeaderCell, Row, Cell, Header Row, Feed Row, Destination Row, Preset Row |
+| Page Figma | Composants | Développés |
+|---|---|---|
+| 🏷 Data Display | 22 | Tag, Badge → CountBadge + StatusBadge, Card, Counter, Segment Header, Resource Title Header, Empty State, Active Filter Bar |
+| 💬 Feedback & Overlays | 19 | Dropdown ×5, Overlay + Header + Footer, Search / Modal |
+| 🧭 Navigation & Shell | 16 | TopBar, SideMenu + Item, AppLauncher, Actionbar, Tab, Tab Bar, Pagination, Breadcrumb |
+| 📊 Table & Lists | 8 | Table / Toolbar (les rangées sont rendues par `antd/Table`) |
+| 📝 Form Inputs | 6 | Input, Select, Checkbox, Radio, Switch, Section Toggle |
+| 🔘 Button | 3 | Link, buttonIcon (Button est thémé AntD) |
+| 📊 Charts | 5 | — les graphiques sont du SVG écrit à la main, hors DS |
 
-Les composants **thémés** (Button, Input, Select, Checkbox, Radio, Switch) sont rendus par AntD
-sans enveloppe : ils fonctionnent déjà dans les écrans, mais leur page Storybook reste à écrire.
-Ne pas confondre « rendu correctement » et « documenté ».
+Le reste est identifié, pas encore fait. Les plus utiles à prendre ensuite : `Alert` (aujourd'hui
+rendu en texte brut sur le board Builders usage), `Metrics Column`, `Alert Row`, `Progress`.
+
+Attention à ne pas confondre **rendu correctement** et **documenté** : les composants thémés
+fonctionnent dans les écrans depuis le début, leur page Storybook est arrivée après.
 
 ## 4. Pièges rencontrés, et pourquoi le code est écrit ainsi
 
