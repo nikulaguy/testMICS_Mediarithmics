@@ -1,188 +1,117 @@
-# MICS — test front
+# MICS — design system et prototype front
 
-Prototype jetable qui rejoue les écrans Segements et Boards du DS (Figma `34:2041`) et les
-comportements de filtrage validés en maquette. Aucune API : les données sont en dur.
+Reconstruction du front MICS avec une couche de composants documentée, pour réduire le temps de
+passation entre le prototypage produit et l'intégration.
 
-## Stack
+| | URL |
+| --- | --- |
+| **Storybook** (le design system) | https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/ |
+| **Application** de démonstration | https://nikulaguy.github.io/testMICS_Mediarithmics/ |
 
-Même socle que le repo client, nettoyé :
-
-| Côté client | Ici |
-|---|---|
-| React + TypeScript | idem (Vite au lieu de Nx, pour un test isolé) |
-| Ant Design v5 + ConfigProvider | idem, `src/theme/micsTheme.ts` reprend `defaultTheme.ts` |
-| LESS v3 legacy (primary/info inversés), 478 px bruts | **supprimé** : plus une seule valeur en dur hors du module de thème |
-
-`src/theme/micsTheme.ts` est la seule source de valeurs : primitives, sémantiques, échelle.
-Il applique aussi les arbitrages du ticket « Tokens de couleurs » (page Audit) : `colorLink`
-déclaré explicitement (`#003056`), `borderRadiusLG` à 6, `controlHeight` à 32.
+Commencez par le Storybook : c'est la documentation, et c'est la source de vérité.
+La page **Design System / Passation** explique quoi faire de ce dépôt.
 
 ## Lancer
 
 ```bash
-npm install
-npm run dev
+npm install && npm run storybook
 ```
 
-Le serveur écoute sur **http://localhost:5199** 
+Le Storybook écoute sur **http://localhost:6006**, l'application sur **http://localhost:5199**
+(`npm run dev`). Aucune API n'est appelée : toutes les données sont fausses et en dur.
 
-## Ce que le prototype démontre
+| Script | Effet |
+|---|---|
+| `npm run storybook` | la documentation, en développement |
+| `npm run dev` | l'application de démonstration |
+| `npm run build` | typecheck (`tsc -b`) puis build de l'app |
+| `npm run build-storybook` | build statique du Storybook |
+| `npm run lint` | oxlint |
 
-- **Actions de page dans l'Actionbar** (Export, New segment, ⋮), actions de tableau dans la Toolbar.
-- **Panneau Filters en cascade** : dimensions à gauche avec un **compteur** par dimension (pas de
-  pastille de couleur), valeurs à droite, application immédiate, `CLEAR <DIMENSION>` à portée explicite.
-- **Compteur du bouton Filters** : il compte les **filtres**, pas les dimensions. Trois types
-  cochés dans « Segment type », c'est 3 — le même nombre que les chips affichées juste en dessous.
-- **Barre de filtres actifs** : une chip par dimension (« Segment type : Campaign +2 »), fermable,
-  plus `Clear all filters`. Elle n'apparaît que s'il existe au moins un filtre actif.
-- **Repli automatique** : la largeur réelle des chips est mesurée (`ResizeObserver`) ; le lien
-  « +n autres / Réduire » n'apparaît que si la ligne déborde vraiment. Réduire la fenêtre pour le voir.
-- **Filtre de colonne** (entonnoir de la colonne Type) qui écrit **la même clé d'état** que le
-  panneau : une seule chip, jamais deux vérités. Ni OK ni Reset, application immédiate.
-- **Le cas qui justifie tout** : quand le filtrage ne renvoie rien, le tableau affiche « No data »
-  mais les chips expliquent pourquoi.
+## Ce que contient le dépôt
 
-## Assets
+| | |
+|---|---|
+| Composants de DS | **30**, exposés par `src/ui.ts` |
+| Pages de documentation | **31** MDX, une par composant plus les transverses |
+| Fichiers de stories | 28 |
+| Icônes SVG | 52, exportées du Figma client et normalisées |
+| Écrans de démonstration | Boards (9 tableaux de bord), Segments (liste, usage, alertes, détail) |
 
-Les icônes et le logo viennent du **fichier Figma**, pas d'une librairie tierce :
-33 SVG exportés de la page 🖼 Icons vers `src/assets/icons/`, plus le logo
-(`src/assets/logo-mediarithmics.png`). Chaque SVG a été normalisé (viewBox carré,
-`preserveAspectRatio` retiré, fills remplacés par `currentColor`, taille en `1em`),
-ce qui permet de piloter couleur et taille en CSS comme un glyphe de police.
-Le composant `src/components/Icon.tsx` les expose par nom (`<Icon name="view" />`).
+```
+src/
+  ui.ts            surface publique unique — le seul import autorisé depuis une page
+  theme/           micsTheme.ts : primitives, sémantiques, échelle, typographie
+  components/      les 30 composants, chacun avec ses stories et sa page MDX
+  pages/           les écrans de démonstration
+  docs/            Introduction, Fondations, Comparaison, Passation
+  assets/icons/    les 52 SVG
+mics-skills/       les règles de production, réutilisables par un agent
+ARCHITECTURE.md    la règle des trois catégories, la correspondance Figma → dev
+```
 
-## Comportements implémentés
+## Les trois règles
 
-- **TopBar** : les trois actions de droite sont des `buttonIcon` (Figma 666:110318) — icône 20×20
-  sans fond, couleur pilotée par l'état (Default `text/on-dark`, Hover `bg/hover`, Pressed
-  `bg/selected`), cible cliquable de 32×32, `aria-label` sur chacune. Le launcher et le compte
-  ouvrent un panneau (`aria-haspopup` + `aria-expanded`, fermeture au clic extérieur et à Échap) ;
-  le panneau compte affiche l'email et Logout.
-- **Recherche globale** : le clic sur la barre de la TopBar ou **Cmd/Ctrl + K** ouvre la palette
-  (`SearchPalette`) — scrim `bg/scrim`, modale de 760 ancrée à 140 px du haut, résultats groupés
-  FEATURES / SEGMENTS / PLUGINS, mise en gras de la sous-chaîne cherchée, navigation ↑ ↓, Échap
-  pour fermer, état vide quand la requête ne donne rien.
-- **Edit view** : dropdown de choix des colonnes affichées (les 11 de la maquette), application
-  immédiate sur le tableau.
-- **Survols conformes à la maquette** : items du SideMenu et pieds « CLEAR … » en `bg/hover`
-  (#ebeff2), là où le défaut est transparent pour le menu et `bg/window` pour les pieds.
+Elles sont détaillées dans `Design System / Introduction` ; en résumé :
 
-## Navigation et écrans
+1. **`src/ui.ts` est la seule porte d'entrée.** Une page n'importe jamais `antd` directement.
+2. **Aucune valeur en dur** hors de `src/theme/micsTheme.ts`. Pas un hex, pas un padding.
+3. **Un besoin = une entrée.** Deux composants qui rendent la même surface, c'est un composant.
 
-- **Fil d'ariane à trois niveaux** : niveau 1 = item actif du SideMenu, niveau 2 = onglet actif,
-  niveau 3 = ressource ouverte. La liste affiche donc « Segments › Segments », l'onglet suivant
-  « Segments › Usage overview », et le détail « Segments › Segments › {nom du segment} ».
-- **Trois onglets** développés : Segments (liste filtrable), Usage overview (compteurs à barre de
-  progression, répartition par type, créations dans le temps) et Alerts (quatre familles d'alertes
-  dépliables, tableau ou état vide selon le cas).
-- **Détail d'un segment** : clic sur le nom dans la liste. En-tête de ressource, carte UserPoint +
-  compteurs, onglets internes, et l'onglet « Features and adoption » en deux colonnes comparées.
-- **Switcher d'organisation** : le clic sur « mediarithmics - product » ouvre la liste des
-  organisations avec leur identifiant ; la sélection ne change que le contexte, pas la page.
+Chaque composant relève d'une des trois catégories : **thémé** (AntD tel quel, habillé par les
+tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **construit** (aucun
+équivalent AntD).
 
-## Détails conformes à la maquette
+## Écarts avec `mediarithmics-platform`
 
-- Pastille de l'onglet Alerts : Badge du DS (fond `warning`, 20×20, radius 6, chiffre blanc),
-  ancrée en haut à droite du libellé, et non centrée verticalement.
-- Filtre « Creation date » : panneau `Date Range Content` (plage absolue à deux champs datés +
-  plages relatives), et non une liste de cases à cocher.
-- Onglet Alerts : tout est replié à l'arrivée, la barre d'en-tête entière est cliquable
-  (`role="button"` + `aria-expanded`), le tableau ou l'état vide se place SOUS la rangée
-  texte + bouton, et l'état vide est centré avec l'icône `inbox` du DS.
-- Usage overview : tous les espacements à 16, icône `info` sur les compteurs (pas `options`),
-  aucune icône sur « Breakdown of segments by type », et les deux compteurs occupent toute la
-  hauteur de leur colonne.
-- Navigation : les niveaux parents du fil d'ariane sont des liens, les entrées du SideMenu sont
-  cliquables, et le logo ramène à l'entrée Boards.
+À lire avant d'évaluer la réutilisation du code.
 
-## Composants du DS développés
+| | mediarithmics-platform | Ici |
+|---|---|---|
+| Ant Design | 5.22 | **6.5** |
+| React | 18.3 | **19.2** |
+| Build | Nx (monorepo) | Vite |
+| Storybook | aucun | 9 |
+| Graphiques | Highcharts 7 | SVG écrit à la main |
+| Tokens | LESS v3 **et** AntD v5 en parallèle, `primary`/`info` inversés entre les deux | un seul module |
 
-`Icon`, `IconButton` (buttonIcon), `Link`, `Tag`, `ActiveFilterBar`, `FilterPanel`, `SearchPalette`,
-`EmptyBlock`, plus la coque (TopBar, SideMenu, AppShell). Ils reprennent les specs Figma, tokens
-compris : par exemple le `Tag` porte les six couleurs du composant (fond 100, bordure 1 px 300,
-texte 700 ; Default en gris), hauteur 26, padding 2/8, gap 4, radius/base, libellé Body/Book 12.
-Aucun composant AntD n'est utilisé tel quel quand le DS en définit un.
+Deux majeures d'écart sur AntD et sur React : les composants thémés et enveloppés demanderont une
+passe d'adaptation. Les composants construits (`Card`, `Counter`, `Link`, `Overlay`, `TabBar`,
+`DropdownPanel`, `Icon`…) ne dépendent presque pas d'AntD et se reprennent directement.
 
-## Écarts assumés
+Le code de production a été **lu** pour comprendre structure et comportements ; rien n'en a été
+copié. Ce qui vient de chez le client : les **valeurs** de tokens, transcrites de `defaultTheme.ts`,
+et les **52 icônes**, exportées du Figma.
+
+## Écarts assumés dans le prototype
 
 - Police Circular non embarquée (licence) : `font-family` la déclare, repli système sinon.
-- Croix de fermeture du Tag : la maquette la dessine à 8 px, en dessous de toute recommandation
-  de cible de pointage. Le dev utilise un glyphe de 12 px dans une cible de 20 px. À arbitrer côté
-  maquette (la cible, elle, doit rester au moins à 20).
-- Deux glyphes manquent au set exporté : le « + » de New segment reste `PlusOutlined` d'AntD
-  (identique visuellement), et le type Partition retombe sur l'icône `cluster`.
 - Pagination, tri et sélection sont ceux d'AntD, non recâblés sur les données.
-- Le panneau Filters est un popover maîtrisé plutôt qu'un `Dropdown` AntD : le composant se ferme
-  au clic interne, incompatible avec une application immédiate multi-valeurs.
+- Deux glyphes manquent au set exporté : le « + » de New segment reste `PlusOutlined` d'AntD, et le
+  type Partition retombe sur l'icône `cluster`.
+- Le panneau Filters est un popover maîtrisé plutôt qu'un `Dropdown` AntD, qui se ferme au clic
+  interne — incompatible avec une application immédiate multi-valeurs.
 - Les surfaces flottantes d'AntD (calendrier, select, filtre de colonne) sont rendues dans un
-  **portail attaché au body** : un clic dedans n'est pas un clic « en dehors » du panneau. Sans
-  cette exception dans le détecteur de clic extérieur, choisir une date de début refermait tout
-  avant la date de fin. Échap ferme d'abord le calendrier, puis seulement le panneau.
+  portail attaché au body : le détecteur de clic extérieur doit les exclure, sinon choisir une date
+  de début referme tout avant la date de fin.
+- La croix du Tag est dessinée à 8 px dans la maquette, sous toute recommandation de cible de
+  pointage : le dev utilise un glyphe de 12 px dans une cible de 20 px.
 
-## Consulter les versions compilées
+Les écarts propres à un composant sont écrits dans sa page de documentation, section
+« Écarts et évolutions ».
 
-```bash
-npm run build && npm run build-storybook
-npx vite preview --host 127.0.0.1 --port 4199 --strictPort                              # l'application
-npx vite preview --outDir storybook-static --host 127.0.0.1 --port 4200 --strictPort    # la documentation
-```
+## Publication
 
-- Application : **http://localhost:4199**
-- Storybook : **http://localhost:4200**
+`.github/workflows/pages.yml` construit les deux artefacts à chaque push sur `main` et les déploie
+sur GitHub Pages : l'app à la racine, le Storybook sous `/storybook/`. Rien à lancer à la main.
 
-`--host 127.0.0.1` est nécessaire : sans lui, Vite n'écoute qu'en IPv6 et `localhost` peut ne pas
-répondre selon la résolution de la machine.
+Le build utilise des chemins relatifs (`base: './'`), donc le même artefact fonctionne en local et
+sous le sous-chemin de GitHub Pages.
 
-## Documentation du design system (Storybook)
+Deux prérequis, une seule fois, sur un dépôt recréé :
 
-```bash
-npm run storybook
-```
-
-Ouvre **http://localhost:6006**. Trois entrées :
-
-- **Design System / Introduction** : le principe (AntD encadré, pas remplacé), la règle des trois
-  catégories, les trois règles d'or.
-- **Design System / Tokens** : sémantiques, primitives, échelle et typographie, rendus avec les
-  vraies valeurs du thème.
-- **Composants** : `Tag` (enveloppé) et `Link` (construit), avec leurs variantes, leurs états et
-  un cas d'usage réel. La catégorie est rappelée en tête de chaque page.
-
-Les stories sont rendues dans le `ConfigProvider` du produit : ce qui s'affiche est exactement ce
-que rendent les écrans. L'addon d'accessibilité est actif sur chaque story.
-
-## Pour reprendre le projet
-
-Lire `ARCHITECTURE.md` : règle des trois catégories (thémé / enveloppé / construit), table de
-correspondance Figma → dev, écarts connus et pièges rencontrés.
-
-## Consulter en ligne
-
-| | URL |
-| --- | --- |
-| App de démonstration | https://nikulaguy.github.io/testMICS_Mediarithmics/ |
-| Storybook (design system) | https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/ |
-
-La publication est automatique : `.github/workflows/pages.yml` construit les deux artefacts à
-chaque push sur `main` et les déploie sur GitHub Pages, l'app à la racine et le Storybook sous
-`/storybook/`. Rien à lancer à la main.
-
-Le build utilise des chemins relatifs (`base: './'` dans `vite.config.ts`), donc le même
-artefact fonctionne en local et sous le sous-chemin de GitHub Pages.
-
-### Deux prérequis, une seule fois
-
-1. Le dépôt doit être **public**. GitHub Pages ne sert un dépôt privé que sur un plan payant.
+1. Le dépôt doit être **public** (Pages ne sert un dépôt privé que sur un plan payant).
 2. **Settings → Pages → Build and deployment → Source → « GitHub Actions »**.
 
-Le second n'est pas contournable, malgré le `enablement: true` passé à `actions/configure-pages` :
-le `GITHUB_TOKEN` du workflow n'a pas le droit de **créer** un site Pages. Sans activation
-préalable, l'étape échoue avec
-
-```
-Get Pages site failed.    Error: Not Found
-Create Pages site failed. Error: Resource not accessible by integration
-```
-
-Une fois Pages activé, le `GET` réussit et `enablement` ne tente plus rien : le paramètre reste
-utile si le dépôt est recréé, il ne coûte rien sinon.
+Le second n'est pas contournable malgré le `enablement: true` passé à `actions/configure-pages` :
+le `GITHUB_TOKEN` du workflow n'a pas le droit de *créer* un site Pages, seulement d'y déployer.

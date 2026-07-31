@@ -2,10 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "mics-front-test",
+      "name": "mics-app",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "/Users/nicolasguy/Downloads/mics-front-test"],
-      "port": 5173
+      "runtimeArgs": ["run", "dev", "--prefix", "/Users/nicolasguy/Documents/mics-front-test"],
+      "port": 5199
+    },
+    {
+      "name": "mics-storybook",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "storybook", "--prefix", "/Users/nicolasguy/Documents/mics-front-test"],
+      "port": 6006
     }
   ]
 }

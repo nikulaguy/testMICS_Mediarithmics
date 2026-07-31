@@ -1,0 +1,125 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { DocTable } from './DocTable';
+
+<Meta title="Design System/Passation" />
+
+# Passation
+
+Cette page s'adresse aux équipes produit et front de mediarithmics. Elle dit **ce qu'est ce dépôt**,
+**ce qu'il n'est pas**, et **les trois façons de s'en servir**.
+
+## Ce que c'est
+
+Un prototype de design system **écrit de zéro**, qui reconstruit le front MICS avec une couche de
+composants documentée. Rien n'est extrait du dépôt `mediarithmics-platform` : le code de production
+a été **lu** pour comprendre la structure et les comportements, jamais copié.
+
+<DocTable
+  headers={['Ce qui vient de chez vous', 'Ce qui a été écrit ici']}
+  rows={[
+    [
+      <>Les <b>valeurs de tokens</b>, transcrites depuis <code>defaultTheme.ts</code></>,
+      <>Le fichier <code>src/theme/micsTheme.ts</code> qui les porte</>,
+    ],
+    [
+      <>Les <b>52 icônes</b>, exportées de votre fichier Figma et normalisées</>,
+      <>Le composant <code>Icon</code> qui les expose par nom</>,
+    ],
+    [
+      <>La <b>structure et les comportements</b>, relevés dans le code et en production</>,
+      <>Les <b>30 composants</b>, les <b>31 pages de documentation</b>, les écrans</>,
+    ],
+    [
+      <><b>Ant Design</b>, la même librairie que vous utilisez déjà</>,
+      <>La couche qui l'encadre : thème, enveloppes, surface publique</>,
+    ],
+  ]}
+/>
+
+Les données affichées sont **fausses et en dur**. Aucune API n'est appelée.
+
+## Ce qu'il faut savoir avant de parler réutilisation
+
+Le prototype a été monté sur des versions plus récentes que les vôtres. Ce n'est pas un détail :
+c'est ce qui décide si le code se reprend tel quel ou s'il sert de modèle.
+
+<DocTable
+  headers={['', 'mediarithmics-platform', 'Ce prototype']}
+  rows={[
+    ['Ant Design', '5.22', <b>6.5</b>],
+    ['React', '18.3', <b>19.2</b>],
+    ['Storybook', <i>aucun</i>, '9'],
+    ['Graphiques', 'Highcharts 7', 'SVG écrit à la main'],
+    ['Tokens', 'LESS v3 + AntD v5, en parallèle', 'un seul module'],
+  ]}
+/>
+
+**Deux majeures d'écart** sur Ant Design et sur React. Les composants *thémés* et *enveloppés*
+demanderont une passe d'adaptation ; ce qui se reprend sans discussion, c'est **l'architecture, les
+règles et la documentation**.
+
+## Trois façons de s'en servir
+
+### 1 — Reprendre la couche telle quelle
+
+Vous alignez les versions et vous importez `src/ui.ts` dans le produit. C'est l'option la plus
+rapide vers le bénéfice visé, et la plus engageante : elle suppose une montée de version d'AntD et
+de React.
+
+Ce qui se reprend directement : les tokens, les icônes, les composants *construits* (`Link`,
+`Card`, `Counter`, `Overlay`, `TabBar`, `DropdownPanel`…) qui ne dépendent presque pas d'AntD.
+
+### 2 — Reprendre le modèle, garder vos composants
+
+Vous gardez vos composants existants et vous reprenez **la méthode** : la surface publique unique,
+la règle des trois catégories, le format de page de documentation, la façon de relever une valeur
+en production plutôt que de la deviner.
+
+C'est l'option qui coûte le moins et qui donne déjà l'essentiel du gain de passation : un dev
+n'ouvre plus une maquette en se demandant quel composant utiliser, il ouvre le Storybook.
+
+### 3 — S'en servir comme banc d'essai
+
+Vous clonez, vous lancez, vous comparez avec votre produit. Le dépôt devient un lieu où trancher des
+questions sans toucher au produit : « à quoi ressemble ce composant avec ce token », « ce
+comportement, on le veut comme ça ? ».
+
+## Ce que ça change pour la passation
+
+Le point de départ du projet : réduire le temps entre le prototype d'un PM et l'intégration par un
+dev, et faire passer le dev **en revue plutôt qu'en interprétation**.
+
+<DocTable
+  headers={['Avant', 'Avec ce modèle']}
+  rows={[
+    ['Le dev lit une maquette et déduit le composant', 'La maquette nomme le composant, le Storybook le rend'],
+    ['Les valeurs se relisent à l’œil sur la maquette', 'Les valeurs sont des tokens, écrits une fois'],
+    ['Les écarts se découvrent en recette', <>Les écarts sont écrits dans la section « Écarts et évolutions » de chaque page</>],
+    ['Chaque écran réinvente ses surfaces', 'Une Card, un Overlay, un DropdownPanel pour tout le produit'],
+  ]}
+/>
+
+## Ce que le travail a déjà mis au jour
+
+Ce ne sont pas des hypothèses : ce sont des défauts trouvés en reconstruisant, et écrits dans les
+pages concernées.
+
+- **Deux systèmes de tokens en parallèle** dans le produit, avec `primary` et `info` **inversés**
+  entre le LESS v3 et le thème AntD v5.
+- **Douze composants Figma** redessinaient la même surface de carte, à deux valeurs de padding
+  différentes. La production en applique une troisième.
+- Sur le graphique Stats, **deux séries partagent la même couleur** — « Vector IDs » et
+  « User Accounts » sont indistinguables.
+- Les libellés d'axes des graphiques sont en **Lucida Grande 11 px**, les défauts de Highcharts, pas
+  la police du produit.
+- La documentation Figma décrivait des **slots non exposés** : les zones de contenu de la Card
+  n'étaient pas injectables.
+
+## Par où commencer
+
+1. **Le Storybook en ligne** — la vue d'ensemble, sans rien installer.
+2. **`Design System / Introduction`** — le principe et les trois catégories.
+3. **`Design System / Tokens / Fondations`** — les valeurs et les règles qui en découlent.
+4. **Un composant au hasard**, par exemple `Card` ou `Tag` — pour voir le format de page.
+5. **Le dépôt**, pour lire le code d'un composant et son commentaire : le *pourquoi* est écrit à
+   côté du *quoi*.

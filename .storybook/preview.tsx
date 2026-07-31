@@ -19,7 +19,19 @@ const preview: Preview = {
   ],
   parameters: {
     options: {
-      storySort: { order: ['Design System', ['Introduction', 'Tokens', ['Fondations', 'Semantiques', 'Primitives', 'Echelle', 'Typographie']], 'Composants'] },
+      storySort: {
+        order: [
+          'Design System',
+          [
+            'Introduction',
+            'Passation',
+            'Tokens',
+            ['Fondations', 'Semantiques', 'Primitives', 'Echelle', 'Typographie'],
+            'Patterns',
+          ],
+          'Composants',
+        ],
+      },
     },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     a11y: { test: 'todo' },
