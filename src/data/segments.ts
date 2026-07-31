@@ -56,6 +56,13 @@ export interface FilterDimension {
   icon: string;
   /** Une dimension aussi réglable depuis l'en-tête de la colonne du tableau. */
   columnKey?: string;
+  /**
+   * Ajoute un champ de recherche au-dessus des valeurs. C'est une propriété de la
+   * dimension, pas un seuil sur le nombre de valeurs : les labels sont créés par
+   * les utilisateurs et se comptent par dizaines en production, même si le jeu de
+   * démo n'en porte que quatre.
+   */
+  searchable?: boolean;
 }
 
 export const DIMENSIONS: FilterDimension[] = [
@@ -66,7 +73,7 @@ export const DIMENSIONS: FilterDimension[] = [
     columnKey: 'type',
     values: ['Automation', 'Campaign', 'Cohort lookalike', 'EDGE', 'Experiment group', 'File import', 'Partition', 'Pixel', 'Query'],
   },
-  { key: 'labels', label: 'Labels', icon: 'tag', values: ['E commerce', 'r', 'test', 'titi'] },
+  { key: 'labels', label: 'Labels', icon: 'tag', searchable: true, values: ['E commerce', 'r', 'test', 'titi'] },
   { key: 'persistence', label: 'Persistence', icon: 'save', values: ['Persisted', 'Not persisted'] },
   { key: 'cleanRoom', label: 'Data Clean Room', icon: 'database', values: ['Havas', 'Valiuz'] },
   {

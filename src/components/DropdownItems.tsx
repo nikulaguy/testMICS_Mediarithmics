@@ -62,11 +62,17 @@ export function DropdownNavItem({
       aria-haspopup="true"
       aria-expanded={active}
       {...handlers}
-      onMouseEnter={() => {
-        handlers.onMouseEnter();
-        onActivate?.();
-      }}
-      onFocus={onActivate}
+      /*
+        L'ouverture est au CLIC, pas au survol. Le survol n'ouvrait rien de
+        volontaire : traverser la liste pour atteindre le pied « Clear all »
+        ouvrait et refermait chaque panneau au passage, et le premier item se
+        retrouvait ouvert dès l'affichage. Le survol ne fait donc plus que
+        l'effet de survol.
+
+        Même règle au clavier : le déplacement du focus n'ouvre pas. Il faut
+        Entrée, Espace, ou ← (le niveau 2 s'ouvre vers la gauche, le
+        déclencheur étant à droite de l'écran).
+      */
       onClick={onActivate}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowLeft') {

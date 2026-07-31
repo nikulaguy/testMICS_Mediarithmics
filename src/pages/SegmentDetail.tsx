@@ -696,6 +696,7 @@ export function SegmentDetail({ segment }: { segment: Segment }) {
         {/* Pattern de recherche : pas de label visible, loupe à droite comme dans la Toolbar. */}
         <Input
           type="search"
+          aria-label="Search segments"
           placeholder="Search segments"
           rightIcon="magnifier"
           value={pickerSearch}

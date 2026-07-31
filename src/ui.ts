@@ -35,6 +35,8 @@ export { Icon } from './components/Icon';
 export { IconButton } from './components/IconButton';
 export { Link } from './components/Link';
 export { CountBadge } from './components/CountBadge';
+export { StatusBadge } from './components/StatusBadge';
+export type { StatusTone } from './components/StatusBadge';
 export { DropdownPanel, panelSurface } from './components/DropdownPanel';
 export {
   DropdownNavItem,

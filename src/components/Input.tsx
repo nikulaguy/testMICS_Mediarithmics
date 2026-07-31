@@ -15,6 +15,12 @@ interface Props extends FieldProps {
   rightIcon?: string;
   type?: 'text' | 'search' | 'email' | 'url' | 'password';
   autoComplete?: string;
+  /**
+   * Nom accessible, pour les champs sans `label` visible — une recherche dans un
+   * panneau, par exemple. Un placeholder ne remplace pas un intitulé : il n'est
+   * plus lisible dès la première frappe (RGAA 11.1).
+   */
+  'aria-label'?: string;
 }
 
 /**
@@ -38,12 +44,16 @@ export function Input({
   rightIcon,
   type = 'text',
   autoComplete,
+  'aria-label': ariaLabel,
 }: Props) {
   return (
     <Field label={label} message={message} state={state} required={required} width={width}>
       {(control) => (
         <AntInput
           id={control.id}
+          // Le label visible prime : le doubler d'un aria-label le remplacerait
+          // dans l'annonce, et on n'entendrait plus ce qui est affiché.
+          aria-label={label ? undefined : ariaLabel}
           aria-describedby={control['aria-describedby']}
           aria-invalid={control['aria-invalid']}
           required={control.required}

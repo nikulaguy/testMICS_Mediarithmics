@@ -11,6 +11,17 @@ interface Props {
   onSelect: (label: string) => void;
   onCancel: () => void;
   width?: number;
+  /** Texte d'exemple dans le champ. */
+  placeholder?: string;
+  /** Nom accessible du champ, quand « Rechercher un label » ne décrit pas l'action. */
+  ariaLabel?: string;
+  /**
+   * Côté de la loupe. Les deux maquettes qui portent ce motif ne s'accordent pas :
+   * l'ajout de label sur un segment la place à gauche, le filtre par label des
+   * Campaigns à droite. À arbitrer côté maquette ; en attendant, chaque écran suit
+   * la sienne.
+   */
+  iconSide?: 'left' | 'right';
 }
 
 /**
@@ -25,7 +36,15 @@ interface Props {
  * Motif combobox du WAI-APG : le focus ne quitte jamais le champ, les flèches
  * déplacent une rangée active désignée par `aria-activedescendant`.
  */
-export function LabelPicker({ options, onSelect, onCancel, width = 240 }: Props) {
+export function LabelPicker({
+  options,
+  onSelect,
+  onCancel,
+  width = 240,
+  placeholder,
+  ariaLabel = 'Rechercher un label',
+  iconSide = 'left',
+}: Props) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -79,20 +98,26 @@ export function LabelPicker({ options, onSelect, onCancel, width = 240 }: Props)
     }
   };
 
+  // AntInput veut `undefined` et non `null` pour ne pas réserver la place de l'affixe.
+  const icon = (side: 'left' | 'right') =>
+    iconSide === side ? <Icon name="magnifier" size={14} color={semantic.textLighter} /> : undefined;
+
   return (
     <div ref={rootRef} style={{ position: 'relative', width, flex: '0 0 auto' }}>
       <AntInput
         autoFocus
         role="combobox"
-        aria-label="Rechercher un label"
+        aria-label={ariaLabel}
         aria-expanded={matches.length > 0}
         aria-controls={listId}
         aria-autocomplete="list"
         aria-activedescendant={matches.length ? `${listId}-${active}` : undefined}
         value={query}
+        placeholder={placeholder}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
-        prefix={<Icon name="magnifier" size={14} color={semantic.textLighter} />}
+        prefix={icon('left')}
+        suffix={icon('right')}
       />
 
       {matches.length > 0 && (

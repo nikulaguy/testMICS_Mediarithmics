@@ -241,6 +241,7 @@ export function Boards({ board, onBoardChange }: Props) {
       >
         <Input
           type="search"
+          aria-label="Search by name or id"
           placeholder="Search by name or id"
           rightIcon="magnifier"
           value={pickerSearch}

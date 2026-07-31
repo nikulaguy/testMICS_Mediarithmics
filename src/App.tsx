@@ -3,6 +3,7 @@ import { ConfigProvider, App as AntApp } from 'antd';
 import { micsTheme, scale, semantic } from './theme/micsTheme';
 import { AppShell, Button, Icon, TabBar, type Crumb } from './ui';
 import { Boards } from './pages/Boards';
+import { CampaignsList } from './pages/CampaignsList';
 import { SegmentsList } from './pages/SegmentsList';
 import { UsageOverview } from './pages/UsageOverview';
 import { AlertsPage, ALERT_SECTIONS } from './pages/AlertsPage';
@@ -175,6 +176,20 @@ export default function App() {
           ]
         : [{ label: 'Segments', onClick: goSegments }, { label: TAB_LABEL[tab] }];
 
+  /*
+    Actions de page des Campaigns, relevées sur la maquette : Export puis
+    New Campaign. Le composant Actionbar y porte aussi Edit et Add a Feed, mais
+    l'instance de l'écran les masque — on suit l'instance, pas le maître.
+  */
+  const campaignActions = (
+    <>
+      <Button icon={<Icon name="download" size={14} />}>Export</Button>
+      <Button type="primary" icon={<Icon name="plus" size={14} />}>
+        New Campaign
+      </Button>
+    </>
+  );
+
   const actions = detail ? (
     // Supprimer le segment ouvert renvoie à la liste : l'écran qu'on regardait
     // n'existe plus, y rester afficherait une ressource fantôme.
@@ -198,7 +213,7 @@ export default function App() {
       <AntApp>
         <AppShell
           crumbs={crumbs}
-          actions={section === 'Segments' ? actions : null}
+          actions={section === 'Segments' ? actions : section === 'Campaigns' ? campaignActions : null}
           searchOpen={searchOpen}
           onSearchOpenChange={setSearchOpen}
           menuActive={section}
@@ -206,6 +221,8 @@ export default function App() {
         >
           {section === 'Boards' ? (
             <Boards board={board} onBoardChange={setBoard} />
+          ) : section === 'Campaigns' ? (
+            <CampaignsList />
           ) : section !== 'Segments' ? (
             <section
               style={{

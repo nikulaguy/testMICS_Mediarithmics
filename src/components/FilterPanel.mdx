@@ -13,7 +13,7 @@ import { DocTable } from '../docs/DocTable';
 </div>
 
 Panneau de filtres en **cascade à deux niveaux** : le niveau 1 liste les dimensions, le niveau 2
-affiche les valeurs de la dimension survolée. C'est le modèle **panneau**, réservé aux listes à
+affiche les valeurs de la dimension choisie. C'est le modèle **panneau**, réservé aux listes à
 nombreuses dimensions.
 
 ## Les deux modèles de filtrage du produit
@@ -38,6 +38,16 @@ Le choix ne se discute pas écran par écran, il découle du nombre de dimension
 
 ## Règles d'usage
 
+- **Le niveau 2 s'ouvre au clic, jamais au survol.** À l'ouverture du panneau, aucune dimension
+  n'est choisie et le niveau 2 n'existe pas. Le survol l'ouvrait auparavant : la première dimension
+  apparaissait donc sélectionnée dès l'affichage — un filtre qu'on n'a pas demandé a l'air d'un
+  filtre déjà posé — et traverser la liste pour atteindre le pied « Clear all filters » ouvrait et
+  refermait chaque panneau au passage. Un second clic sur la même dimension referme son niveau 2.
+- **Recherche dans les valeurs**, quand la dimension le déclare (`searchable`). C'est une propriété
+  de la dimension, pas un seuil sur le nombre de valeurs affichées : les labels sont créés par les
+  utilisateurs et se comptent par dizaines en production, quel que soit le jeu de démo. Changer de
+  dimension remet la recherche à zéro, et une recherche sans résultat le dit plutôt que de laisser
+  un panneau vide.
 - **Compteurs, pas de pastilles colorées.** Le niveau 1 affiche « 2 » à côté de la dimension
   filtrée. Une pastille dit qu'il y a un filtre ; un compteur dit combien : à surface égale, le
   compteur porte strictement plus d'information.
@@ -57,7 +67,8 @@ Le choix ne se discute pas écran par écran, il découle du nombre de dimension
 ## Anatomie
 
 1. **Niveau 1** : liste des dimensions, icône + libellé + compteur de valeurs cochées.
-2. **Niveau 2** : valeurs de la dimension survolée. Cases à cocher, ou sélecteur de période.
+2. **Niveau 2** : valeurs de la dimension choisie, absent tant qu'aucune ne l'est. Cases à cocher,
+   ou sélecteur de période, précédées d'une recherche si la dimension est `searchable`.
 3. **Pied de dimension** : « CLEAR {'{DIMENSION}'} », icône balai, fond `bg/window` → `bg/hover`.
 4. **Pied de panneau** : « CLEAR ALL FILTERS ».
 
@@ -76,7 +87,20 @@ Le choix ne se discute pas écran par écran, il découle du nombre de dimension
     ],
     [
       'Clavier',
-      "Le niveau 2 s'ouvre au survol ET au focus clavier : un panneau qui ne réagit qu'à la souris est inatteignable au clavier (RGAA 7.3, 13.x).",
+      <>
+        Le niveau 2 s'ouvre à <kbd>Entrée</kbd>, <kbd>Espace</kbd> ou <kbd>←</kbd> — il s'ouvre vers
+        la gauche, le déclencheur étant à droite. Le simple déplacement du focus n'ouvre rien, comme
+        le survol n'ouvre rien : la souris et le clavier demandent la même intention explicite
+        (RGAA 7.3, 13.x).
+      </>,
+    ],
+    [
+      'Intitulé',
+      <>
+        La recherche d'une dimension <code>searchable</code> porte un <code>aria-label</code>, pas
+        seulement un <code>placeholder</code> : celui-ci disparaît dès la première frappe et ne
+        vaut pas intitulé (RGAA 11.1).
+      </>,
     ],
     [
       'Contenu dynamique',
@@ -97,5 +121,4 @@ Le choix ne se discute pas écran par écran, il découle du nombre de dimension
 - **Ajouté en maquette.** En production, chaque écran de liste filtre à sa façon : positions,
   affichages et comportements diffèrent d'un écran à l'autre. Ce composant est la réponse à
   l'incohérence remontée par le client.
-- **À construire.** La recherche dans les valeurs d'une dimension très longue (labels, owners) et
-  l'enregistrement d'un jeu de filtres en vue nommée.
+- **À construire.** L'enregistrement d'un jeu de filtres en vue nommée.
