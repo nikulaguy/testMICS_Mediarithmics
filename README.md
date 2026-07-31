@@ -46,7 +46,7 @@ src/
   pages/           les écrans de démonstration
   docs/            Introduction, Fondations, Comparaison, Passation
   assets/icons/    les 52 SVG
-mics-skills/       les 22 skills de production Figma (voir plus bas)
+figma/             le fichier de design system et les 22 skills de production (voir plus bas)
 ARCHITECTURE.md    la règle des trois catégories, la correspondance Figma → dev
 ```
 
@@ -62,26 +62,28 @@ Chaque composant relève d'une des trois catégories : **thémé** (AntD tel que
 tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **construit** (aucun
 équivalent AntD).
 
-## Les skills — produire des maquettes conformes avec Claude Code
+## Figma — la moitié amont
 
-`mics-skills/` contient **22 skills** plus un pack de 14 références RGAA. Ce sont les règles de
-production du design system, écrites dans un format que Claude Code charge automatiquement :
-règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma, accessibilité.
+Tout ce qui concerne la conception est dans **[`figma/`](figma/)** : le fichier de design system
+(19 pages, 446 composants, 121 variables) et les **22 skills** de production, plus un pack de
+14 références RGAA. Les skills sont les règles du DS écrites dans un format que Claude Code charge
+automatiquement : règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma,
+accessibilité.
 
 **Ce qu'ils font, et ce qu'ils ne font pas.** Ils pilotent la production dans **Figma** — un PM
 décrit un écran, Claude le construit avec les vrais composants du fichier, tokens liés, autolayout
 partout, et refuse d'improviser une frame quand un composant existe déjà. Ils **ne génèrent pas de
 code** : la traduction en React reste le travail du dev, ce dépôt en est le résultat.
 
-C'est la moitié amont de la passation. Sans eux, une maquette part en dérive et le dev hérite de
-l'arbitrage ; avec eux, ce qui arrive au dev est déjà exprimé dans le vocabulaire du DS.
+Sans eux, une maquette part en dérive et le dev hérite de l'arbitrage ; avec eux, ce qui arrive au
+dev est déjà exprimé dans le vocabulaire du DS.
 
 ### Installer
 
 Depuis la racine du dépôt :
 
 ```bash
-for f in mics-skills/md-*.md; do n=$(basename "$f" .md); mkdir -p ~/.claude/skills/"$n"; cp "$f" ~/.claude/skills/"$n"/SKILL.md; done && cp -R mics-skills/md-a11y-rgaa ~/.claude/skills/
+for f in figma/skills/md-*.md; do n=$(basename "$f" .md); mkdir -p ~/.claude/skills/"$n"; cp "$f" ~/.claude/skills/"$n"/SKILL.md; done && cp -R figma/skills/md-a11y-rgaa ~/.claude/skills/
 ```
 
 Chaque skill doit finir dans son propre dossier, sous le nom exact `SKILL.md` — c'est la seule
@@ -113,7 +115,8 @@ rarement utile.
 
 **Prérequis** : un compte Figma avec accès en édition et un siège payant, la police Circular
 disponible, et le MCP Figma connecté. L'installation complète, la connexion du MCP et le dépannage
-sont détaillés dans **[`mics-skills/README.md`](mics-skills/README.md)**.
+sont détaillés dans **[`figma/skills/README.md`](figma/skills/README.md)** ; le contenu du fichier
+et l'accès, dans **[`figma/README.md`](figma/README.md)**.
 
 ### Les faire vivre
 

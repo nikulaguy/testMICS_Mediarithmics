@@ -12,7 +12,7 @@ Ce guide part de zéro : un compte Figma et un compte Claude qui n'ont jamais ut
 | Police | **Circular** (LLCircularWeb) doit être disponible pour votre compte : police d'organisation partagée, ou installée sur votre poste si vous utilisez Figma Desktop. Sans elle, toute édition de texte échouera (« Cannot load font »). |
 | Compte Claude | Un compte **Claude Pro, Max ou Team** (l'accès à Claude Code est inclus). |
 | Poste | macOS, Windows ou Linux, avec un terminal. |
-| Ce dossier | Le package `mics-skills/` complet (22 fichiers `md-*.md` + `md-a11y-rgaa/references/`). |
+| Ce dossier | Le package `figma/skills/` complet (22 fichiers `md-*.md` + `md-a11y-rgaa/references/`). |
 
 ---
 
