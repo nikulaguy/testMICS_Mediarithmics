@@ -91,6 +91,20 @@ segment lui-même.
 
 <Canvas of={ItemStories.ActionItem} />
 
+### Combien d'entrées pour ouvrir un « ⋮ »
+
+**Au moins deux.** Un menu de dépassement à une seule entrée coûte un clic pour rien, et cache une
+action là où un bouton l'aurait montrée. C'est pour cette raison que la liste des segments n'en a
+pas : elle n'a qu'Export et New segment, tous deux visibles.
+
+**Une exception, une seule, et elle est métier.** L'écran Campaigns garde un « ⋮ » pour la seule
+entrée `Goals`, parce que la fonctionnalité est en cours de dépréciation. Le menu sert alors à
+sortir l'action du chemin principal sans la retirer, et le jour où elle disparaît c'est le menu
+entier qui s'en va — pas un trou dans la barre d'actions.
+
+Cette exception se demande, elle ne se déduit pas : sans intention produit explicite, un « ⋮ » à
+une entrée est un défaut.
+
 ## Footer
 
 Pied de menu, **toujours en dernier**, pleine largeur. Le bloc lui-même n'a plus d'état : c'est le
