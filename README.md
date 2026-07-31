@@ -27,6 +27,7 @@ Le Storybook écoute sur **http://localhost:6006**, l'application sur **http://l
 | `npm run build` | typecheck (`tsc -b`) puis build de l'app |
 | `npm run build-storybook` | build statique du Storybook |
 | `npm run lint` | oxlint |
+| `npm run icons` | régénère `src/assets/icons.generated.ts` depuis les SVG |
 
 ## Ce que contient le dépôt
 
@@ -48,6 +49,7 @@ src/
   assets/icons/    les 52 SVG
 figma/             le fichier de design system et les 22 skills de production (voir plus bas)
 ARCHITECTURE.md    la règle des trois catégories, la correspondance Figma → dev
+PORTABILITE.md     ce que coûte la reprise de chaque composant dans le produit
 ```
 
 ## Les trois règles
@@ -154,6 +156,10 @@ copié depuis ce dépôt compile dans le produit sans passe d'adaptation liée a
 Ce qui reste à traiter au cas par cas : les **imports** (`../ui` ici, chemins Nx là-bas), les
 **tokens** (le produit lit encore deux systèmes en parallèle) et les **graphiques**, écrits en SVG
 plutôt qu'en Highcharts.
+
+**[`PORTABILITE.md`](PORTABILITE.md)** mesure la reprise composant par composant : 27 des 31
+compilent tels quels sous la chaîne exacte du produit, et la table de correspondance dit ce qui
+existe déjà de votre côté.
 
 Le code de production a été **lu** pour comprendre structure et comportements ; rien n'en a été
 copié. Ce qui vient de chez le client : les **valeurs** de tokens, transcrites de `defaultTheme.ts`,
