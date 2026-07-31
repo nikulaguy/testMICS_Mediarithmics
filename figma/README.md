@@ -5,9 +5,16 @@ de production, et le mode d'emploi pour produire des maquettes conformes avec Cl
 
 ```
 figma/
-  README.md      ce fichier — le fichier, son contenu, l'accès
-  skills/        les 22 skills de production + le guide d'installation pas à pas
+  README.md              ce fichier — le fichier Figma, son contenu, l'accès
+  SETUP.md               installation : Claude Code, le MCP Figma, les skills
+  skills/                les 22 skills de production + les 14 références RGAA
+  variables.json         les 121 variables exportées, avec leur cible de code
+  export-variables.js    le script qui régénère variables.json
 ```
+
+**Vous n'avez encore rien installé ?** Tout est dans **[`SETUP.md`](SETUP.md)** : Claude Code, la
+connexion du MCP Figma (trois options, dont le contournement du quota), les skills, un premier test
+de bout en bout et le dépannage.
 
 La moitié aval — les composants React, leur documentation, les écrans — est à la racine du dépôt.
 Voir le [README principal](../README.md).
@@ -40,9 +47,20 @@ sinon toute édition de texte échoue avec « Cannot load font ».
 ### Le passage design → code
 
 Les 121 variables portent leur cible de code dans leur description, sous la forme
-`CODE : → token.colorPrimary`. **120 sur 121** la renseignent aujourd'hui. C'est la passerelle
-entre le fichier et [`src/theme/micsTheme.ts`](../src/theme/micsTheme.ts) : ne la supprimez jamais,
-renseignez-la sur toute nouvelle variable.
+`CODE : → token.colorPrimary`. **120 sur 121** la renseignent aujourd'hui — la seule exception est
+`showActionMore`, un booléen de propriété de composant rangé par erreur dans Primitives. C'est la
+passerelle entre le fichier et [`src/theme/micsTheme.ts`](../src/theme/micsTheme.ts) : ne la
+supprimez jamais, renseignez-la sur toute nouvelle variable.
+
+[`variables.json`](variables.json) en est l'export : nom, type, alias, valeur finale et cible de
+code, pour les trois collections (Primitives 47, Color 32, Scale 42). Contrairement au fichier
+Figma, il se relit en revue et se compare d'une version à l'autre — c'est là que se voit une
+dérive entre la maquette et le thème du code.
+
+Pour le régénérer après une modification du fichier, exécutez
+[`export-variables.js`](export-variables.js) dans le contexte plugin de Figma (via le MCP
+`figma-console`, ou collé dans un plugin de développement) et remplacez le contenu du JSON. Le
+script est en lecture seule et signale les variables sans cible de code et les alias cassés.
 
 La table de correspondance composant Figma → composant React est dans
 [`ARCHITECTURE.md`](../ARCHITECTURE.md), section 3.
@@ -62,15 +80,15 @@ le nom : `MICS-DS-Rebuild-2026-07-31.fig`.
 
 ## Produire une maquette
 
-Tout est dans **[`skills/`](skills/)**. En résumé : installer les skills, connecter le MCP Figma,
-puis un seul point d'entrée.
+Une fois [`SETUP.md`](SETUP.md) suivi, il n'y a qu'un point d'entrée :
 
 ```bash
 claude "/md-produce-screen Écran de liste des Creatives, avec recherche, filtres par statut et pagination. Fichier : https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/"
 ```
 
-Le guide complet — installation, connexion du MCP, premier test de bout en bout, dépannage — est
-dans **[`skills/README.md`](skills/README.md)**.
+Claude enchaîne seul : vocabulaire métier, choix du template parmi les 9, production en instances,
+puis *pre-flight check* — screenshot et auto-contrôle, zéro défaut exigé avant de rendre la main.
+Les autres skills se chargent d'eux-mêmes selon le besoin.
 
 ## Les trois règles d'or du fichier
 

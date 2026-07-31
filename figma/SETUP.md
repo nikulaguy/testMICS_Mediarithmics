@@ -1,6 +1,8 @@
-# Éditer le fichier « MICS DS — Rebuild » avec Claude — guide d'installation pas à pas
+# Installation — Claude Code, le MCP Figma et les skills
 
 Ce guide part de zéro : un compte Figma et un compte Claude qui n'ont jamais utilisé ni MCP ni skills. À la fin, vous saurez produire un écran conforme au design system depuis une simple conversation avec Claude.
+
+C'est le document à suivre pour être autonome. Le contenu du fichier Figma et les conditions d'accès sont dans [`README.md`](README.md) ; les règles de production elles-mêmes, dans [`skills/`](skills/).
 
 ---
 
@@ -42,7 +44,7 @@ Au premier lancement, tapez `/login` : votre navigateur s'ouvre, connectez-vous 
 
 ## 2 · Connecter le MCP Figma
 
-Le MCP (Model Context Protocol) est le pont qui permet à Claude de lire et d'écrire dans Figma. Deux options ; l'option A suffit dans la plupart des cas.
+Le MCP (Model Context Protocol) est le pont qui permet à Claude de lire et d'écrire dans Figma. Trois options : **commencez par l'option A**, elle suffit dans la plupart des cas. L'option C est le recours quand le quota de l'option A est atteint — lisez-la avant d'en avoir besoin, c'est le seul blocage dur du dispositif.
 
 ### Option A — Serveur officiel distant (recommandée)
 
@@ -58,8 +60,27 @@ Utile si vous travaillez toujours fichier ouvert dans l'application :
 
 1. Ouvrez **Figma Desktop** → menu Figma → **Préférences** → activez **« Enable local MCP Server »**.
 2. ```bash
-   claude mcp add --transport http figma http://127.0.0.1:3845/mcp
+   claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
    ```
+
+### Option C — `figma-console`, pour passer outre le quota
+
+Le serveur officiel applique un **quota d'appels par siège Figma**. Une session d'écriture soutenue l'atteint, et il n'existe alors aucun moyen de continuer : ni réessai, ni changement de fichier. C'est le seul point où le dispositif s'arrête net.
+
+`figma-console` contourne le problème : il passe par le plugin **Desktop Bridge** de Figma Desktop et exécute le code dans le contexte plugin, en local. Même API Figma, pas de quota.
+
+```bash
+claude mcp add figma-console --env FIGMA_ACCESS_TOKEN=votre_jeton -- npx -y figma-console-mcp@latest
+```
+
+Le jeton se crée dans Figma : **Paramètres → Sécurité → Personal access tokens**. C'est un secret personnel qui ouvre l'accès à tous vos fichiers : ne le commitez jamais, ne le collez pas dans un ticket.
+
+Deux différences à connaître avant de l'utiliser :
+
+- Les opérations ne sont **pas atomiques**. Un script qui échoue à mi-parcours laisse le fichier dans un état intermédiaire. `figma.triggerUndo()` permet de revenir en arrière — on s'en est servi deux fois pour récupérer du contenu détruit par un script trop pressé — mais c'est un filet, pas une garantie.
+- Il faut **Figma Desktop ouvert** sur le bon fichier, avec le plugin Desktop Bridge lancé.
+
+Règle pratique : lecture et petites écritures avec l'option A, gros lots de production avec l'option C.
 
 ### Vérification (obligatoire avant de continuer)
 
@@ -73,7 +94,7 @@ Vous devez voir votre e-mail Figma. Ensuite :
 
 Si l'image du sommaire s'affiche, la lecture fonctionne.
 
-**À savoir** : le serveur officiel applique un quota d'appels par siège Figma. Une très grosse session d'écriture peut l'atteindre ; dans ce cas, reprenez un peu plus tard — rien n'est perdu, chaque opération est atomique.
+**À savoir** : avec l'option A, chaque opération est atomique — en cas d'erreur, rien n'a été écrit, on relance la demande. C'est ce qui la rend sûre pour l'édition courante, et c'est la garantie que l'option C ne donne pas.
 
 ---
 
@@ -85,18 +106,20 @@ Les skills sont les modes d'emploi que Claude charge automatiquement : règles d
 - `~/.claude/skills/` → pour vous seul (rapide pour démarrer).
 - `<votre-repo>/.claude/skills/` → partagé par toute l'équipe via git (**recommandé** : une seule source, versionnée).
 
-Depuis le dossier qui contient ce README :
+Depuis la racine du dépôt :
 
 ```bash
 DEST=~/.claude/skills        # ou <repo>/.claude/skills
 mkdir -p "$DEST"
-for f in md-*.md; do
+for f in figma/skills/md-*.md; do
   name=$(basename "$f" .md)
   mkdir -p "$DEST/$name"
   cp "$f" "$DEST/$name/SKILL.md"
 done
-cp -R md-a11y-rgaa "$DEST/md-a11y-rgaa"
+cp -R figma/skills/md-a11y-rgaa "$DEST/md-a11y-rgaa"
 ```
+
+`md-a11y-rgaa` se copie **à côté** des skills, pas dedans : `md-a11y-specs` pointe ses 14 références par le chemin `md-a11y-rgaa/references/…`, relatif à la racine des skills.
 
 ### Vérification
 
@@ -156,7 +179,7 @@ Et trois habitudes du fichier :
 | « Cannot load font Circular » | La police n'est pas disponible pour votre compte (voir Prérequis). |
 | « Invalid hyperlink target node » | Il faut charger toutes les pages avant de poser un lien — Claude le sait via md-figma-api ; rappelez-lui de charger ce skill. |
 | Erreur en cours d'écriture | Les appels sont **atomiques** : en cas d'erreur, rien n'a été écrit. Relancez simplement la demande. |
-| Quota MCP atteint | Quota par siège Figma ; attendre puis reprendre. |
+| Quota MCP atteint | Quota par siège Figma sur le serveur officiel. Basculer sur `figma-console` (option C de l'étape 2) plutôt qu'attendre. |
 | Claude « invente » des composants | Vérifiez que les skills sont bien installés (étape 3) et exigez `/md-produce-screen` comme point d'entrée. |
 
 ---

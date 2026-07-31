@@ -114,9 +114,14 @@ rarement utile.
 | Création et documentation | `md-new-component`, `md-component-doc`, `md-a11y-specs` (+ `md-a11y-rgaa/`) |
 
 **Prérequis** : un compte Figma avec accès en édition et un siège payant, la police Circular
-disponible, et le MCP Figma connecté. L'installation complète, la connexion du MCP et le dépannage
-sont détaillés dans **[`figma/skills/README.md`](figma/skills/README.md)** ; le contenu du fichier
-et l'accès, dans **[`figma/README.md`](figma/README.md)**.
+disponible, et le **MCP Figma** connecté — c'est le pont qui permet à Claude de lire et d'écrire
+dans le fichier. L'installation complète part de zéro dans
+**[`figma/SETUP.md`](figma/SETUP.md)** : Claude Code, les trois options de connexion du MCP (dont
+le contournement du quota par siège), les skills, un premier test de bout en bout et le dépannage.
+
+Le contenu du fichier, les conditions d'accès et l'export des 121 variables
+([`figma/variables.json`](figma/variables.json)) sont décrits dans
+**[`figma/README.md`](figma/README.md)**.
 
 ### Les faire vivre
 
