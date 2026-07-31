@@ -16,7 +16,7 @@ const GROUPS = [
 ];
 
 const meta = {
-  title: 'Composants/AppLauncher',
+  title: 'Composants/Globaux/AppLauncher',
   component: AppLauncher,
   argTypes: {
     groups: {

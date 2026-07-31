@@ -32,7 +32,7 @@ function Demo({ initial }: { initial: ActiveFilter[] }) {
 }
 
 const meta = {
-  title: 'Composants/ActiveFilterBar',
+  title: 'Composants/Composés/ActiveFilterBar',
   component: ActiveFilterBar,
   argTypes: {
     filters: { control: false, description: 'Une entrée par valeur appliquée. Jamais de regroupement.' },

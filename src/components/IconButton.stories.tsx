@@ -3,7 +3,7 @@ import { IconButton } from './IconButton';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/IconButton',
+  title: 'Composants/Simples/IconButton',
   component: IconButton,
   argTypes: {
     icon: {

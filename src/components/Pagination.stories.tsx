@@ -4,7 +4,7 @@ import { Pagination } from './Pagination';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Pagination',
+  title: 'Composants/Simples/Pagination',
   component: Pagination,
   argTypes: {
     current: { control: 'number', description: 'Page courante, 1-indexée.' },

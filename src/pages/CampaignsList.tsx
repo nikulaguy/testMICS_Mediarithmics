@@ -1,17 +1,15 @@
 import { useMemo, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {
-  ActiveFilterBar,
   Button,
   Icon,
   LabelPicker,
   Link,
+  ListTemplate,
   Pagination,
   Select,
   StatusBadge,
   Table,
-  Toolbar,
-  ToolbarSearch,
   type ActiveFilter,
 } from '../ui';
 import {
@@ -22,7 +20,7 @@ import {
   applyCampaignFilters,
   type Campaign,
 } from '../data/campaigns';
-import { scale, semantic } from '../theme/micsTheme';
+import { semantic } from '../theme/micsTheme';
 
 /*
   Campaigns — Liste (Figma 611:2, filtre ouvert 612:344).
@@ -146,29 +144,27 @@ export function CampaignsList() {
   const paged = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <section
-      style={{
-        background: semantic.bgContainer,
-        borderRadius: scale.radiusCard,
-        padding: scale.space20,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: scale.space20,
+    <ListTemplate
+      search={search}
+      onSearchChange={(v) => {
+        setSearch(v);
+        setPage(1);
       }}
-    >
-      <Toolbar
-        search={
-          <ToolbarSearch
-            value={search}
-            onChange={(v) => {
-              setSearch(v);
-              setPage(1);
-            }}
-            placeholder="Search Display Campaigns"
-          />
-        }
-        actions={
-          <>
+      searchPlaceholder="Search Display Campaigns"
+      activeFilters={activeFilters}
+      onRemoveFilter={(key) => {
+        setLabels((prev) => prev.filter((l) => `label:${l}` !== key));
+        setPage(1);
+      }}
+      onClearFilters={() => {
+        setLabels([]);
+        setPage(1);
+      }}
+      pagination={
+        <Pagination current={page} total={rows.length} pageSize={PAGE_SIZE} onChange={setPage} />
+      }
+      actions={
+        <>
             <LabelFilter selected={labels} onAdd={addLabel} />
             <Select
               width={160}
@@ -192,25 +188,10 @@ export function CampaignsList() {
               ]}
               aria-label="Status"
             />
-            <Button icon={<Icon name="view" size={14} />}>Edit view</Button>
-          </>
-        }
-      />
-
-      {activeFilters.length > 0 && (
-        <ActiveFilterBar
-          filters={activeFilters}
-          onRemove={(key) => {
-            setLabels((prev) => prev.filter((l) => `label:${l}` !== key));
-            setPage(1);
-          }}
-          onClearAll={() => {
-            setLabels([]);
-            setPage(1);
-          }}
-        />
-      )}
-
+          <Button icon={<Icon name="view" size={14} />}>Edit view</Button>
+        </>
+      }
+    >
       <Table
         rowKey="id"
         columns={columns}
@@ -219,10 +200,6 @@ export function CampaignsList() {
         rowSelection={{ type: 'checkbox' }}
         size="middle"
       />
-
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination current={page} total={rows.length} pageSize={PAGE_SIZE} onChange={setPage} />
-      </div>
-    </section>
+    </ListTemplate>
   );
 }

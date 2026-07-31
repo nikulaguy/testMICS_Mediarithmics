@@ -15,7 +15,7 @@ import { Tag } from './Tag';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/DropdownItems',
+  title: 'Composants/Simples/DropdownItems',
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

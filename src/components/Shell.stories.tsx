@@ -5,7 +5,7 @@ import { SearchPalette } from './SearchPalette';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Shell',
+  title: 'Composants/Globaux/Shell',
   parameters: { layout: 'fullscreen' },
 } satisfies Meta;
 

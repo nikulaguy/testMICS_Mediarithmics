@@ -3,7 +3,7 @@ import { Breadcrumb } from './Breadcrumb';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Breadcrumb',
+  title: 'Composants/Composés/Breadcrumb',
   component: Breadcrumb,
   argTypes: {
     items: { control: false, description: "Niveaux, du plus général au plus précis. Trois au maximum." },

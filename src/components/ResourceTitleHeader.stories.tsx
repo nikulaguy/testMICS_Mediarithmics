@@ -4,7 +4,7 @@ import { ResourceTitleHeader, type ResourceLabel } from './ResourceTitleHeader';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/ResourceTitleHeader',
+  title: 'Composants/Composés/ResourceTitleHeader',
   component: ResourceTitleHeader,
   argTypes: {
     title: { control: 'text', description: 'Nom de la ressource. Headline 4 (16/24).' },

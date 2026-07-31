@@ -5,7 +5,7 @@ import { Overlay, OverlayFooter, OverlayHeader } from './Overlay';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Overlay',
+  title: 'Composants/Simples/Overlay',
   component: Overlay,
   parameters: { layout: 'fullscreen' },
   argTypes: {

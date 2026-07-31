@@ -9,7 +9,7 @@ const ITEMS = [
 ];
 
 const meta = {
-  title: 'Composants/Steps',
+  title: 'Composants/Simples/Steps',
   component: Steps,
   argTypes: {
     direction: { control: 'inline-radio', options: ['vertical', 'horizontal'] },

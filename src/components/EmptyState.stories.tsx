@@ -18,7 +18,7 @@ const Card = ({ children }: { children: React.ReactNode }) => (
 );
 
 const meta = {
-  title: 'Composants/EmptyState',
+  title: 'Composants/Simples/EmptyState',
   component: EmptyState,
   argTypes: {
     title: {

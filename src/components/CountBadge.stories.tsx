@@ -4,7 +4,7 @@ import { Icon } from './Icon';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/CountBadge',
+  title: 'Composants/Simples/CountBadge',
   component: CountBadge,
   argTypes: {
     count: { control: { type: 'number', min: 0 }, description: 'Nombre affiché.' },

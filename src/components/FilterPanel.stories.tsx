@@ -27,7 +27,7 @@ function Demo({ initial = {} as FilterState }: { initial?: FilterState }) {
 }
 
 const meta = {
-  title: 'Composants/FilterPanel',
+  title: 'Composants/Composés/FilterPanel',
   component: FilterPanel,
   argTypes: {
     filters: { control: false, description: 'État courant : une entrée par dimension, valeurs cochées.' },

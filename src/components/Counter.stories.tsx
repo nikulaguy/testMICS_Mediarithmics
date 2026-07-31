@@ -4,7 +4,7 @@ import { Counter } from './Counter';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Counter',
+  title: 'Composants/Simples/Counter',
   component: Counter,
   argTypes: {
     title: { control: 'text', description: 'Ce que compte la carte. Body/Medium 12.' },

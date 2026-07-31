@@ -12,7 +12,7 @@ const TYPES: SelectOption[] = [
 ];
 
 const meta = {
-  title: 'Composants/Select',
+  title: 'Composants/Simples/Select',
   component: Select,
   argTypes: {
     label: { control: 'text' },

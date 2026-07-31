@@ -4,7 +4,7 @@ import { SideMenuItem } from './SideMenuItem';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/SideMenuItem',
+  title: 'Composants/Simples/SideMenuItem',
   component: SideMenuItem,
   argTypes: {
     label: { control: 'text', description: 'Libellé de l’entrée. Court, sans ponctuation.' },

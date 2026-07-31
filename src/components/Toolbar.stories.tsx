@@ -13,7 +13,7 @@ const Card = ({ children }: { children: React.ReactNode }) => (
 );
 
 const meta = {
-  title: 'Composants/Toolbar',
+  title: 'Composants/Simples/Toolbar',
   component: Toolbar,
   argTypes: {
     search: { control: false, description: 'Champ de recherche, à gauche. Omis = pas de recherche sur ce tableau.' },

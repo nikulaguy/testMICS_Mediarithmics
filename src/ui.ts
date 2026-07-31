@@ -72,5 +72,10 @@ export type { Crumb } from './components/Breadcrumb';
 export { TopBar, SideMenu } from './components/Shell';
 export { SideMenuItem } from './components/SideMenuItem';
 
+// --- TEMPLATES --------------------------------------------------------------
+// Coques d'écran : elles fixent l'ordre des blocs et les espacements, jamais le
+// contenu. Une page les remplit, elle ne les recompose pas.
+export { ListTemplate } from './templates/ListTemplate';
+
 // --- TOKENS -----------------------------------------------------------------
 export { micsTheme, primitives, semantic, scale, elevation, typography } from './theme/micsTheme';

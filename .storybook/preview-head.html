@@ -1,0 +1,44 @@
+<script>
+  /*
+    Récupération après un déploiement.
+
+    Storybook découpe chaque page en un module chargé à la demande, dont le nom
+    porte une empreinte : Introduction-BzB_wZzP.js. À chaque déploiement les
+    empreintes changent et GitHub Pages SUPPRIME les anciennes.
+
+    GitHub Pages sert par ailleurs le HTML avec un Cache-Control de dix minutes,
+    sans moyen de le régler. Pendant ces dix minutes, un onglet ouvert avant le
+    déploiement — ou un retour sur le site — utilise l'ancien index, qui pointe
+    vers des modules effacés. D'où le « Failed to fetch dynamically imported
+    module », et sa disparition dès qu'on rafraîchit : le rafraîchissement va
+    chercher le nouvel index.
+
+    On automatise donc ce rafraîchissement.
+  */
+  (function () {
+    var CLÉ = 'mics-sb-dernier-rechargement';
+    // Un rechargement au plus par demi-minute. Si le module manque encore après
+    // ça, la cause n'est pas le déploiement : mieux vaut laisser voir l'erreur
+    // que boucler indéfiniment. Le délai se ré-arme tout seul ensuite.
+    var DÉLAI = 30000;
+
+    function recharger() {
+      var dernier = Number(sessionStorage.getItem(CLÉ) || 0);
+      if (Date.now() - dernier < DÉLAI) return false;
+      sessionStorage.setItem(CLÉ, String(Date.now()));
+      window.location.reload();
+      return true;
+    }
+
+    // Vite émet cet évènement quand un module préchargé ne se charge pas.
+    window.addEventListener('vite:preloadError', function (e) {
+      if (recharger()) e.preventDefault();
+    });
+
+    // Filet : certains chargements échouent hors du chemin de préchargement.
+    window.addEventListener('unhandledrejection', function (e) {
+      var m = e.reason && e.reason.message;
+      if (m && m.indexOf('Failed to fetch dynamically imported module') !== -1) recharger();
+    });
+  })();
+</script>

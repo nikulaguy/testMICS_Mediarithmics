@@ -4,7 +4,7 @@ import { Input } from './Input';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Input',
+  title: 'Composants/Simples/Input',
   component: Input,
   argTypes: {
     label: { control: 'text', description: 'Libellé visible au-dessus. Obligatoire, sauf pattern de recherche.' },

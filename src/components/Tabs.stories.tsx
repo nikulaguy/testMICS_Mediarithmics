@@ -10,7 +10,7 @@ const ITEMS: TabItem[] = [
 ];
 
 const meta = {
-  title: 'Composants/Tabs',
+  title: 'Composants/Composés/Tabs',
   component: TabBar,
   argTypes: {
     items: { control: false, description: 'Onglets : key, label, badge optionnel.' },

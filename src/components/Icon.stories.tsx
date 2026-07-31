@@ -20,7 +20,7 @@ const APP_MARKS = [
 ];
 
 const meta = {
-  title: 'Composants/Icon',
+  title: 'Composants/Simples/Icon',
   component: Icon,
   argTypes: {
     name: {

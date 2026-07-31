@@ -1,0 +1,73 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as StatusBadgeStories from './StatusBadge.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={StatusBadgeStories} />
+
+# StatusBadge
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : construit</span>
+  <span><b>Source code</b> : `src/components/StatusBadge.tsx`</span>
+  <span><b>Maquette</b> : Figma `Badge` <code>15:38</code>, variantes Dot / Success / Processing / Warning / Error</span>
+</div>
+
+Pastille d'état, suivie de son libellé. C'est **l'autre moitié du `Badge` de la maquette** :
+`CountBadge` en rend la variante Count, celui-ci les variantes d'état.
+
+<Canvas of={StatusBadgeStories.Tons} />
+
+## Props
+
+<Controls of={StatusBadgeStories.BacASable} />
+
+## Règles d'usage
+
+- **Jamais la pastille seule.** Le libellé est toujours rendu à côté. Un point vert et un point
+  orange ne se distinguent pas pour une part des utilisateurs, et pas du tout pour un lecteur
+  d'écran.
+- **Un ton par état, pas par envie.** `success` pour ce qui tourne, `processing` pour ce qui est en
+  cours, `warning` pour ce qui est suspendu, `error` pour ce qui a échoué, `neutral` pour ce qui
+  n'a plus d'activité.
+- **Ne pas confondre avec `Tag`.** Le Tag est une étiquette posée par un utilisateur, sur un fond
+  coloré et souvent retirable. Le StatusBadge est un état calculé par le système : pas de fond, pas
+  de croix, rien à retirer.
+- **Ne pas confondre avec `CountBadge`.** Un compteur porte un nombre et se colle à un libellé
+  existant ; un état porte un mot et se suffit.
+
+<Canvas of={StatusBadgeStories.DansUnTableau} />
+
+## Pourquoi deux composants et pas un
+
+La maquette n'a qu'un composant `Badge`, avec une propriété `Type`. Le code en a deux. La
+séparation est assumée : un compteur et un état ne partagent ni forme, ni API, ni usage. Les réunir
+sous une prop `type` obligerait chaque appel à ignorer la moitié des props — `count` sur un état,
+`label` sur un compteur.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Information couleur',
+      "L'état est écrit en toutes lettres à côté de la pastille. La couleur ne fait que redoubler une information déjà lisible (RGAA 3.1).",
+    ],
+    [
+      'Alternative textuelle',
+      <>
+        La pastille porte <code>aria-hidden</code> : elle n'ajoute rien à ce que le libellé dit
+        déjà, et l'annoncer produirait un doublon.
+      </>,
+    ],
+    [
+      'Contraste',
+      "La pastille est décorative, elle n'est donc pas soumise au seuil de contraste. Le libellé, lui, hérite de la couleur de texte de son contexte.",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Ajouté en dev.** La maquette porte les cinq variantes depuis le début ; seule la variante Count
+  avait été implémentée. Ce composant comble le manque, il n'invente rien.

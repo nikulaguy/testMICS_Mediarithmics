@@ -5,7 +5,7 @@ import { Icon } from './Icon';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Card',
+  title: 'Composants/Simples/Card',
   component: Card,
   argTypes: {
     title: { control: 'text', description: 'Titre de la carte. Headline 4.' },

@@ -1,6 +1,6 @@
 ---
 name: md-data-display
-description: Composants d'affichage de données MICS — Tag, Badge, Alert, Alert Row, Counter, Segment Header, Resource Title Header, Metrics Column, Empty State, Tooltip, Table.
+description: Composants d'affichage de données MICS — Tag, Badge, Active Filter Bar, Alert, Alert Row, Counter, Segment Header, Resource Title Header, Metrics Column, Empty State, Tooltip, Table.
 ---
 
 # md-data-display — Affichage de données
@@ -14,6 +14,15 @@ Appliquer /md-ds-rules avant toute utilisation. Pour les graphiques : /md-charts
 ## Badge — Set 15:38 (6 variantes)
 - **Type** : Count | Dot | Success | Processing | Warning | Error. Count porte un nombre (utilisé aussi par la prop `Badge` des Tab).
 - C'est le composant du **statut d'une ressource** (feed Live = Success, erreur = Error…). Le libellé s'override sur le calque texte (pas de prop — extension candidate).
+
+## Active Filter Bar — Set 712:132327 (3 variantes)
+- **State** : Default (les chips tiennent sur une ligne) | Overflow (lien « +n autres ») | Expanded (toutes les chips, lien « Réduire »).
+- Surface `bg/subtle`, `radius/card`, padding `space/8`, gap `space/12`. Zone chips en FILL, « Clear all filters » en HUG à droite.
+- Les chips sont des instances de **Tag** (`Color=Default`, `Closable` activé) — jamais un rectangle redessiné. La réinitialisation est un **Button `Type=Link` + `icon/broom`**, le même balai que le pied des panneaux de filtres.
+- **Une chip par filtre appliqué**, jamais de regroupement : grouper supprime ce que la barre existe pour montrer. Le libellé nomme la dimension puis la valeur (« Segment type : Campaign +2 »).
+- **Quand la poser** : modèle panneau (bouton Filters unique) → toujours, c'est le seul endroit où l'état est lisible panneau fermé. Modèle exposé (un sélecteur par dimension) → uniquement pour les dimensions que la barre d'outils ne montre plus. Aucun filtre actif → la barre n'existe pas, elle ne réserve pas de hauteur.
+- Une seule barre par écran, quelle que soit l'origine des filtres (cascade, filtre de colonne).
+- ⚠ Les variantes **Button `Type=Link` `Size=M`** (Default/Hover/Disabled) n'ont pas de nœud `icon`, contrairement à `Size=L`. Prendre `Size=L` dès qu'une icône est nécessaire.
 
 ## Alert — Set 15:55 (4 variantes)
 - **Type** : Info | Success | Warning | Error · largeur FILL

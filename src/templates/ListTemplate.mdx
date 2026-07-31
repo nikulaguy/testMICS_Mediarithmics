@@ -1,0 +1,97 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ListStories from './ListTemplate.stories';
+import { DocTable } from '../docs/DocTable';
+
+<Meta of={ListStories} />
+
+# Template — Liste
+
+<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+  <span><b>Catégorie</b> : template</span>
+  <span><b>Source code</b> : `src/templates/ListTemplate.tsx`</span>
+  <span><b>Référence</b> : l'écran Segments, dont il est extrait</span>
+</div>
+
+Coque commune à tous les écrans de liste. Elle **ne décide de rien** : ni des colonnes, ni des
+filtres, ni de la donnée. Elle fixe uniquement ce qui doit être identique d'un écran à l'autre —
+l'ordre des blocs, la surface, et les espacements entre eux.
+
+<Canvas of={ListStories.Complet} />
+
+## Props
+
+<Controls of={ListStories.Complet} />
+
+## Ce qu'il garantit
+
+<DocTable
+  headers={['Bloc', 'Règle tenue par le template']}
+  rows={[
+    ['1 · Barre d\'outils', "Recherche à gauche, actions à droite, sur une seule rangée. Elle disparaît entièrement si l'écran n'a ni recherche ni action."],
+    ['2 · Filtres actifs', "Toujours SOUS la barre d'outils, jamais au-dessus. Absente — et non vide — quand aucun filtre n'est appliqué : pas de hauteur réservée."],
+    ['3 · Contenu', "Le tableau, ou l'état vide. C'est le seul bloc que la page fournit obligatoirement."],
+    ['4 · Pagination', 'Sous le contenu, alignée à droite.'],
+  ]}
+/>
+
+## Ce qu'il ne fait pas
+
+Le **fil d'ariane** et les **actions de page** (Export, New…) n'y sont pas. Ils vivent dans
+l'Actionbar, qui appartient à la coque de l'application et non à la liste : un écran de détail les
+porte aussi, sans être une liste.
+
+Il ne fournit pas non plus la pagination — seulement sa place. Le nombre de pages dépend du
+filtrage, que le template ignore.
+
+<Canvas of={ListStories.AvecFiltresActifs} />
+
+## Règles d'usage
+
+- **Un écran de liste passe par ce template.** Recomposer la surface à la main, c'est réintroduire
+  l'écart que le template existe pour supprimer — un padding ici, un gap là.
+- **L'état vide remplace le tableau, pas la page.** La barre d'outils et les chips restent
+  affichées : c'est ce qui permet de comprendre *pourquoi* il n'y a rien. Un écran qui se vide
+  entièrement laisse l'utilisateur sans moyen d'annuler ce qu'il vient de faire.
+- **Les chips ne portent que ce que la barre d'outils ne montre plus.** Un filtre lisible dans son
+  sélecteur n'a pas besoin d'une chip ; il en aurait deux représentations concurrentes.
+- **Pas de second niveau de surface.** Le contenu est posé directement dans la carte du template :
+  l'envelopper dans une `Card` doublerait le padding.
+
+<Canvas of={ListStories.SansResultat} />
+
+## Écrans qui l'utilisent
+
+`Campaigns` aujourd'hui. `Segments`, dont il est extrait, porte encore sa propre coque : la
+migration est mécanique mais touche un écran très instrumenté, elle est faite à part.
+
+<Canvas of={ListStories.Minimal} />
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Structuration',
+      <>
+        Le template rend une <code>&lt;section&gt;</code>. Le titre de l'écran vit dans l'Actionbar,
+        au-dessus : la liste n'est pas un document à elle seule (RGAA 9.1).
+      </>,
+    ],
+    [
+      'Ordre de tabulation',
+      "L'ordre du DOM suit l'ordre visuel — recherche, actions, chips, tableau, pagination. Aucun bloc n'est déplacé en CSS (RGAA 12.8).",
+    ],
+    [
+      'Contenu dynamique',
+      "Le nombre de résultats après filtrage est annoncé par l'écran, pas par le template : lui ne connaît pas la donnée.",
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **À construire.** Un template `Détail` sur le même principe, extrait de la page de détail d'un
+  segment.
+- **À construire.** La migration de l'écran Segments, aujourd'hui seul écran de liste à ne pas
+  passer par le template.

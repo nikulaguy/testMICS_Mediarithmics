@@ -10,7 +10,7 @@ import { scale, semantic } from '../theme/micsTheme';
  * Les stories ci-dessous en sont les illustrations vivantes.
  */
 const meta = {
-  title: 'Composants/Tag',
+  title: 'Composants/Simples/Tag',
   component: Tag,
   argTypes: {
     color: {

@@ -12,7 +12,7 @@ import {
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/DropdownPanel',
+  title: 'Composants/Simples/DropdownPanel',
   component: DropdownPanel,
   argTypes: {
     width: {

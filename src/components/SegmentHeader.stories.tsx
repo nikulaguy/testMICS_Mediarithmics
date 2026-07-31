@@ -42,7 +42,7 @@ const METRICS: SegmentMetric[] = [
 ];
 
 const meta = {
-  title: 'Composants/SegmentHeader',
+  title: 'Composants/Simples/SegmentHeader',
   component: SegmentHeader,
   argTypes: {
     userPoint: { control: 'number', description: 'Métrique principale : la taille de l’audience.' },

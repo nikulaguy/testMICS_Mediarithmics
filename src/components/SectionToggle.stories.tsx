@@ -5,7 +5,7 @@ import { Select } from './Select';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/SectionToggle',
+  title: 'Composants/Simples/SectionToggle',
   component: SectionToggle,
   argTypes: {
     label: { control: 'text', description: 'Court : « Advanced », « Options ». Un intitulé, pas une phrase.' },

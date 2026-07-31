@@ -6,7 +6,7 @@ import { Select } from './Select';
 import { scale, semantic, typography } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Choix (Checkbox, Radio, Switch)',
+  title: 'Composants/Simples/Choix (Checkbox, Radio, Switch)',
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

@@ -30,7 +30,7 @@ function Demo({ crumbs, actions }: { crumbs: { label: string; onClick?: () => vo
 }
 
 const meta = {
-  title: 'Composants/AppShell',
+  title: 'Composants/Globaux/AppShell',
   component: AppShell,
   parameters: { layout: 'fullscreen' },
   argTypes: {

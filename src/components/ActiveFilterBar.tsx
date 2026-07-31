@@ -99,6 +99,15 @@ export function ActiveFilterBar({ filters, onRemove, onClearAll }: Props) {
           gap: scale.space8,
           alignItems: 'center',
           minWidth: 0,
+          /*
+            Filet de sécurité. La mesure décide combien de chips tiennent, mais
+            elle s'appuie sur une largeur relevée au rendu précédent : sur une
+            barre très étroite, ou juste après un redimensionnement, une chip de
+            trop débordait par-dessus « Clear all filters ». Le rognage garantit
+            que les deux zones ne se marchent jamais dessus, quoi que la mesure
+            ait conclu.
+          */
+          overflow: expanded ? 'visible' : 'hidden',
         }}
       >
         {shown.map((f) => (

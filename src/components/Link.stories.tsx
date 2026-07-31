@@ -3,7 +3,7 @@ import { Link } from './Link';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
-  title: 'Composants/Link',
+  title: 'Composants/Simples/Link',
   component: Link,
   parameters: {
     docs: {

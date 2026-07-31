@@ -19,6 +19,11 @@ const preview: Preview = {
   ],
   parameters: {
     options: {
+      /*
+        Du plus général au plus assemblé : les principes, puis les briques qui ne
+        dépendent de rien, puis celles qui en assemblent d'autres, puis la coque
+        de l'application, et enfin les templates d'écran.
+      */
       storySort: {
         order: [
           'Design System',
@@ -30,6 +35,8 @@ const preview: Preview = {
             'Patterns',
           ],
           'Composants',
+          ['Simples', 'Composés', 'Globaux'],
+          'Templates',
         ],
       },
     },
