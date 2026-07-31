@@ -1,4 +1,4 @@
-# MICS — test front « Segments »
+# MICS — test front
 
 Prototype jetable qui rejoue l'écran **Segments — Liste** du DS (Figma `34:2041`) et les
 comportements de filtrage validés en maquette. Aucune API : les données sont en dur.
