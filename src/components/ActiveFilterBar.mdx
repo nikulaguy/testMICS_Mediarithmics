@@ -12,7 +12,7 @@ import { DocTable } from '../docs/DocTable';
   <span><b>Maquette</b> : Figma, test de filtres <code>631:1093</code></span>
 </div>
 
-Barre de rappel des filtres appliqués : fond `bg/subtle`, `radius/card`, padding 8. **Une chip par
+Barre de rappel des filtres appliqués : fond `bg/subtle`, `radius/card`, padding `space/8`. **Une chip par
 valeur appliquée**, jamais de regroupement du type « Labels (3) ». Le regroupement économise de la
 place au prix de la seule chose que cette barre sert à faire : dire ce qui est filtré, et permettre
 de retirer une valeur précise sans rouvrir un panneau.
@@ -52,8 +52,8 @@ courts et tronquerait des libellés longs bien avant le débordement.
 
 ## Anatomie
 
-1. **Conteneur** : fond `bg/subtle`, `radius/card`, padding 8, gap 12.
-2. **Rangée de chips** : `Tag` fermables, gap 8, `nowrap` replié, `wrap` déplié.
+1. **Conteneur** : fond `bg/subtle`, `radius/card`, padding `space/8`, gap `space/12`.
+2. **Rangée de chips** : `Tag` fermables, gap `space/8`, `nowrap` replié, `wrap` déplié.
 3. **Bascule** : lien « +n autres » / « Réduire », affiché seulement en cas de débordement réel.
 4. **Sortie** : lien « Clear all filters », toujours à droite, jamais compressé.
 5. **Rangée de mesure** : copie invisible des chips, hors flux, qui sert au calcul de débordement.

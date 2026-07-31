@@ -18,7 +18,8 @@ interface Props {
 }
 
 /**
- * Barre de filtres actifs (Figma : fond bg/subtle, radius/card, padding 8, gap 12).
+ * Barre de filtres actifs (Figma « Active Filter Bar » : fond bg/subtle, radius/card,
+ * padding space/8, gap space/12).
  * UNE chip par filtre appliqué, jamais de regroupement : c'est le principe même de
  * cette barre de rappel. Elle n'apparaît que s'il existe au moins un filtre actif
  * non lisible dans la barre d'outils.
