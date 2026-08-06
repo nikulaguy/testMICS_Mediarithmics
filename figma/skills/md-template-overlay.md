@@ -10,6 +10,8 @@ Référence visuelle : page 🎼 Layout, blocs « 8 · Overlay — Drawer » et 
 
 ## Choisir Drawer ou Modale
 
+⚠ **Avant d'arriver ici, vérifier que c'est bien un overlay** : dérouler /md-choose-surface. La page est le défaut, et l'arbre y ramène dès que le contenu se partage, déborde, ou porte plus d'une tâche. Ce skill ne traite que le cas où l'overlay est déjà justifié.
+
 - **Drawer** : tâche secondaire qui a besoin du contexte de la page — consulter un détail, filtrer, éditer une liste. Contenu long ou scrollable, l'écran de fond reste une référence visible.
 - **Modale** : décision courte et bloquante — créer un objet en quelques champs, confirmer une action destructrice. Le contenu tient sans scroll ; s'il déborde, c'était un drawer ou une page dédiée.
 

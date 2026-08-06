@@ -20,15 +20,17 @@ Poser uniquement les questions dont la réponse ne se déduit pas de la spec. Un
 
 0. **Le vocabulaire de la spec est-il compris ?** Sinon, le résoudre soi-même via /md-business et le user guide AVANT de questionner — la moitié des ambiguïtés apparentes sont du vocabulaire métier, pas des questions à poser.
 1. **Création ou modification ?** Si modification : de quel écran / section / composant exactement ?
-2. **Quel template ?** Proposer un choix via la matrice de /md-ds-rules (Liste, Détail, Board, Édition, Choix du type, Settings, + Drawer/Modale par-dessus). Si la spec colle à deux templates, présenter les deux avec le critère qui les départage et demander.
-3. **Quelle section du SideMenu est active ?** (ou Settings / tunnel sans SideMenu)
-4. **Contenu principal ?** (table, KPIs + graphiques, formulaire, cartes de choix)
-5. **Overlay ?** (aucun / drawer / modale — et l'écran de fond)
-6. **Où poser l'écran ?** (section existante « ✅ … — Clean » ou nouvelle section) et **quel nom** (format « Section — Nom », ex. « Segments — Liste »).
+2. **Quelle SURFACE ?** Si le contenu pourrait s'afficher en overlay — ou si la spec demande une modale ou un drawer — dérouler **/md-choose-surface** AVANT de parler template. L'arbre tranche entre page, modale, drawer et composant non modal, et la page est le défaut. Si l'arbre contredit la spec, le signaler avec l'étape qui a tranché.
+3. **Quel template ?** Une fois la surface décidée, proposer un choix via la matrice de /md-ds-rules (Liste, Détail, Board, Édition, Choix du type, Settings, + Drawer/Modale par-dessus). Si la spec colle à deux templates, présenter les deux avec le critère qui les départage et demander.
+4. **Quelle section du SideMenu est active ?** (ou Settings / tunnel sans SideMenu)
+5. **Contenu principal ?** (table, KPIs + graphiques, formulaire, cartes de choix)
+6. **Overlay ?** (aucun / drawer / modale — et l'écran de fond)
+7. **Où poser l'écran ?** (section existante « ✅ … — Clean » ou nouvelle section) et **quel nom** (format « Section — Nom », ex. « Segments — Liste »).
 
 ## Étape 2 — Charger les skills
 
 - Toujours : **/md-ds-rules**
+- Doute sur la surface (page / modale / drawer / non modal) : **/md-choose-surface**
 - Si la spec emploie du vocabulaire métier (segments, feeds, automations, UserPoint, clean room…) ou touche un module que vous ne maîtrisez pas : **/md-business** — et lire la page du user guide correspondante avant de produire.
 - Template choisi : /md-template-list · /md-template-detail · /md-template-board · /md-template-edition · /md-template-selection · /md-template-settings · /md-template-overlay · /md-template-analytics · /md-template-lookup
 - Familles de composants selon le contenu : /md-navigation (toujours utile), /md-forms, /md-data-display, /md-overlays, /md-charts

@@ -93,6 +93,8 @@ Largeur de référence d'un écran : **1496 px**. La coque est fluide, seules ce
 
 ## Matrice des templates (aiguillage)
 
+Avant de choisir un template, s'assurer qu'on construit bien une **page** : /md-choose-surface tranche entre page, modale, drawer et composant non modal.
+
 Tout écran du produit se rattache à **un et un seul** de ces templates (page 🎼 Layout, section « ✅ Templates — Clean », pour les références visuelles) :
 
 | # | Template | Skill | SideMenu | Actionbar | Autre navigation |
