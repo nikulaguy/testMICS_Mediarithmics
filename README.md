@@ -47,7 +47,7 @@ src/
   pages/           les écrans de démonstration
   docs/            Introduction, Fondations, Comparaison, Passation
   assets/icons/    les 52 SVG
-figma/             le fichier de design system et les 22 skills de production (voir plus bas)
+figma/             le fichier de design system et les 23 skills de production (voir plus bas)
 ARCHITECTURE.md    la règle des trois catégories, la correspondance Figma → dev
 PORTABILITE.md     ce que coûte la reprise de chaque composant dans le produit
 ```
@@ -67,7 +67,7 @@ tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **constru
 ## Figma — la moitié amont
 
 Tout ce qui concerne la conception est dans **[`figma/`](figma/)** : le fichier de design system
-(19 pages, 446 composants, 121 variables) et les **22 skills** de production, plus un pack de
+(19 pages, 446 composants, 121 variables) et les **23 skills** de production, plus un pack de
 14 références RGAA. Les skills sont les règles du DS écrites dans un format que Claude Code charge
 automatiquement : règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma,
 accessibilité.
@@ -110,6 +110,7 @@ rarement utile.
 | Famille | Skills |
 |---|---|
 | Point d'entrée | `md-produce-screen` |
+| Choix de la surface | `md-choose-surface` — page, modale, drawer ou composant non modal, en 7 étapes |
 | Fondation | `md-ds-rules` (chargé avant tout), `md-business`, `md-figma-api` |
 | Templates d'écran | `md-template-` `list` · `detail` · `board` · `edition` · `selection` · `settings` · `overlay` · `analytics` · `lookup` |
 | Familles de composants | `md-navigation`, `md-forms`, `md-data-display`, `md-overlays`, `md-charts`, `md-icons` |

@@ -8,7 +8,7 @@ figma/
   README.md              ce fichier — le fichier Figma, son contenu, l'accès
   SETUP.md               installation : Claude Code, le MCP Figma, l'aspiration, les skills
   DESKTOP-BRIDGE.md      le second accès à Figma : sans quota, API plugin complète
-  skills/                les 22 skills de production + les 14 références RGAA
+  skills/                les 23 skills de production + les 14 références RGAA
   variables.json         les 121 variables exportées, avec leur cible de code
   export-variables.js    le script qui régénère variables.json
   *.fig                  instantané du fichier — voir plus bas, il périme
