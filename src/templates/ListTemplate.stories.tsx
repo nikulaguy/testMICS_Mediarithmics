@@ -1,27 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ListTemplate } from './ListTemplate';
 import {
   Button,
   CountBadge,
   DropdownCheckboxItem,
-  DropdownFooter,
   DropdownPanel,
   EmptyState,
+  FilterPanel,
   Icon,
   Pagination,
-  Select,
   Table,
   Tag,
+  type ActiveFilter,
 } from '../ui';
+import { DIMENSIONS, isAbsoluteRange, parseAbsoluteRange, type FilterState } from '../data/segments';
 import { scale, semantic } from '../theme/micsTheme';
 
 const meta = {
   title: 'Templates/Liste',
   component: ListTemplate,
   parameters: { layout: 'padded' },
-  // children est obligatoire côté composant ; le déclarer ici évite d'avoir à
-  // répéter un args factice dans chacune des stories, qui rendent toutes en render().
+  // children est obligatoire côté composant ; le déclarer ici évite de répéter un
+  // args factice dans chaque story, qui rendent toutes en render().
   args: { children: null },
 } satisfies Meta<typeof ListTemplate>;
 
@@ -54,84 +55,191 @@ const COLONNES = [
   },
 ];
 
-/** Le cas courant : recherche, deux actions, un tableau, une pagination. */
+/**
+ * Ferme au clic extérieur et à Échap.
+ *
+ * `fermer` est lu par référence : passé en dépendance, une lambda recréée à chaque
+ * rendu du parent remonterait l'écouteur en boucle.
+ */
+function useFermetureExterieure(ouvert: boolean, fermer: () => void) {
+  const zone = useRef<HTMLDivElement>(null);
+  const fermerRef = useRef(fermer);
+  fermerRef.current = fermer;
+
+  useEffect(() => {
+    if (!ouvert) return;
+    const auClic = (e: PointerEvent) => {
+      if (zone.current && !zone.current.contains(e.target as Node)) fermerRef.current();
+    };
+    const auClavier = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') fermerRef.current();
+    };
+    document.addEventListener('pointerdown', auClic);
+    document.addEventListener('keydown', auClavier);
+    return () => {
+      document.removeEventListener('pointerdown', auClic);
+      document.removeEventListener('keydown', auClavier);
+    };
+  }, [ouvert]);
+
+  return zone;
+}
+
+/**
+ * Barre d'actions de démonstration, partagée par toutes les stories.
+ *
+ * Elle est réellement fonctionnelle : Filters ouvre la vraie cascade à deux niveaux
+ * du `FilterPanel`, Edit view ouvre la liste des colonnes, et les deux se ferment au
+ * clic extérieur comme à Échap. Un bouton qui ne réagit pas dans une page de
+ * documentation apprend à ne plus cliquer, et fait douter du composant lui-même.
+ */
+function ActionsDemo({
+  filtres,
+  setFiltres,
+  colonnes,
+  setColonnes,
+  nbFiltres,
+}: {
+  filtres: FilterState;
+  setFiltres: (f: FilterState) => void;
+  colonnes: string[];
+  setColonnes: (c: string[]) => void;
+  nbFiltres: number;
+}) {
+  const [ouvert, setOuvert] = useState<null | 'filtres' | 'vue'>(null);
+  const zone = useFermetureExterieure(ouvert !== null, () => setOuvert(null));
+
+  const basculer = (dimensionKey: string, value: string) => {
+    const actuelles = filtres[dimensionKey] ?? [];
+    const suivantes = actuelles.includes(value)
+      ? actuelles.filter((v) => v !== value)
+      : [...actuelles, value];
+    setFiltres({ ...filtres, [dimensionKey]: suivantes });
+  };
+
+  return (
+    <div ref={zone} style={{ display: 'flex', alignItems: 'center', gap: scale.space12 }}>
+      <div style={{ position: 'relative' }}>
+        <Button
+          icon={<Icon name="filter" size={14} />}
+          aria-haspopup="true"
+          aria-expanded={ouvert === 'filtres'}
+          onClick={() => setOuvert((v) => (v === 'filtres' ? null : 'filtres'))}
+        >
+          Filters
+          {nbFiltres > 0 && <CountBadge count={nbFiltres} />}
+        </Button>
+        {ouvert === 'filtres' && (
+          <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: scale.zDropdown }}>
+            <FilterPanel
+              filters={filtres}
+              onToggle={basculer}
+              onSet={(dimensionKey, values) => setFiltres({ ...filtres, [dimensionKey]: values })}
+              onClearDimension={(dimensionKey) => setFiltres({ ...filtres, [dimensionKey]: [] })}
+              onClearAll={() => setFiltres({})}
+            />
+          </div>
+        )}
+      </div>
+
+      <div style={{ position: 'relative' }}>
+        <Button
+          icon={<Icon name="view" size={14} />}
+          aria-haspopup="true"
+          aria-expanded={ouvert === 'vue'}
+          onClick={() => setOuvert((v) => (v === 'vue' ? null : 'vue'))}
+        >
+          Edit view
+        </Button>
+        {ouvert === 'vue' && (
+          <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: scale.zDropdown }}>
+            <DropdownPanel width={220}>
+              <div role="menu" aria-label="Colonnes affichées" style={{ paddingBlock: scale.space8 }}>
+                {COLONNES.map((c) => (
+                  <DropdownCheckboxItem
+                    key={c.key}
+                    label={c.title}
+                    checked={colonnes.includes(c.key)}
+                    onToggle={() =>
+                      setColonnes(
+                        colonnes.includes(c.key)
+                          ? colonnes.filter((x) => x !== c.key)
+                          : [...colonnes, c.key],
+                      )
+                    }
+                  />
+                ))}
+              </div>
+            </DropdownPanel>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** État partagé par les stories : filtres, colonnes, recherche, et les chips qui en découlent. */
+function useDemo(filtresInitiaux: FilterState = {}) {
+  const [search, setSearch] = useState('');
+  const [filtres, setFiltres] = useState<FilterState>(filtresInitiaux);
+  const [colonnes, setColonnes] = useState(COLONNES.map((c) => c.key));
+
+  // Une chip par VALEUR cochée, jamais une par dimension : le compteur du bouton
+  // doit annoncer le même nombre que les chips affichées juste en dessous.
+  const chips: ActiveFilter[] = useMemo(
+    () =>
+      DIMENSIONS.flatMap((d) =>
+        (filtres[d.key] ?? []).map((value) => ({
+          key: `${d.key}::${value}`,
+          label: `${d.label} : ${isAbsoluteRange(value) ? parseAbsoluteRange(value).join(' → ') : value}`,
+        })),
+      ),
+    [filtres],
+  );
+
+  const retirer = (key: string) => {
+    const [dim, value] = key.split('::');
+    setFiltres({ ...filtres, [dim]: (filtres[dim] ?? []).filter((v) => v !== value) });
+  };
+
+  const lignes = LIGNES.filter((l) => {
+    if (search && !l.name.toLowerCase().includes(search.trim().toLowerCase())) return false;
+    const types = filtres.type ?? [];
+    return !types.length || types.includes(l.type);
+  });
+
+  return { search, setSearch, filtres, setFiltres, colonnes, setColonnes, chips, retirer, lignes };
+}
+
+/** Le cas courant : recherche, les deux actions, un tableau, une pagination. */
 export const Complet: Story = {
   render: function Rendu() {
-    const [search, setSearch] = useState('');
-    const rows = LIGNES.filter((l) => l.name.toLowerCase().includes(search.trim().toLowerCase()));
+    const d = useDemo();
     return (
       <ListTemplate
-        search={search}
-        onSearchChange={setSearch}
+        search={d.search}
+        onSearchChange={d.setSearch}
         searchPlaceholder="Search segments"
+        activeFilters={d.chips}
+        onRemoveFilter={d.retirer}
+        onClearFilters={() => d.setFiltres({})}
         actions={
-          <>
-            <Select
-              width={160}
-              placeholder="Type"
-              options={[
-                { value: 'query', label: 'Query' },
-                { value: 'campaign', label: 'Campaign' },
-              ]}
-              aria-label="Type"
-            />
-            <Button icon={<Icon name="view" size={14} />}>Edit view</Button>
-          </>
+          <ActionsDemo
+            filtres={d.filtres}
+            setFiltres={d.setFiltres}
+            colonnes={d.colonnes}
+            setColonnes={d.setColonnes}
+            nbFiltres={d.chips.length}
+          />
         }
-        pagination={<Pagination current={1} total={rows.length} pageSize={10} onChange={() => {}} />}
+        pagination={<Pagination current={1} total={d.lignes.length} pageSize={10} onChange={() => {}} />}
       >
-        <Table rowKey="id" columns={COLONNES} dataSource={rows} pagination={false} size="small" />
-      </ListTemplate>
-    );
-  },
-};
-
-/**
- * Avec des filtres appliqués. La barre de rappel s'insère SOUS la barre d'outils,
- * et rien ne bouge d'autre : c'est le template qui tient la place, pas la page.
- */
-export const AvecFiltresActifs: Story = {
-  render: function Rendu() {
-    const [filtres, setFiltres] = useState([
-      { key: 'type:query', label: 'Type : Query' },
-      { key: 'labels:test', label: 'Labels : test' },
-    ]);
-    return (
-      <ListTemplate
-        search=""
-        onSearchChange={() => {}}
-        searchPlaceholder="Search segments"
-        actions={<Button icon={<Icon name="filter" size={14} />}>Filters</Button>}
-        activeFilters={filtres}
-        onRemoveFilter={(key) => setFiltres((f) => f.filter((x) => x.key !== key))}
-        onClearFilters={() => setFiltres([])}
-      >
-        <Table rowKey="id" columns={COLONNES} dataSource={LIGNES} pagination={false} size="small" />
-      </ListTemplate>
-    );
-  },
-};
-
-/**
- * Sans résultat. Le tableau cède la place à l'état vide, mais la barre d'outils et
- * les chips restent : c'est ce qui permet de comprendre POURQUOI il n'y a rien.
- */
-export const SansResultat: Story = {
-  render: function Rendu() {
-    const [filtres, setFiltres] = useState([{ key: 'type:edge', label: 'Type : EDGE' }]);
-    return (
-      <ListTemplate
-        search="acheteurs"
-        onSearchChange={() => {}}
-        searchPlaceholder="Search segments"
-        actions={<Button icon={<Icon name="filter" size={14} />}>Filters</Button>}
-        activeFilters={filtres}
-        onRemoveFilter={(key) => setFiltres((f) => f.filter((x) => x.key !== key))}
-        onClearFilters={() => setFiltres([])}
-      >
-        <EmptyState
-          title="Aucun segment ne correspond"
-          description="Retirez un filtre ou élargissez la recherche."
+        <Table
+          rowKey="id"
+          columns={COLONNES.filter((c) => d.colonnes.includes(c.key))}
+          dataSource={d.lignes}
+          pagination={false}
+          size="small"
         />
       </ListTemplate>
     );
@@ -139,119 +247,71 @@ export const SansResultat: Story = {
 };
 
 /**
- * Les deux actions de barre d'outils que porte tout écran de liste, **réellement
- * ouvrables**. À gauche le bouton Filters et sa cascade, à droite Edit view et sa
- * liste de colonnes. Le template ne les fournit pas : il fournit leur place.
+ * Avec des filtres déjà appliqués. La barre de rappel s'insère SOUS la barre
+ * d'outils, et rien ne bouge d'autre : c'est le template qui tient la place.
  */
-export const FiltersEtEditView: Story = {
+export const AvecFiltresActifs: Story = {
   render: function Rendu() {
-    const [filtersOpen, setFiltersOpen] = useState(false);
-    const [viewOpen, setViewOpen] = useState(false);
-    const [filtres, setFiltres] = useState<{ key: string; label: string }[]>([]);
-    const [colonnes, setColonnes] = useState(['name', 'type', 'points']);
-
-    const basculerFiltre = (key: string, label: string) =>
-      setFiltres((f) => (f.some((x) => x.key === key) ? f.filter((x) => x.key !== key) : [...f, { key, label }]));
-
+    const d = useDemo({ type: ['Query', 'Campaign'] });
     return (
       <ListTemplate
-        search=""
-        onSearchChange={() => {}}
+        search={d.search}
+        onSearchChange={d.setSearch}
         searchPlaceholder="Search segments"
-        activeFilters={filtres}
-        onRemoveFilter={(key) => setFiltres((f) => f.filter((x) => x.key !== key))}
-        onClearFilters={() => setFiltres([])}
+        activeFilters={d.chips}
+        onRemoveFilter={d.retirer}
+        onClearFilters={() => d.setFiltres({})}
         actions={
-          <>
-            {/*
-              Chaque déclencheur porte SON panneau, en position absolue dans un
-              parent relatif. Le template ne connaît pas ces panneaux : il ne
-              fournit que la rangée où poser les boutons.
-            */}
-            <div style={{ position: 'relative' }}>
-              <Button
-                icon={<Icon name="filter" size={14} />}
-                aria-haspopup="true"
-                aria-expanded={filtersOpen}
-                onClick={() => {
-                  setFiltersOpen((v) => !v);
-                  setViewOpen(false);
-                }}
-              >
-                Filters
-                {filtres.length > 0 && <CountBadge count={filtres.length} />}
-              </Button>
-              {filtersOpen && (
-                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: scale.zDropdown }}>
-                  <DropdownPanel width={240}>
-                    <div role="menu" aria-label="Filtres" style={{ paddingBlock: scale.space8 }}>
-                      {[
-                        ['type:query', 'Type : Query'],
-                        ['type:campaign', 'Type : Campaign'],
-                        ['labels:test', 'Labels : test'],
-                      ].map(([key, label]) => (
-                        <DropdownCheckboxItem
-                          key={key}
-                          label={label}
-                          checked={filtres.some((f) => f.key === key)}
-                          onToggle={() => basculerFiltre(key, label)}
-                        />
-                      ))}
-                    </div>
-                    <DropdownFooter
-                      label="Clear all filters"
-                      disabled={!filtres.length}
-                      onClick={() => setFiltres([])}
-                    />
-                  </DropdownPanel>
-                </div>
-              )}
-            </div>
-
-            <div style={{ position: 'relative' }}>
-              <Button
-                icon={<Icon name="view" size={14} />}
-                aria-haspopup="true"
-                aria-expanded={viewOpen}
-                onClick={() => {
-                  setViewOpen((v) => !v);
-                  setFiltersOpen(false);
-                }}
-              >
-                Edit view
-              </Button>
-              {viewOpen && (
-                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: scale.zDropdown }}>
-                  <DropdownPanel width={220}>
-                    <div role="menu" aria-label="Colonnes affichées" style={{ paddingBlock: scale.space8 }}>
-                      {COLONNES.map((c) => (
-                        <DropdownCheckboxItem
-                          key={c.key}
-                          label={c.title}
-                          checked={colonnes.includes(c.key)}
-                          onToggle={() =>
-                            setColonnes((v) =>
-                              v.includes(c.key) ? v.filter((x) => x !== c.key) : [...v, c.key],
-                            )
-                          }
-                        />
-                      ))}
-                    </div>
-                  </DropdownPanel>
-                </div>
-              )}
-            </div>
-          </>
+          <ActionsDemo
+            filtres={d.filtres}
+            setFiltres={d.setFiltres}
+            colonnes={d.colonnes}
+            setColonnes={d.setColonnes}
+            nbFiltres={d.chips.length}
+          />
         }
       >
         <Table
           rowKey="id"
-          columns={COLONNES.filter((c) => colonnes.includes(c.key))}
-          dataSource={LIGNES.filter(
-            (l) => !filtres.length || filtres.some((f) => f.label.endsWith(l.type)),
-          )}
+          columns={COLONNES.filter((c) => d.colonnes.includes(c.key))}
+          dataSource={d.lignes}
           pagination={false}
           size="small"
+        />
+      </ListTemplate>
+    );
+  },
+};
+
+/**
+ * Sans résultat. Le tableau cède la place à l'état vide, mais la barre d'outils et
+ * les chips restent : c'est ce qui permet de comprendre POURQUOI il n'y a rien, et
+ * de revenir en arrière.
+ */
+export const SansResultat: Story = {
+  render: function Rendu() {
+    const d = useDemo({ type: ['EDGE'] });
+    return (
+      <ListTemplate
+        search={d.search}
+        onSearchChange={d.setSearch}
+        searchPlaceholder="Search segments"
+        activeFilters={d.chips}
+        onRemoveFilter={d.retirer}
+        onClearFilters={() => d.setFiltres({})}
+        actions={
+          <ActionsDemo
+            filtres={d.filtres}
+            setFiltres={d.setFiltres}
+            colonnes={d.colonnes}
+            setColonnes={d.setColonnes}
+            nbFiltres={d.chips.length}
+          />
+        }
+      >
+        <EmptyState
+          title="Aucun segment ne correspond"
+          description="Retirez un filtre ou élargissez la recherche."
         />
       </ListTemplate>
     );
@@ -267,25 +327,42 @@ export const Minimal: Story = {
   ),
 };
 
-/** Repère visuel : ce que le template pose, et ce qu'il laisse à la page. */
+/** Repère visuel : ce que le template pose, dans l'ordre. */
 export const Anatomie: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, color: semantic.textLighter }}>
-      <span>1 · Barre d'outils — recherche à gauche, actions à droite</span>
-      <span>2 · Barre de filtres actifs — seulement s'il y en a</span>
-      <span>3 · Contenu — le tableau, ou l'état vide</span>
-      <span>4 · Pagination — alignée à droite</span>
-      <ListTemplate
-        search=""
-        onSearchChange={() => {}}
-        actions={<Button>Action</Button>}
-        activeFilters={[{ key: 'x', label: 'Un filtre' }]}
-        onRemoveFilter={() => {}}
-        onClearFilters={() => {}}
-        pagination={<Pagination current={1} total={40} pageSize={10} onChange={() => {}} />}
-      >
-        <Table rowKey="id" columns={COLONNES} dataSource={LIGNES} pagination={false} size="small" />
-      </ListTemplate>
-    </div>
-  ),
+  render: function Rendu() {
+    const d = useDemo({ type: ['Query'] });
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space8, color: semantic.textLighter }}>
+        <span>1 · Barre d'outils — recherche à gauche, actions à droite</span>
+        <span>2 · Barre de filtres actifs — seulement s'il y en a</span>
+        <span>3 · Contenu — le tableau, ou l'état vide</span>
+        <span>4 · Pagination — alignée à droite</span>
+        <ListTemplate
+          search={d.search}
+          onSearchChange={d.setSearch}
+          activeFilters={d.chips}
+          onRemoveFilter={d.retirer}
+          onClearFilters={() => d.setFiltres({})}
+          actions={
+            <ActionsDemo
+              filtres={d.filtres}
+              setFiltres={d.setFiltres}
+              colonnes={d.colonnes}
+              setColonnes={d.setColonnes}
+              nbFiltres={d.chips.length}
+            />
+          }
+          pagination={<Pagination current={1} total={40} pageSize={10} onChange={() => {}} />}
+        >
+          <Table
+            rowKey="id"
+            columns={COLONNES.filter((c) => d.colonnes.includes(c.key))}
+            dataSource={d.lignes}
+            pagination={false}
+            size="small"
+          />
+        </ListTemplate>
+      </div>
+    );
+  },
 };

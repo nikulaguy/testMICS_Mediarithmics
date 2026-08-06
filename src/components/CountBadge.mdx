@@ -1,18 +1,19 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as CountBadgeStories from './CountBadge.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={CountBadgeStories} />
 
 # CountBadge
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : à ne pas confondre avec <code>Badge</code> d'Ant Design, qui est une pastille flottante en position absolue</span>
   <span><b>Maquette</b> : Figma Badge Type=Count <code>15:38</code></span>
-</div>
+</DocMeta>
 
-Pastille de comptage : hauteur 20, radius 6, chiffre en `text/on-dark`. Elle se pose **dans le flux**,
+Pastille de comptage : hauteur `size/badge`, `radius/card`, chiffre en `text/on-dark`. Elle se pose **dans le flux**,
 à côté d'un libellé, et non en exposant sur une icône. La couleur porte le sens : `info` pour un
 état neutre (nombre de filtres actifs), `warning` pour des éléments à traiter, `success` pour
 « rien à traiter ».
@@ -46,7 +47,7 @@ Pastille de comptage : hauteur 20, radius 6, chiffre en `text/on-dark`. Elle se 
 
 ## Anatomie
 
-1. **Conteneur** : hauteur 20, largeur minimale 20, padding horizontal 6, radius 6, fond
+1. **Conteneur** : hauteur `size/badge`, largeur minimale 20, padding horizontal 6, `radius/card`, fond
    sémantique selon le ton.
 2. **Chiffre** : Body/Book 12 en `text/on-dark`, centré.
 

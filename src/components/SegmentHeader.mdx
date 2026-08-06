@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as SH from './SegmentHeader.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={SH} />
 
 # SegmentHeader
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>libs/basic/counter-dashboard</code> + <code>dashboard-header</code></span>
   <span><b>Maquette</b> : Figma « Segment Header », écran <code>239:3843</code></span>
-</div>
+</DocMeta>
 
 En-tête du tableau de bord d'un segment. Carte navy à gauche pour la métrique principale, liste
 des métriques secondaires à droite. **La hiérarchie est le message** : le UserPoint est la seule
@@ -66,7 +67,7 @@ sens : c'est pour cela qu'ils sont listés et non totalisés.
 
 1. **Carte principale** : 500 de large, fond `info` (navy), icône `server` de 60, « UserPoint » en
    Headline 3, valeur en Headline. Gap 12, centré.
-2. **Liste** : fond `bg/container`, padding 24, gap 12. Chaque rangée fait 24 : icône 20 en
+2. **Liste** : fond `bg/container`, padding `space/24`, gap `space/12`. Chaque rangée fait 24 : icône 20 en
    `primary`, libellé et valeur en Headline 4 `text/normal`, valeur alignée à droite.
 3. **Date de calcul** : Caption en `text/lighter`, alignée à droite sous la carte.
 

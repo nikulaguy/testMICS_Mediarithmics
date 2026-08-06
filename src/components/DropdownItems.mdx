@@ -1,16 +1,17 @@
 import { Meta, Canvas } from '@storybook/addon-docs/blocks';
 import * as ItemStories from './DropdownItems.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ItemStories} />
 
 # Dropdown Items
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>multi-select</code>, <code>table-view-filters</code>, <code>labels-selector</code> — trois implémentations d'items en production</span>
   <span><b>Maquette</b> : Figma Nav Item <code>142:71</code>, Checkbox Item <code>143:76</code>, Option Item <code>142:76</code>, Label Item <code>143:77</code>, Clear <code>193:2804</code></span>
-</div>
+</DocMeta>
 
 Les briques qui se composent **dans le slot** d'un `DropdownPanel`. Un menu ne s'improvise pas
 avec des `div` : il empile ces items. C'est ce qui garantit que deux menus du produit se
@@ -41,8 +42,9 @@ Le **compteur remplace la pastille verte** de la production. La pastille dit qu'
 le compteur dit combien. À surface égale, le compteur porte strictement plus d'information, et il
 reste lisible pour un daltonien.
 
-Le sous-panneau s'ouvre au survol **et au focus clavier** : un menu qui ne réagit qu'à la souris
-est inatteignable au clavier.
+Le sous-panneau s'ouvre **au clic**, jamais au survol : traverser la liste pour atteindre le pied
+ouvrait et refermait chaque panneau au passage. Au clavier, il faut Entrée, Espace ou ← — le
+déplacement du focus seul n'ouvre rien, comme le survol n'ouvre rien.
 
 Toutes les rangées prennent un fond `bg/hover` au survol. La maquette ne décrit que Default et
 Actif / Sélectionné ; sans retour au survol, rien ne distingue une rangée cliquable d'une ligne de
@@ -52,7 +54,7 @@ texte tant qu'on n'a pas cliqué.
 
 ## Checkbox Item
 
-Multi-sélection : case de 16 (radius `sm`, cochée = fond `primary` + coche blanche), icône de type
+Multi-sélection : case de `size/icon-lg` (radius `sm`, cochée = fond `primary` + coche blanche), icône de type
 optionnelle, libellé. Le nombre de cases cochées alimente le compteur de la catégorie.
 
 Pas de `<label>` autour de la rangée : le Checkbox d'Ant Design rend déjà le sien, et deux labels
@@ -143,10 +145,10 @@ l'utilisateur à s'en méfier.
 
 ## Anatomie
 
-1. **Rangée** : padding 6 × 16, gap 12 (8 pour Label Item), pleine largeur, curseur pointeur.
+1. **Rangée** : padding `space/6` × `space/16`, gap `space/12` (`space/8` pour Label Item), pleine largeur, curseur pointeur.
 2. **Marqueur d'état** : case à cocher (Checkbox Item), fond `bg/window` + texte `primary`
    (Nav et Option Item), fond `bg/hover` au survol sur toutes les rangées.
-3. **Icône** : 18 px, `text/lighter`, décorative.
+3. **Icône** : `size/icon-lg`, `text/lighter`, décorative.
 4. **Libellé** : Body/Book 12, `text/normal` — `primary` à l'état actif ou sélectionné.
 5. **Compteur** (Nav Item) : chiffre en `primary`, doublé d'un libellé lecteur d'écran.
 

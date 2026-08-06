@@ -8,7 +8,7 @@ description: Composants d'affichage de données MICS — Tag, Badge, Active Filt
 Appliquer /md-ds-rules avant toute utilisation. Pour les graphiques : /md-charts.
 
 ## Tag — Set 15:18 (6 variantes)
-- **Color** : Default | Blue | Green | Orange | Purple | Red · h 24
+- **Color** : Default | Blue | Green | Orange | Purple | Red · hauteur `size/tag` (26 — la valeur 24 annoncée jusqu'ici était fausse, relevée sur le composant)
 - **Props** : `Label` · `Closable` (bool — croix de fermeture, utilisé par le Select FullTag) · `Show logo` (bool)
 
 ## Badge — Set 15:38 (6 variantes)
@@ -39,7 +39,7 @@ Appliquer /md-ds-rules avant toute utilisation. Pour les graphiques : /md-charts
 ## Spin — 16:25 — un seul par zone de chargement, centré.
 
 ## Counter — 185:81
-- 360×145, fond bg/container, radius card, padding 24.
+- 360×145, fond `bg/container`, `radius/card`, padding `space/24`.
 - **Props** : `Title` · `Value` · `Max`. Valeur en Headline, titre en Caption/Medium.
 - KPI sans quota : utiliser la prop **`Show progress`** (ajoutée en maquette) qui masque la barre ET le « / Max » — jamais un masquage manuel de calques. À défaut, Metrics Column.
 
@@ -79,7 +79,7 @@ Recherche (Input) à gauche · boutons Filter / Edit view / Export · action Pri
 - **Props** : 9 booléens de colonnes — `ID`, `Technical name`, `Creation date`, `User point`, `User accounts`, `User profiles`, `User device points`, `Installation IDs`, `Vector IDs` (défaut true).
 
 ### Table / Row — Set 21:64
-- **Variantes** : State (Default | Hover) · h 44.
+- **Variantes** : State (Default | Hover) · hauteur `size/row`.
 - **Props** : les **mêmes 9 booléens** que Header Row.
 - **RÈGLE CRITIQUE** : Header Row et toutes les Rows d'un même tableau doivent avoir des booléens **strictement identiques**, sinon les colonnes se désalignent. C'est le premier point à vérifier au pre-flight d'une liste.
 
@@ -87,7 +87,7 @@ Recherche (Input) à gauche · boutons Filter / Edit view / Export · action Pri
 - **Kind** : Text | Link | Number | Icon | Actions · Prop `Value`.
 - Link est cyan (couleur lien de la prod). Dernière colonne = Kind=Actions (kebab).
 - La colonne Type porte une icône swappable (`type-icon`) : l'adapter à la ressource (base = segment, `icon/plug` = feed…).
-- Les textes de cellule **tronquent sur 1 ligne** (ellipsis) : la hauteur de ligne reste 44 quelle que soit la longueur. Si une donnée doit rester lisible en entier, prévoir un Tooltip au survol dans la spec.
+- Les textes de cellule **tronquent sur 1 ligne** (ellipsis) : la hauteur de ligne reste `size/row` quelle que soit la longueur. Si une donnée doit rester lisible en entier, prévoir un Tooltip au survol dans la spec.
 
 ### Table / Feed Row — Set 446:400 (Default | Hover)
 - Ligne de la liste détaillée des feeds. **Props** : `Feed name` · `Segment source` (lien) · `Destination` · `Logo` (swap logo/*).

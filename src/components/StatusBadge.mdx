@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as StatusBadgeStories from './StatusBadge.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={StatusBadgeStories} />
 
 # StatusBadge
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : `src/components/StatusBadge.tsx`</span>
   <span><b>Maquette</b> : Figma `Badge` <code>15:38</code>, variantes Dot / Success / Processing / Warning / Error</span>
-</div>
+</DocMeta>
 
 Pastille d'état, suivie de son libellé. C'est **l'autre moitié du `Badge` de la maquette** :
 `CountBadge` en rend la variante Count, celui-ci les variantes d'état.

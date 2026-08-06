@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as PaginationStories from './Pagination.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={PaginationStories} />
 
 # Pagination
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : enveloppé</span>
   <span><b>Source code</b> : AntD v5 Pagination (<code>table-view</code>, <code>collection-view</code>)</span>
   <span><b>Maquette</b> : Figma Pagination <code>16:34</code></span>
-</div>
+</DocMeta>
 
 Navigation de pages. Ant Design gère déjà l'ellipsis, le clavier et les extrémités désactivées :
 le DS garde son rendu et impose la **position** et les réglages. Structure : précédent · pages ·
@@ -57,7 +58,7 @@ ellipsis · dernière · suivant · sélecteur de taille.
 1. **Boutons de page** : 32 × 32, `radius/base`, fond `bg/container`, bordure `border/input`.
    Page courante : bordure et chiffre en `primary`, Circular Medium 12.
 2. **Ellipsis** : « ••• » en `text/lighter`, non cliquable.
-3. **Sélecteur de taille** : hauteur 32, padding horizontal 10, « n / page ».
+3. **Sélecteur de taille** : hauteur `size/control`, padding horizontal `space/10`, « n / page ».
 4. Gap 8 entre tous les éléments.
 
 ## Accessibilité (RGAA)

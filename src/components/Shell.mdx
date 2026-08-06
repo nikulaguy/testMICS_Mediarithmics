@@ -1,16 +1,17 @@
 import { Meta, Canvas } from '@storybook/addon-docs/blocks';
 import * as ShellStories from './Shell.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ShellStories} />
 
 # Shell : TopBar, SideMenu, SearchPalette
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>menu-list</code> / <code>menu-sub-list</code> en production, sans TopBar composantisée</span>
   <span><b>Maquette</b> : Figma TopBar, SideMenu / Item <code>19:31</code>, AppLauncher <code>19:148</code></span>
-</div>
+</DocMeta>
 
 Les trois pièces de l'ossature applicative. Elles ne portent jamais de contenu métier : elles
 situent l'utilisateur (où suis-je, dans quelle organisation) et le déplacent.
@@ -51,7 +52,7 @@ Hover `bg/hover`, Active `bg/selected`.
 ## SearchPalette
 
 Recherche globale. Surface superposée particulière : centrée horizontalement, ancrée à 140 px du
-haut, largeur 760, par-dessus un voile `bg/scrim`. Ni en-tête ni pied : on ferme à Échap ou au clic
+haut, largeur 760 (hors échelle), par-dessus un voile `bg/scrim`. Ni en-tête ni pied : on ferme à Échap ou au clic
 sur le voile.
 
 <Canvas of={ShellStories.RechercheGlobale} />

@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as DropdownPanelStories from './DropdownPanel.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={DropdownPanelStories} />
 
 # DropdownPanel
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : remplace les surfaces flottantes ad hoc et les trois systèmes de modales de la lib</span>
   <span><b>Maquette</b> : Figma Dropdown / Container <code>145:69</code></span>
-</div>
+</DocMeta>
 
 Surface flottante blanche du design system : `radius/base`, une ombre, un `z-index`, et rien
 d'autre. **Tous les panneaux du produit passent par ici** (menus de la TopBar, panneau de filtres,

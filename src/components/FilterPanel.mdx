@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as FilterPanelStories from './FilterPanel.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={FilterPanelStories} />
 
 # FilterPanel
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : remplace huit « selectors » sans primitive partagée</span>
   <span><b>Maquette</b> : Figma <code>145:73</code>, test de filtres <code>631:1093</code></span>
-</div>
+</DocMeta>
 
 Panneau de filtres en **cascade à deux niveaux** : le niveau 1 liste les dimensions, le niveau 2
 affiche les valeurs de la dimension choisie. C'est le modèle **panneau**, réservé aux listes à

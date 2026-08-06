@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ST from './SectionToggle.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ST} />
 
 # SectionToggle
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>Button.optional-section-title</code> (navigator) et <code>Collapse.Panel</code> (NewPluginForm) — deux implémentations</span>
   <span><b>Maquette</b> : Figma <code>111:39</code></span>
-</div>
+</DocMeta>
 
 En-tête cliquable d'une section repliable de formulaire (« Advanced »). Icône `settings`, libellé
 et chevron, le tout en `primary`. Le pattern existe dans **plus de dix formulaires** du produit —
@@ -51,7 +52,7 @@ composant les unifie.
 
 ## Anatomie
 
-1. **En-tête** : bouton en ligne, hauteur 24, gap 8, tout en `primary`.
+1. **En-tête** : bouton en ligne, hauteur 24 (hors échelle), gap `space/8`, tout en `primary`.
 2. **Icône** `settings` de 16, **libellé** Body/Medium 12, **chevron** de 12.
 3. **Panneau** : le contenu, sous l'en-tête, à 16 d'écart. Masqué par `hidden` quand replié —
    pas seulement par `display: none` en CSS, pour qu'il sorte aussi de l'ordre de tabulation.

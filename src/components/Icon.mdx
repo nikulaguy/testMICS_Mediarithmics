@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as IconStories from './Icon.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={IconStories} />
 
 # Icon
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : remplace <code>McsIcon</code>, qui mélange mcsfont, les icônes AntD et des SVG inline</span>
   <span><b>Maquette</b> : page « 🖼 Icons » du fichier Figma</span>
-</div>
+</DocMeta>
 
 Glyphe du design system. Les icônes sont **exportées du fichier Figma**, pas de la librairie
 Ant Design : ce sont les glyphes du produit. À l'export, les `fill` sont remplacés par

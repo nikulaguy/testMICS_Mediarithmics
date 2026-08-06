@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ItemStories from './SideMenuItem.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ItemStories} />
 
 # SideMenuItem
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>SideMenu.tsx</code> + <code>sideMenu.less</code> (libs/advanced)</span>
   <span><b>Maquette</b> : Figma SideMenu / Item <code>19:31</code></span>
-</div>
+</DocMeta>
 
 Entrée de navigation : icône, libellé, trois états. Elle sert à **deux endroits**, comme dans la
 maquette : les entrées du `SideMenu` et celles de l'`AppLauncher`. Une entrée de navigation reste
@@ -49,8 +50,8 @@ deux hauteurs et deux radius à maintenir.
 
 ## Anatomie
 
-1. **Entrée** : hauteur 32, radius 6, padding horizontal 10, gap 10.
-2. **Icône** : 16 × 16, couleur héritée du libellé.
+1. **Entrée** : hauteur `size/control`, `radius/card`, padding horizontal `space/10`, gap `space/10`.
+2. **Icône** : `size/icon-lg`, couleur héritée du libellé.
 3. **Libellé** : Body/Book 12 en `text/normal`. Actif : Body/Medium 12 en `primary`.
 4. **Fonds** : Default transparent · Hover `bg/hover` · Active `bg/selected`.
 

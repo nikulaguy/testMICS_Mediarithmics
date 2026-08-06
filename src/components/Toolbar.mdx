@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ToolbarStories from './Toolbar.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ToolbarStories} />
 
 # Toolbar
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>libs/basic/table-view-filters</code></span>
   <span><b>Maquette</b> : Figma Table / Toolbar <code>21:65</code>, règle ActionBar/Toolbar <code>617:2</code></span>
-</div>
+</DocMeta>
 
 Barre d'outils d'un tableau. Recherche à gauche, actions à droite, **ordre stable d'un écran à
 l'autre**. Elle se pose en haut du panneau qui contient le tableau, jamais ailleurs.
@@ -70,9 +71,9 @@ Sur une liste standard, cela veut dire `Show export` et `Show primary` à **fals
 
 ## Anatomie
 
-1. **Rangée** : `space-between`, gap 12, alignée sur la largeur du tableau.
+1. **Rangée** : `space-between`, gap `space/12`, alignée sur la largeur du tableau.
 2. **Recherche** : Input de 400, suffixe loupe 14 en `text/lighter`, effaçable.
-3. **Actions** : Buttons `Default` de 32, gap 12, icône 14 à gauche du libellé.
+3. **Actions** : Buttons `Default` de 32, gap `space/12`, icône 14 à gauche du libellé.
 
 ## Accessibilité (RGAA)
 

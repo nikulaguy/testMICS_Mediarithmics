@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as HeaderStories from './ResourceTitleHeader.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={HeaderStories} />
 
 # ResourceTitleHeader
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : bloc titre refait page par page sur les écrans de détail</span>
   <span><b>Maquette</b> : Figma Resource Title Header <code>706:116522</code> — 5 écrans de détail de segment</span>
-</div>
+</DocMeta>
 
 Bloc titre d'une page de détail. Ligne 1 : le nom de la ressource à gauche, ses métadonnées à
 droite. Ligne 2 : les labels. Les métadonnées ne se mettent **jamais** à gauche : elles y
@@ -74,9 +75,9 @@ déplacent une rangée active désignée par `aria-activedescendant`, Entrée ch
 ## Anatomie
 
 1. **Ligne 1** : titre Headline 4 (Circular Medium 16 / 24) en `text/darker`, `flex: 1` ; puis le
-   type et la date, gap 12, chacun icône 14 + libellé.
+   type et la date, gap `space/12`, chacun icône 14 + libellé.
 2. **Ligne 2** (si `labels`) : bouton « Add label » taille M avec le glyphe `plus`, puis les Tag,
-   gap 8, retour à la ligne autorisé. Tags système sans croix, tags utilisateur avec.
+   gap `space/8`, retour à la ligne autorisé. Tags système sans croix, tags utilisateur avec.
 3. **Ligne 2 en ajout** : le bouton devient un champ de 240 × 32 à loupe, et la liste de
    suggestions se pose à `top: 100%`, même largeur, sur la surface du `DropdownPanel`.
 4. Gap 12 entre les deux lignes.

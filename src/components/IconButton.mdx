@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as IconButtonStories from './IconButton.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={IconButtonStories} />
 
 # IconButton
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : icônes posées à la main dans la TopBar en production, sans état ni cible de pointage</span>
   <span><b>Maquette</b> : Figma <code>666:110318</code>, doc <code>669:71</code></span>
-</div>
+</DocMeta>
 
 Bouton icône sans fond ni bordure. **Seule la couleur du glyphe change selon l'état** :
 `text/on-dark` au repos, `bg/hover` au survol, `bg/selected` pressé ou panneau ouvert.

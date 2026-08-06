@@ -106,7 +106,11 @@ export const typography = {
 } as const;
 
 export const scale = {
+  /** Padding vertical du Tag. La plus petite valeur de l'échelle. */
+  space2: 2,
   space4: 4,
+  /** Gap d'une pastille à son libellé — StatusBadge, Counter. */
+  space6: 6,
   space8: 8,
   space10: 10,
   space12: 12,
@@ -116,12 +120,30 @@ export const scale = {
   space20: 20,
   space24: 24,
   space35: 35,
+  /** Padding horizontal d'un champ Ant Design. Valeur héritée, hors échelle. */
+  spaceInputPadH: 7,
   radiusBase: 3,
   radiusSm: 2,
   radiusCard: 6,
   sizeControl: 32,
   sizeHeader: 40,
   sizeRow: 44,
+  /** Hauteur du Tag. Relevée sur le composant Figma, qui fait 26 et non 24. */
+  sizeTag: 26,
+  /** Côté de la pastille de comptage (CountBadge). */
+  sizeBadge: 20,
+  /** Icône courante dans un bouton ou une rangée. */
+  sizeIcon: 14,
+  /** Icône d'un item de menu ou d'une rangée de dropdown. */
+  sizeIconLg: 16,
+  /**
+   * Plus petite cible de pointage acceptable. Elle ne suit pas la taille du
+   * glyphe : la croix du Tag fait 8, sa cible fait 20 — un calque transparent
+   * hors flux les découple.
+   */
+  sizeTargetMin: 20,
+  /** Épaisseur de filet, unique dans tout le produit. */
+  borderWidth: 1,
   sideMenuWidth: 200,
   actionBarHeight: 52,
   /** Interlettrage des micro-libellés en capitales. Une seule valeur. */

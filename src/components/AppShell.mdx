@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as AppShellStories from './AppShell.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={AppShellStories} />
 
 # AppShell
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>action-bar</code> + mise en page d'écran refaite page par page en production</span>
   <span><b>Maquette</b> : Figma ActionBar, règle ActionBar / Toolbar <code>617:2</code></span>
-</div>
+</DocMeta>
 
 Ossature de tout écran : TopBar, SideMenu, ActionBar (fil d'ariane + actions de page), zone de
 contenu défilante. Une page ne construit jamais sa propre mise en page : elle fournit un fil
@@ -73,9 +74,9 @@ page où l'on se trouve déjà n'a pas de destination.
 
 1. **TopBar** : hauteur fixe, navy, en dehors du défilement.
 2. **SideMenu** : colonne gauche, pleine hauteur sous la TopBar.
-3. **ActionBar** : hauteur `actionBarHeight`, fond `bg/container`, padding horizontal 24 ;
-   fil d'ariane à gauche, actions à droite, gap 8.
-4. **Contenu** : `bg/window`, padding 35, seule zone défilante.
+3. **ActionBar** : hauteur `actionBarHeight`, fond `bg/container`, padding horizontal `space/24` ;
+   fil d'ariane à gauche, actions à droite, gap `space/8`.
+4. **Contenu** : `bg/window`, padding `space/35`, seule zone défilante.
 
 ## Accessibilité (RGAA)
 

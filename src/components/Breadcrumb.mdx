@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as BreadcrumbStories from './Breadcrumb.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={BreadcrumbStories} />
 
 # Breadcrumb
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : AntD v5 Breadcrumb (ActionBar + sous-header navy New Segment)</span>
   <span><b>Maquette</b> : Figma <code>29:22142</code> — 2 thèmes × 3 niveaux</span>
-</div>
+</DocMeta>
 
 Fil d'Ariane : les parents en liens, un séparateur `›`, la page courante en texte.
 C'est une **hiérarchie, pas un historique** : il dit où l'on est dans la structure, pas par où
@@ -87,7 +88,7 @@ s'appellent « onglets », mais ce sont les mêmes objets de navigation, donc le
 
 ## Anatomie
 
-1. **Liste ordonnée** `<ol>` horizontale, gap 8.
+1. **Liste ordonnée** `<ol>` horizontale, gap `space/8`.
 2. **Parents** : `Link` taille M (Body/Book 12), couleur selon le thème.
 3. **Séparateur** : `›` en `text/lighter` (onLight) ou `link/on-dark` (onDark), décoratif.
 4. **Courant** : texte simple, `text/normal` ou `text/on-dark`.

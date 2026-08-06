@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as EmptyStateStories from './EmptyState.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={EmptyStateStories} />
 
 # EmptyState
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : enveloppé</span>
   <span><b>Source code</b> : remplace <code>empty-records</code>, <code>empty-table-view</code> et <code>Empty</code> d'AntD, trois états vides différents en production</span>
   <span><b>Maquette</b> : Figma Empty State <code>285:151</code></span>
-</div>
+</DocMeta>
 
 État vide : illustration, **titre**, description optionnelle, action optionnelle. **Centré dans
 son conteneur**, jamais aligné à gauche : un état vide aligné en haut à gauche se lit comme un
@@ -53,12 +54,12 @@ Trois compositions, du plus sobre au plus complet :
 
 ## Anatomie
 
-1. **Illustration** : icône de 44 px en `text/lightest`. Discrète : elle situe, elle n'alerte pas.
+1. **Illustration** : icône de `size/row` en `text/lightest`. Discrète : elle situe, elle n'alerte pas.
 2. **Titre** : Headline 4 (Circular Medium 16 / 24) en `text/lighter`, centré.
-3. **Description** (optionnelle) : Body/Book 12 / 20, même couleur, gap 4 sous le titre.
-4. **Action** (optionnelle) : un Button, jamais plus d'un, gap 12 sous le bloc de texte.
+3. **Description** (optionnelle) : Body/Book 12 / 20, même couleur, gap `space/4` sous le titre.
+4. **Action** (optionnelle) : un Button, jamais plus d'un, gap `space/12` sous le bloc de texte.
 
-Padding 35 vertical, 24 horizontal, gap 12 entre les trois blocs.
+Padding 35 vertical, 24 horizontal, gap `space/12` entre les trois blocs.
 
 ## Accessibilité (RGAA)
 

@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as InputStories from './Input.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={InputStories} />
 
 # Input
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : enveloppé</span>
   <span><b>Source code</b> : <code>libs/basic form/FormItem</code> + AntD v5 Input</span>
   <span><b>Maquette</b> : Figma <code>14:16</code> — 6 états</span>
-</div>
+</DocMeta>
 
 Champ de saisie complet : **label + champ + message**. Ant Design rend le champ ; le DS ajoute
 l'enveloppe et impose l'anatomie. En production, label et message sont portés par le `FormItem`
@@ -77,8 +78,8 @@ d'œil : un seul signal change, toujours au même endroit.
 
 ## Anatomie
 
-1. **Label** : Body/Medium 12 en `text/darker`, au-dessus du champ, gap 4.
-2. **Champ** : hauteur 32, padding horizontal 7, `radius/base`, fond `bg/container`,
+1. **Label** : Body/Medium 12 en `text/darker`, au-dessus du champ, gap `space/4`.
+2. **Champ** : hauteur `size/control`, padding horizontal `spaceInputPadH`, `radius/base`, fond `bg/container`,
    bordure `border/input`.
 3. **Valeur** : Body/Book 12 en `text/normal`. **Placeholder** en `text/lightest`.
 4. **Icônes** (optionnelles) : 14 × 14, `text/lighter`, à gauche et / ou à droite.

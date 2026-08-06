@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ActiveFilterBarStories from './ActiveFilterBar.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ActiveFilterBarStories} />
 
 # ActiveFilterBar
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : n'existe pas en production, d'où l'incohérence de filtrage relevée par le client</span>
   <span><b>Maquette</b> : Figma, test de filtres <code>631:1093</code></span>
-</div>
+</DocMeta>
 
 Barre de rappel des filtres appliqués : fond `bg/subtle`, `radius/card`, padding `space/8`. **Une chip par
 valeur appliquée**, jamais de regroupement du type « Labels (3) ». Le regroupement économise de la

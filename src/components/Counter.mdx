@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as CounterStories from './Counter.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={CounterStories} />
 
 # Counter
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>libs/basic/counter</code> + <code>counter-dashboard</code></span>
   <span><b>Maquette</b> : Figma Counter <code>185:81</code></span>
-</div>
+</DocMeta>
 
 Métrique d'un tableau de bord : intitulé, barre optionnelle, valeur. La barre n'apparaît **que
 s'il y a un plafond** : une progression sans maximum ne veut rien dire. Le chiffre est toujours là,
@@ -55,9 +56,9 @@ pas dans une carte. Plusieurs compteurs partagent souvent la même, comme sur le
 
 ## Anatomie
 
-1. **Bloc** : colonne, gap 8. Aucune surface — elle vient de la `Card` qui l'entoure.
+1. **Bloc** : colonne, gap `space/8`. Aucune surface — elle vient de la `Card` qui l'entoure.
 2. **Intitulé** : Body/Medium 12 en `text/normal`, icône info 14 en `text/lighter` à droite.
-3. **Barre** (si `max`) : hauteur 8, radius 4, piste `bg/window`, remplissage `success`.
+3. **Barre** (si `max`) : hauteur `space/8`, radius `space/4`, piste `bg/window`, remplissage `success`.
 4. **Valeur** : Headline (Circular Medium 24 / 28) en `text/darker`, suivie de « / N » en
    Body/Book 12 `text/lighter`.
 

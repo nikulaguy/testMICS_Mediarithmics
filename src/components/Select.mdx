@@ -1,19 +1,20 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as SelectStories from './Select.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={SelectStories} />
 
 # Select
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : enveloppé</span>
   <span><b>Source code</b> : <code>libs/basic popup-container</code> + AntD v5 Select</span>
   <span><b>Maquette</b> : Figma <code>14:30</code> — 7 états</span>
-</div>
+</DocMeta>
 
 Sélecteur dans une liste fermée de valeurs. Même enveloppe que l'`Input` — label, champ, message —
-et la même anatomie : hauteur 32, `radius/base`, bordure `border/input`, états portés par la
+et la même anatomie : hauteur `size/control`, `radius/base`, bordure `border/input`, états portés par la
 bordure. **Les deux champs doivent être indiscernables au repos** : c'est ce qui fait qu'un
 formulaire se lit comme une colonne et non comme une collection de contrôles.
 
@@ -77,8 +78,8 @@ la liste déroulée sature la page et le Select reprend l'avantage.
 
 ## Anatomie
 
-1. **Label** : Body/Medium 12 en `text/darker`, gap 4.
-2. **Déclencheur fermé** : hauteur 32, padding horizontal 7, `radius/base`,
+1. **Label** : Body/Medium 12 en `text/darker`, gap `space/4`.
+2. **Déclencheur fermé** : hauteur `size/control`, padding horizontal `spaceInputPadH`, `radius/base`,
    bordure `border/input`.
 3. **Valeur / placeholder** : Body/Book 12, `text/normal` / `text/lightest`.
 4. **Caret** : `chevron-bottom` de 10 px en `text/lighter`, à droite.

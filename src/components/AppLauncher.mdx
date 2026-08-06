@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as LauncherStories from './AppLauncher.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={LauncherStories} />
 
 # AppLauncher
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : panneau posé à la main dans la TopBar en production</span>
   <span><b>Maquette</b> : Figma AppLauncher <code>19:148</code></span>
-</div>
+</DocMeta>
 
 Contenu du panneau « Applications » de la TopBar : bandeau de marque, puis les entrées groupées —
 les applications de la plateforme, un filet, les ressources documentaires. C'est le seul endroit du
@@ -54,10 +55,10 @@ panneaux du produit. Une ombre et un radius de plus seraient une ombre et un rad
 
 ## Anatomie
 
-1. **Panneau** : largeur 260, surface du `DropdownPanel` (fond `bg/container`, radius/base, ombre
+1. **Panneau** : largeur 260 (hors échelle), surface du `DropdownPanel` (fond `bg/container`, radius/base, ombre
    Dropdown).
-2. **Bandeau de marque** : hauteur 101, padding 20 haut / 16 bas, logo de 140 centré.
-3. **Entrée** : un `SideMenuItem` (hauteur 32, radius 6, padding horizontal 10, gap 10, marque
+2. **Bandeau de marque** : hauteur 101 (hors échelle), padding `space/20` haut / 16 bas, logo de 140 centré.
+3. **Entrée** : un `SideMenuItem` (hauteur `size/control`, `radius/card`, padding horizontal `space/10`, gap `space/10`, marque
    16 × 16, libellé Body/Book 12), dans une gouttière de 15 horizontaux et 4 verticaux.
 4. **Filet** : 1 px `border/default` en retrait de 16, entre deux groupes seulement.
 

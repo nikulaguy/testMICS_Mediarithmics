@@ -1,19 +1,20 @@
 import { Meta, Canvas, Controls, Story } from '@storybook/addon-docs/blocks';
 import * as TagStories from './Tag.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={TagStories} />
 
 # Tag
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : enveloppé (rend un Tag Ant Design en dessous)</span>
   <span><b>Source code</b> : <code>frontend/libs/basic</code> + AntD v5 Tag (mention-tag, labels-selector, statuts de liste)</span>
   <span><b>Maquette</b> : Figma <code>15:18</code>, doc <code>90:8</code></span>
-</div>
+</DocMeta>
 
 Étiquette compacte. Affiche un statut, une catégorie ou un label. Fond rampe/100, bordure
-rampe/300, texte rampe/700 ; radius `radius/base`, padding 2×8, texte Body/Book 12.
+rampe/300, texte rampe/700 ; radius `radius/base`, padding `space/2` × `space/8`, texte Body/Book 12.
 Les couleurs sont les rampes de marque.
 
 <Canvas of={TagStories.Couleurs} />
@@ -56,8 +57,8 @@ Les trois cas réels rencontrés dans le produit.
 
 ## Anatomie
 
-1. **Conteneur** : fond rampe/100, bordure 1 px rampe/300, radius `radius/base`, padding 2×8,
-   hauteur 26, gap 4.
+1. **Conteneur** : fond rampe/100, bordure `border/width` rampe/300, radius `radius/base`, padding `space/2` × `space/8`,
+   hauteur `size/tag`, gap `space/4`.
 2. **Libellé** : Body/Book 12 en rampe/700, contraste suffisant sur le fond /100.
 3. **Croix de retrait** (si `closable`) : glyphe `icon/close` de **8 px**, comme dans la maquette.
    La cible de pointage fait 20 px grâce à un calque transparent en position absolue : hors flux,

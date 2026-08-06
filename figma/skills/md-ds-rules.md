@@ -10,6 +10,7 @@ Ces règles sont agnostiques : elles valent que vous construisiez à la main dan
 ## Les 3 règles d'or
 
 1. **Aucune valeur en dur.** Couleur, spacing, radius, font : tout est lié à une variable ou un style du fichier. Jamais de hex libre, jamais de nombre libre, jamais de calque vide pour espacer (padding/gap uniquement).
+   **La règle vaut aussi pour la documentation.** Une doc qui écrit « padding 8 » apprend à recopier 8 ; une doc qui écrit `space/8` apprend à chercher le token. On nomme la variable, pas sa valeur — y compris dans les skills. Deux exceptions, à signaler comme telles : les conventions de canevas (largeur d'écran 1496, gap de 120 entre écrans) et les valeurs héritées qu'on n'a pas tokenisées, qui se citent avec la mention « hors échelle ».
 2. **Composants = instances.** Jamais reconstruits à la main. Toujours instanciés depuis la librairie du fichier ; on swappe les variantes et on override les textes. Si aucun composant ne convient : voir /md-new-component, on n'improvise pas.
 3. **Zéro défaut au pre-flight check.** Après production, prendre un screenshot de ce qui a été produit, le vérifier visuellement, et corriger soi-même ses erreurs (alignement, débordement, composant manquant, couleur hors palette) avant de livrer.
 
@@ -82,12 +83,12 @@ Largeur de référence d'un écran : **1496 px**. La coque est fluide, seules ce
 
 | Élément | Composant | Constante |
 |---|---|---|
-| TopBar | `TopBar` (17:26) | h 40, pleine largeur, **toujours premier enfant** |
+| TopBar | `TopBar` (17:26) | hauteur `size/header`, pleine largeur, **toujours premier enfant** |
 | SideMenu | `SideMenu` (19:32) | l 200 fixe, hauteur FILL |
-| Actionbar | `Actionbar` (245:4156) | h 52 ; dans `main` s'il y a un SideMenu, pleine largeur sinon |
-| Settings Bar | `Settings Bar` (309:161) | h 44, pleine largeur |
+| Actionbar | `Actionbar` (245:4156) | hauteur `actionBarHeight` (52) ; dans `main` s'il y a un SideMenu, pleine largeur sinon |
+| Settings Bar | `Settings Bar` (309:161) | hauteur `size/row`, pleine largeur |
 | step-nav / subnav | — | l 200 |
-| content | — | padding 35 (space/35), gap 16 (données) ou 35 (réglages/tunnels) |
+| content | — | padding `space/35`, gap `space/16` (données) ou `space/35` (réglages/tunnels) |
 | Drawer | `Overlay` Mode=Drawer | l 520, pleine hauteur, collé à droite |
 | Modale | `Overlay` Mode=Modal | 960 × 692, centrée ; scrim = `bg/scrim` |
 

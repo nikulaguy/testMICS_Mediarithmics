@@ -1,19 +1,20 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as CardStories from './Card.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={CardStories} />
 
 # Card
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : classe <code>mcs-card</code>, relevée en production</span>
   <span><b>Maquette</b> : Figma Card <code>706:116913</code></span>
-</div>
+</DocMeta>
 
 Surface de contenu d'un écran. Fond `bg/container`, radius/card, padding **15 vertical / 20
-horizontal**, gap 15, en-tête optionnel. C'est le composant le plus répété du produit : chaque
+horizontal**, gap `space/15`, en-tête optionnel. C'est le composant le plus répété du produit : chaque
 onglet d'une page de détail en est une.
 
 <Canvas of={CardStories.BacASable} />
@@ -54,9 +55,9 @@ onglet d'une page de détail en est une.
 
 ## Anatomie
 
-1. **Surface** : `bg/container`, radius/card (6), padding 15 / 20, gap 15.
+1. **Surface** : `bg/container`, radius/card (6), padding `space/15` / 20, gap `space/15`.
 2. **En-tête** (si `title` ou `actions`) : titre Headline 4 (Circular Medium 16 / 24) en
-   `text/darker`, `flex: 1` ; actions à droite, gap 8.
+   `text/darker`, `flex: 1` ; actions à droite, gap `space/8`.
 3. **Contenu** : libre, pleine largeur.
 
 ## Accessibilité (RGAA)
@@ -91,11 +92,11 @@ onglet d'une page de détail en est une.
   composant. Ils ne l'étaient pas au premier jet : les nœuds SLOT existaient dans l'arbre sans être
   enregistrés comme propriétés, donc rien n'était injectable sur une instance. Piège à retenir —
   cloner un slot copie le nœud mais pas la propriété.
-- **Migration faite.** Huit composants Figma redessinaient cette surface avec un padding de 24 et
+- **Migration faite.** Huit composants Figma redessinaient cette surface avec un padding `space/24` et
   parfois une bordure de 1 px. Ils l'**instancient** désormais et injectent leur contenu dans le
   slot : `Counter`, `Metrics Column`, `Chart / Bar`, `Chart / Adoption Funnel`, `Chart / Scatter`,
   `Chart / Stacked Bar`, `Chart / Stats Line`, `Funnel / Step Card`. Leur racine est devenue un
-  cadre transparent. La production applique **15 / 20, radius 6, sans bordure** : c'est elle qui
+  cadre transparent. La production applique **15 / 20, `radius/card`, sans bordure** : c'est elle qui
   tranche.
 - **Reste à arbitrer.** Quatre composants ne se migrent pas mécaniquement : `Alert Row` (quatre
   variants avec états dépliés), `Builder / Criteria Group` (accent coloré par variant), `Spin`

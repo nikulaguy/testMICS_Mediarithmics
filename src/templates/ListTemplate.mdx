@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ListStories from './ListTemplate.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={ListStories} />
 
 # Template — Liste
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : template</span>
   <span><b>Source code</b> : `src/templates/ListTemplate.tsx`</span>
   <span><b>Référence</b> : l'écran Segments, dont il est extrait</span>
-</div>
+</DocMeta>
 
 Coque commune à tous les écrans de liste. Elle **ne décide de rien** : ni des colonnes, ni des
 filtres, ni de la donnée. Elle fixe uniquement ce qui doit être identique d'un écran à l'autre —
@@ -30,7 +31,7 @@ l'ordre des blocs, la surface, et les espacements entre eux.
     ['1 · Barre d\'outils', "Recherche à gauche, actions à droite, sur une seule rangée. Elle disparaît entièrement si l'écran n'a ni recherche ni action."],
     ['2 · Filtres actifs', "Toujours SOUS la barre d'outils, jamais au-dessus. Absente — et non vide — quand aucun filtre n'est appliqué : pas de hauteur réservée."],
     ['3 · Contenu', "Le tableau, ou l'état vide. C'est le seul bloc que la page fournit obligatoirement."],
-    ['4 · Pagination', 'Sous le contenu, alignée à droite.'],
+    ['4 · Pagination', <>Sous le contenu, alignée à droite. <b>Fait partie du template</b> : la page fournit le composant <code>Pagination</code>, le template fixe sa place et son alignement.</>],
   ]}
 />
 
@@ -40,8 +41,9 @@ Le **fil d'ariane** et les **actions de page** (Export, New…) n'y sont pas. Il
 l'Actionbar, qui appartient à la coque de l'application et non à la liste : un écran de détail les
 porte aussi, sans être une liste.
 
-Il ne fournit pas non plus la pagination — seulement sa place. Le nombre de pages dépend du
-filtrage, que le template ignore.
+La **pagination**, elle, appartient bien au template : c'est lui qui garantit qu'elle est sous le
+contenu et alignée à droite, sur tous les écrans de liste. La page se contente de lui passer le
+composant `Pagination` renseigné — le nombre de pages dépend du filtrage, que le template ignore.
 
 <Canvas of={ListStories.AvecFiltresActifs} />
 
@@ -52,11 +54,10 @@ template ne les fournit pas — il fournit leur **place**. C'est volontaire : le
 filtrage et les colonnes disponibles changent à chaque écran, les imposer ici reviendrait à
 recoder Segments dans le template.
 
-La story ci-dessous les rend **réellement ouvrables** : cocher un filtre incrémente le compteur du
-bouton, fait apparaître la chip et filtre le tableau ; Edit view retire une colonne. C'est le
-montage à recopier.
-
-<Canvas of={ListStories.FiltersEtEditView} />
+**Toutes les stories de cette page sont réellement manipulables.** Filters ouvre la vraie cascade à
+deux niveaux du `FilterPanel` : on choisit une dimension à gauche, on coche ses valeurs à droite, le
+compteur du bouton s'incrémente, la chip apparaît et le tableau se filtre. Edit view retire une
+colonne. Les deux panneaux se ferment au clic extérieur et à Échap.
 
 <DocTable
   headers={['', 'Filters', 'Edit view']}

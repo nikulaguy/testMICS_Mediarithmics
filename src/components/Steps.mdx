@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as StepsStories from './Steps.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={StepsStories} />
 
 # Steps
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : thémé</span>
   <span><b>Source code</b> : <code>antd/Steps</code>, tel quel</span>
   <span><b>Relevé</b> : onglet « Contextual Targeting » d'une page de détail de segment</span>
-</div>
+</DocMeta>
 
 Annonce d'un parcours en plusieurs étapes. **Thémé** : l'anatomie et les états d'Ant Design sont
 ceux de la production — pastille numérotée, filet de liaison, titre — donc rien à envelopper. Le

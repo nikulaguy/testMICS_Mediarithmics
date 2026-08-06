@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as OverlayStories from './Overlay.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={OverlayStories} />
 
 # Overlay
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : <code>mcs-modal</code> (AntD Modal) et drawer (AntD Drawer) thémés — même structure</span>
   <span><b>Maquette</b> : Figma Container <code>212:169</code>, Header <code>190:198</code>, Footer <code>202:198</code></span>
-</div>
+</DocMeta>
 
 Conteneur unique des surfaces superposées : il sert à la fois de **modale** et de **drawer**.
 Structure fixe — `OverlayHeader` (titre + croix), contenu, `OverlayFooter` (actions). On ne compose
@@ -111,6 +112,9 @@ Répondre dans l'ordre. **Un seul « oui » suffit** à valider une étape, sauf
   ]}
 />
 
+Chaque étape est reprise et illustrée d'un cas réel du produit dans
+l'[annexe en bas de page](#annexe).
+
 ### Les quatre issues, en composants
 
 <DocTable
@@ -153,7 +157,7 @@ mêmes sept étapes avant de choisir un template.
 - **OK** : formulaire, texte, liste ou sélecteur, étapes courtes, aperçu.
 - **À éviter** : navigation principale, tableaux très larges, parcours multi-pages — page dédiée.
 - Le contenu scrolle **à l'intérieur** ; header et footer restent fixes.
-- Le padding de 24 est porté par le conteneur : **ne pas re-padder le contenu**.
+- Le padding `space/24` est porté par le conteneur : **ne pas re-padder le contenu**.
 - Le drawer occupe toute la hauteur et coûte cher en surface. Largeur **constante dans un même
   parcours** (520).
 
@@ -161,8 +165,8 @@ mêmes sept étapes avant de choisir un template.
 
 ## OverlayHeader
 
-Bandeau de 52 : titre à gauche (Circular Medium 16), croix à droite (20). Padding 0 / 20 / 0 / 24,
-gap 12. Trois thèmes relevés en production :
+Bandeau de `actionBarHeight` : titre à gauche (style Headline 4), croix à droite (`size/target-min`). Padding 0 / `space/20` / 0 / `space/24`,
+gap `space/12`. Trois thèmes relevés en production :
 
 <DocTable
   headers={['Thème', 'Fond', 'Usage']}
@@ -192,7 +196,7 @@ overlay, en haut.
 
 ## OverlayFooter
 
-Barre de 52, padding 10 / 16, gap 8, actions alignées à **droite**, bordure haute.
+Barre de 52, padding `space/10` / 16, gap `space/8`, actions alignées à **droite**, bordure haute.
 
 - Bouton **primaire tout à droite** = action principale. **Secondaire à sa gauche** = annuler.
 - Jusqu'à **trois** actions, **un seul primaire**. Une troisième action se place encore à gauche
@@ -211,7 +215,7 @@ Barre de 52, padding 10 / 16, gap 8, actions alignées à **droite**, bordure ha
 2. **Panneau** : fond `bg/container`, ombre à trois couches. Modale : `radius/card`, centrée,
    hauteur max 80 vh. Drawer : sans radius, collé à droite, pleine hauteur.
 3. **Header** : 52, fixe.
-4. **Contenu** : `flex: 1`, `overflow-y: auto`, padding 24.
+4. **Contenu** : `flex: 1`, `overflow-y: auto`, padding `space/24`.
 5. **Footer** : 52, fixe, optionnel.
 
 ## Accessibilité (RGAA)
@@ -259,3 +263,54 @@ Barre de 52, padding 10 / 16, gap 8, actions alignées à **droite**, bordure ha
   le focus lettre après lettre. `onClose` est lue via une ref, l'effet ne dépend que de `open`.
 - **À construire.** Flèche retour pour les modales multi-étapes, sous-titre sous le titre, action
   tertiaire alignée à gauche dans le footer, boutons pleine largeur sous un breakpoint mobile.
+
+---
+
+<span id="annexe" />
+
+## Annexe — les sept étapes expliquées
+
+Le tableau plus haut pose les questions. Voici ce que chaque étape **décide**, avec un cas du
+produit.
+
+### 1 · Sortir du flux — « Un overlay a-t-il seulement un intérêt ici ? »
+
+On cherche une raison, n'importe laquelle, de ne pas se contenter d'une page : capter l'attention,
+faire choisir vite, recueillir deux champs, garder la page visible derrière. Confirmer la
+suppression d'un segment a cet intérêt. Consulter la documentation d'un plugin, non — c'est une
+page.
+
+### 2 · Vie propre — « Le contenu est-il une destination ? »
+
+Une destination, c'est quelque chose qui a une URL, qu'on met en favori, qu'on envoie à un
+collègue, sur quoi on revient. Le détail d'un segment est une destination : il ne peut pas être un
+overlay. Le choix d'un label ne l'est pas. Un contenu appelé à grossir compte aussi comme une
+destination : il finira page, autant commencer page.
+
+### 3 · Tenue — « Est-ce que ça tient dans la surface ? »
+
+Purement physique. Si ça déborde, si ça défile, s'il y a plus de deux actions principales ou plus
+d'une tâche : ça ne tient pas. Créer un segment en quatre étapes ne tient pas. Confirmer une
+suppression tient.
+
+### 4 · Justification — « Qu'est-ce qui plaide positivement pour l'overlay ? »
+
+L'étape la plus importante, et la plus oubliée. Aux étapes 1 à 3, on n'a fait qu'éliminer les
+empêchements. Ici on demande un argument **pour** : l'utilisateur fait des allers-retours avec le
+fond, le contenu est temporaire, le focus revient à la page d'origine. Choisir un segment à
+comparer coche tout : on a besoin de voir la liste, et on revient à l'écran d'origine.
+
+### 5 · Bloquer ou signaler — « Faut-il interrompre, ou juste signaler ? »
+
+Bloquer coûte cher. On ne le fait que si c'est urgent, critique pour continuer, ou si ça fait
+gagner un vrai travail. Un compteur qui se met à jour n'interrompt pas : c'est un signalement.
+
+### 6 · Nature — « Est-ce un simple message ? »
+
+Une erreur ou un succès s'affichent, ils ne se confirment pas. « Export terminé » dans une modale
+oblige à cliquer pour accuser réception d'une information déjà lue.
+
+### 7 · Modale ou drawer — la seule étape dont le nom était clair.
+
+Décision, saisie, conséquence irréversible → **modale**. Sinon → **drawer**. « Supprimer ce
+segment ? » est une modale. « Choisir un segment à comparer » est un drawer.

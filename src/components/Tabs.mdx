@@ -1,16 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as TabsStories from './Tabs.stories';
 import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
 
 <Meta of={TabsStories} />
 
 # Tabs
 
-<div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', margin: '16px 0 24px', fontSize: 12 }}>
+<DocMeta>
   <span><b>Catégorie</b> : construit</span>
   <span><b>Source code</b> : AntD v5 Tabs (<code>mcs-tabs</code>)</span>
   <span><b>Maquette</b> : Figma Tab <code>17:61</code>, Tab Bar <code>249:107</code></span>
-</div>
+</DocMeta>
 
 Rangée d'onglets et sa ligne de base pleine largeur. Un onglet donne accès aux **sous-vues d'un
 même contexte** : les onglets d'un segment, d'un board. Ce n'est pas une navigation entre objets,
@@ -61,12 +62,12 @@ sélectionne l'onglet, affiche son contenu et le ramène dans le champ de vision
 
 ## Anatomie
 
-1. **Onglet** : hauteur 44, padding 12 haut / 10 bas, gap 6, libellé Circular Medium 14.
+1. **Onglet** : hauteur `size/row`, padding `space/12` haut / 10 bas, gap `space/6`, libellé Circular Medium 14.
    Défaut : libellé `text/normal`, trait bas transparent. Actif : libellé et trait de 2 px en
    `primary`.
-2. **Badge** : pastille ronde de 16, radius 8, fond `warning`, chiffre Circular Medium 10 blanc.
-   Anatomie distincte du `CountBadge` (20 de haut, radius 6) : ne pas les confondre.
-3. **Barre** : gap 35 entre onglets, ligne de base de 1 px en `border/input`.
+2. **Badge** : pastille ronde de 16, radius 8 (hors échelle), fond `warning`, chiffre Circular Medium 10 blanc.
+   Anatomie distincte du `CountBadge` (20 de haut, `radius/card`) : ne pas les confondre.
+3. **Barre** : gap `space/35` entre onglets, ligne de base de 1 px en `border/input`.
 
 ## Accessibilité (RGAA)
 
