@@ -19,9 +19,12 @@ permissions:
   pages: write
   id-token: write
 
+# `cancel-in-progress: false` : on met en file plutôt que d'interrompre. Annuler un
+# déploiement Pages EN COURS le laisse dans un état intermédiaire, et le suivant
+# expire en attendant sa place. C'est ce qui a fait échouer trois runs d'affilée.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -54,9 +57,18 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Garde-fou : au-delà, c'est GitHub qui est en peine, pas nous.
+    timeout-minutes: 30
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # L'action attend 10 minutes par défaut, puis abandonne. L'artefact ne
+          # pèse que 13 Mo pour 160 fichiers : quand ça dépasse, c'est la file
+          # d'attente de Pages qui est chargée, pas le transfert. On lui laisse
+          # le temps plutôt que de réessayer à la main.
+          timeout: 1200000
+          error_count: 20
