@@ -66,9 +66,13 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
         with:
-          # L'action attend 10 minutes par défaut, puis abandonne. L'artefact ne
-          # pèse que 13 Mo pour 160 fichiers : quand ça dépasse, c'est la file
-          # d'attente de Pages qui est chargée, pas le transfert. On lui laisse
-          # le temps plutôt que de réessayer à la main.
-          timeout: 1200000
+          # 600000 ms est le MAXIMUM autorisé, pas un réglage : toute valeur
+          # supérieure est ramenée là avec un avertissement. Le laisser explicite
+          # évite qu'on retente de l'augmenter en croyant que c'est possible.
+          #
+          # Ce délai est régulièrement dépassé alors que la publication ABOUTIT :
+          # l'action cesse d'observer avant que Pages ne rende son statut, et
+          # rapporte un échec pour un déploiement qui a bien eu lieu. Avant de
+          # conclure qu'une publication a raté, vérifier le site — pas le badge.
+          timeout: 600000
           error_count: 20

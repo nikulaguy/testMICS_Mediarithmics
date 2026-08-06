@@ -196,3 +196,18 @@ Deux prérequis, une seule fois, sur un dépôt recréé :
 
 Le second n'est pas contournable malgré le `enablement: true` passé à `actions/configure-pages` :
 le `GITHUB_TOKEN` du workflow n'a pas le droit de *créer* un site Pages, seulement d'y déployer.
+
+### Un workflow rouge ne veut pas dire un site périmé
+
+`actions/deploy-pages` observe la publication pendant **10 minutes au maximum** — c'est un plafond
+de l'action, pas un réglage : toute valeur supérieure est ramenée là. Quand la file d'attente de
+Pages est chargée, l'action cesse d'observer avant que le statut ne remonte et **rapporte un échec
+pour un déploiement qui aboutit quand même**, quelques minutes plus tard.
+
+Avant de conclure qu'une publication a raté, **regardez le site, pas le badge**. Si le contenu est
+là, il n'y a rien à faire ; s'il n'y est toujours pas au bout d'un quart d'heure, relancez le
+workflow.
+
+Le `concurrency` est en `cancel-in-progress: false` pour cette raison : interrompre un déploiement
+Pages en vol le laisse dans un état intermédiaire et fait échouer le suivant. Mieux vaut les mettre
+en file.
