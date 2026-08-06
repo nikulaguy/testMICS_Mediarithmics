@@ -3,3 +3,6 @@ dist/
 storybook-static/
 .DS_Store
 *.local
+
+# Journal de debug de Storybook, régénéré à chaque build en échec
+debug-storybook.log
