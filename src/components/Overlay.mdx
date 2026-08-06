@@ -74,37 +74,37 @@ Répondre dans l'ordre. **Un seul « oui » suffit** à valider une étape, sauf
   headers={['Étape', 'La question', 'Si ça ne passe pas']}
   rows={[
     [
-      <b>1 · Sortir du flux</b>,
+      <b>1 · Un overlay a-t-il un intérêt ?</b>,
       "Faut-il capter l'attention ? choisir parmi peu d'options ? recueillir une petite information avant de continuer ? ajouter du contenu sans perdre le contexte ? faire prendre connaissance d'urgence ?",
       <>Aucun oui → <b>Page</b></>,
     ],
     [
-      <b>2 · Vie propre</b>,
+      <b>2 · Le contenu est-il une destination ?</b>,
       "Le contenu se met-il en favori ou se partage-t-il ? le parcours est-il pensé mobile ? l'utilisateur quitte-t-il le flux sans retour attendu ? les interactions sont-elles complexes ou en plusieurs étapes ? d'autres contenus sont-ils prévus ici plus tard ?",
       <>Un seul oui → <b>Page</b></>,
     ],
     [
-      <b>3 · Tenue</b>,
+      <b>3 · Est-ce que ça tient dedans ?</b>,
       "Beaucoup d'éléments à faire entrer ? hauteur dépassée ? défilement nécessaire ? mieux dans un conteneur plus large ? plus de deux actions primaires ? plus d'une tâche ?",
       <>Un seul oui → <b>Page</b></>,
     ],
     [
-      <b>4 · Justification</b>,
+      <b>4 · Qu'est-ce qui plaide pour l'overlay ?</b>,
       "Allers-retours fréquents avec le fond ? interaction minimale ? contenu temporaire ou de transition ? focus rendu à la page d'origine ? argument clair et défendable pour l'overlay ? consultation courte et simple ? niveau le plus profond du parcours ?",
       <>Aucun oui → <b>Page</b></>,
     ],
     [
-      <b>5 · Bloquer ou signaler</b>,
+      <b>5 · Faut-il interrompre ?</b>,
       "Urgent à voir tout de suite ? tâche plus facile si on détourne l'attention ? critique pour poursuivre ? gain de travail significatif ? information essentielle au flux ? processus autonome, début et fin clairs ?",
       <>Aucun oui → <b>Composant non modal</b></>,
     ],
     [
-      <b>6 · Nature</b>,
+      <b>6 · Est-ce un simple message ?</b>,
       "Est-ce un message d'erreur ou de succès ?",
       <>Oui → <b>Composant non modal</b></>,
     ],
     [
-      <b>7 · Modale ou drawer</b>,
+      <b>7 · Modale ou drawer ?</b>,
       "Recueillir une information ? confirmer une action ? conséquences sérieuses et difficiles à annuler ? formulaire ou décision ? avertissement corrigeant une erreur critique ? erreur irréversible ?",
       <>Un seul oui → <b>Modale</b> · aucun → <b>Drawer</b></>,
     ],

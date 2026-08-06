@@ -25,7 +25,9 @@ coûte qu'un clic.
 Répondre dans l'ordre. **Une seule réponse « oui » suffit** à valider une étape, sauf mention
 contraire.
 
-### 1 · Le contenu mérite-t-il de sortir du flux ?
+### 1 · Un overlay a-t-il un intérêt ?
+
+*On cherche une raison, n'importe laquelle, de ne pas se contenter d'une page.*
 
 - Faut-il capter l'attention de l'utilisateur ?
 - Choisit-il parmi un petit nombre d'options ?
@@ -35,7 +37,9 @@ contraire.
 
 **Aucun oui → PAGE.** Sinon, étape 2.
 
-### 2 · Le contenu a-t-il une vie propre ?
+### 2 · Le contenu est-il une destination ?
+
+*Une destination a une URL : on la met en favori, on l'envoie, on y revient. Un contenu appelé à grossir en est une aussi — il finira page, autant commencer page.*
 
 - L'utilisateur voudra-t-il le mettre en favori ou le partager ?
 - Le parcours est-il d'abord pensé pour mobile ?
@@ -47,7 +51,9 @@ contraire.
 **Un seul oui → PAGE.** Un contenu qu'on partage ou qui va grossir n'a rien à faire dans un
 overlay. Sinon, étape 3.
 
-### 3 · Le contenu tient-il dans un overlay ?
+### 3 · Est-ce que ça tient dedans ?
+
+*Question purement physique : la place disponible dans la surface.*
 
 - Cherche-t-on à faire entrer beaucoup d'éléments ?
 - La hauteur dépasserait-elle celle du conteneur ?
@@ -58,7 +64,9 @@ overlay. Sinon, étape 3.
 
 **Un seul oui → PAGE.** Sinon, étape 4.
 
-### 4 · L'overlay a-t-il une justification positive ?
+### 4 · Qu'est-ce qui plaide pour l'overlay ?
+
+*Les trois étapes précédentes n'ont fait qu'écarter des empêchements. Celle-ci exige un argument POUR — c'est la plus souvent sautée.*
 
 - L'utilisateur fait-il des allers-retours fréquents avec la page de fond ?
 - Interagit-il peu avec ce contenu ?
@@ -71,7 +79,9 @@ overlay. Sinon, étape 3.
 
 **Aucun oui → PAGE.** Sinon, étape 5.
 
-### 5 · Faut-il bloquer, ou seulement signaler ?
+### 5 · Faut-il interrompre ?
+
+*Bloquer coûte cher. On ne bloque que si l'urgence, la criticité ou le gain de travail le paient.*
 
 - Le contenu est-il urgent, à voir tout de suite ?
 - La tâche est-elle plus facile si on détourne l'attention de la page ?
@@ -82,7 +92,9 @@ overlay. Sinon, étape 3.
 
 **Aucun oui → COMPOSANT NON MODAL.** Sinon, étape 6.
 
-### 6 · Est-ce un message d'erreur ou de succès ?
+### 6 · Est-ce un simple message ?
+
+*Une erreur ou un succès s'affichent, ils ne se confirment pas.*
 
 **Oui → COMPOSANT NON MODAL.** Un message ne se confirme pas, il s'affiche. Le mettre dans une
 modale oblige à cliquer pour accuser réception d'une information qu'on a déjà lue.
@@ -90,6 +102,8 @@ modale oblige à cliquer pour accuser réception d'une information qu'on a déj�
 Sinon, étape 7.
 
 ### 7 · Modale ou drawer ?
+
+*Décision, saisie ou conséquence irréversible d'un côté ; consultation et contexte de l'autre.*
 
 - Faut-il recueillir une information auprès de l'utilisateur ?
 - Confirme-t-on une action ?
