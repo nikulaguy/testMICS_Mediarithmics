@@ -68,13 +68,30 @@ fiche de documentation par écran, plus le cadre général en troisième colonne
   plus tôt et la compléter depuis sa page de détail.
 - **Une action par étape.** Un contenu qui défile sur plusieurs sections est un formulaire long
   déguisé.
-- Validation **toujours en bas à droite**, dans `Overlay / Footer`. « Cancel » en secondaire ferme
-  le tunnel avec confirmation ; le retour arrière passe par le stepper, pas par un « Previous ».
+- Validation **toujours en bas à droite**, dans `Overlay / Footer` : « Back » en secondaire,
+  « Next » en primaire. « Back » revient d'une étape et reste masqué sur la première. Le pied ne
+  porte **pas** de « Cancel » : sortir du tunnel passe par la croix du header.
 - **Étape facultative** : tag « Optional » à droite du titre **ET** lien « Skip this step » dans le
   pied — le tag décrit, le lien offre la sortie. Sauter équivaut à valider vide. Une étape
   facultative n'est jamais la dernière.
 - **Dernière étape** : le primaire **nomme l'action** (« Create resource »), jamais « Next », et
   reprend le verbe de l'en-tête.
+
+### Sortir en cours de route — la modale d'abandon
+- La **croix du header est la seule sortie**, disponible à tout moment. Dès qu'une saisie existe,
+  elle n'exécute pas la fermeture : elle ouvre une **modale d'abandon** posée **sur le tunnel** (et
+  non sur la liste, contrairement à la confirmation de fin — le parcours n'est pas terminé).
+- Sur l'écran de choix du type, rien n'est saisi : la croix ferme directement. Demander
+  confirmation pour rien apprend à l'utilisateur à confirmer sans lire.
+- **Échap se comporte exactement comme la croix**, modale d'abandon comprise. Depuis la modale
+  d'abandon, Échap la referme et laisse l'utilisateur dans le tunnel : Échap ne détruit jamais.
+- Les libellés **nomment l'issue** : « Continue editing » en secondaire, « Leave without saving »
+  en primaire `Type=Danger`. Proscrire « Cancel » / « OK » — ici « Cancel » désignerait aussi bien
+  annuler la sortie qu'annuler la création. C'est le seul endroit du parcours où le rouge est
+  justifié, l'action détruit une saisie.
+- Un seul paragraphe dans la modale : ce qui est perdu, et que ce n'est pas réversible. Confirmer
+  ramène à la liste d'origine, sans ressource créée ni brouillon conservé. Proposer d'enregistrer un
+  brouillon en ferait un choix à trois branches : cela se conçoit à part.
 
 ### La confirmation — deux cas exclusifs
 - **Avec donnée à emporter** (extrait de code, clé, identifiant) → modale posée **sur la liste**,
