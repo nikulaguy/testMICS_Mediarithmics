@@ -42,10 +42,11 @@ La recherche globale est une surface superposée SPÉCIALE : Search / Modal (voi
 ## Variante : overlay plein écran — parcours de création de ressource
 
 Troisième forme d'overlay, au-delà du drawer et de la modale : un **plein écran qui recouvre
-l'application**. SideMenu et Actionbar disparaissent, la TopBar se réduit au switcher
-d'organisation, et la croix du header est la seule sortie. C'est le gabarit de toute création de
-ressource (segment, dataset, campagne, feed).
-Référence : page 📋 Audit, section « Parcours générique — Création de ressource » — 9 écrans, une
+l'application**. SideMenu et Actionbar disparaissent, la TopBar ne garde que le **nom** de
+l'organisation — sans le chevron qui permet d'en changer, puisque la ressource se rattache à celle
+d'où l'on est parti — et la croix du header est la seule sortie. C'est le gabarit de toute création
+de ressource (segment, dataset, campagne, feed).
+Référence : page 📋 Audit, section « Parcours générique — Création de ressource » — 11 écrans, une
 fiche de documentation par écran, plus le cadre général en troisième colonne.
 
 **Trois temps, toujours dans cet ordre** : choix du type → tunnel d'étapes → confirmation.
@@ -76,6 +77,24 @@ fiche de documentation par écran, plus le cadre général en troisième colonne
   facultative n'est jamais la dernière.
 - **Dernière étape** : le primaire **nomme l'action** (« Create resource »), jamais « Next », et
   reprend le verbe de l'en-tête.
+
+### Valider une étape — champs obligatoires
+- Tant qu'un champ obligatoire n'est pas renseigné, « Next » est **présenté** désactivé. Il ne l'est
+  pas réellement : `aria-disabled="true"`, **jamais** l'attribut `disabled`. Un bouton réellement
+  désactivé ne reçoit ni focus ni clic — il ne peut donc pas déclencher l'affichage des erreurs, et
+  l'utilisateur reste bloqué sans savoir pourquoi (RGAA 7.1, 11.10).
+- **Au clic**, les champs manquants passent en `Input State=Error` avec leur message, et le focus
+  part sur le **premier** d'entre eux.
+- L'erreur ne s'affiche **jamais pendant la frappe** : au clic sur « Next », ou à la sortie d'un
+  champ rempli puis vidé. Elle se lève dès que le champ redevient valide, sans nouveau clic, et le
+  bouton reprend son apparence active quand tous les obligatoires sont remplis.
+- Champ obligatoire : astérisque dans le libellé **et** `aria-required` — l'astérisque seul n'est
+  pas annoncé. En erreur : `aria-invalid` + `aria-describedby` vers le message (RGAA 11.10, 8.9).
+- Le message dit **quoi faire** (« This field is required. »), il ne constate pas (« Erreur »).
+- **Pas d'Alert globale** tant que les erreurs sont visibles sur les champs. On en ajoute une
+  (`Type=Error`, en tête de l'étape) au-delà de cinq champs en erreur, ou pour une erreur serveur.
+- Le champ facultatif reste neutre, et « Back » comme la croix restent actifs : une étape invalide
+  ne doit jamais emprisonner l'utilisateur.
 
 ### Sortir en cours de route — la modale d'abandon
 - La **croix du header est la seule sortie**, disponible à tout moment. Dès qu'une saisie existe,
