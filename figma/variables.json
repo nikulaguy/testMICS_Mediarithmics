@@ -3,7 +3,7 @@
     "source": "Mediarithmics - MICS DS — Rebuild",
     "fileKey": "OnvlU9azeM4rffD83XnEGI",
     "url": "https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/",
-    "generated": "2026-07-31",
+    "generated": "2026-08-07",
     "generator": "figma/export-variables.js",
     "note": "Export des variables locales. 'aliasOf' = variable pointée, 'value' = valeur finale après résolution de la chaîne d'alias, 'code' = cible de code déclarée dans la description Figma."
   },
@@ -119,6 +119,8 @@
       { "name": "size/menu-item", "type": "FLOAT", "value": 32, "code": "→ --mics-size-menu-item (à créer, 32)" },
       { "name": "size/row", "type": "FLOAT", "value": 44, "code": "→ --mics-size-row (à créer, 44)" },
       { "name": "size/row-header", "type": "FLOAT", "value": 44, "code": "→ --mics-size-row-header (à créer, 44)" },
+      { "name": "size/tag", "type": "FLOAT", "value": 26, "code": "→ scale.sizeTag (26) — hauteur du Tag, relevée sur le composant" },
+      { "name": "size/target-min", "type": "FLOAT", "value": 20, "code": "→ scale.sizeTargetMin (20) — plus petite cible de pointage ; ne suit PAS la taille du glyphe (la croix du Tag fait 8, sa cible 20)" },
       { "name": "space/2", "type": "FLOAT", "value": 2, "code": "→ --mics-space-2 (échelle à créer)" },
       { "name": "space/4", "type": "FLOAT", "value": 4, "code": "→ --mics-space-4 (échelle à créer)" },
       { "name": "space/6", "type": "FLOAT", "value": 6, "code": "→ --mics-space-6 (échelle à créer)" },

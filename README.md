@@ -67,7 +67,7 @@ tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **constru
 ## Figma — la moitié amont
 
 Tout ce qui concerne la conception est dans **[`figma/`](figma/)** : le fichier de design system
-(19 pages, 446 composants, 121 variables) et les **23 skills** de production, plus un pack de
+(18 pages, 449 composants, 123 variables) et les **23 skills** de production, plus un pack de
 14 références RGAA. Les skills sont les règles du DS écrites dans un format que Claude Code charge
 automatiquement : règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma,
 accessibilité.
@@ -126,7 +126,7 @@ Pour la production en lot, le serveur officiel bute sur un quota par siège. Le 
 plugin **Desktop Bridge**, exécution locale, API plugin complète — est documenté dans
 **[`figma/DESKTOP-BRIDGE.md`](figma/DESKTOP-BRIDGE.md)**.
 
-Le contenu du fichier, les conditions d'accès et l'export des 121 variables
+Le contenu du fichier, les conditions d'accès et l'export des 123 variables
 ([`figma/variables.json`](figma/variables.json)) sont décrits dans
 **[`figma/README.md`](figma/README.md)**.
 

@@ -195,7 +195,10 @@ apparition de surface (menu, panneau), **300 ms** pour un déplacement ample (dr
   impression. Une surface flottante garde un fond franc et, si nécessaire, une bordure.
 - **z-index par paliers nommés**, jamais de nombre improvisé : `zPopover` 1030, `zDropdown` 1050,
   `zTooltip` 1060, `zModal` 1200. Une valeur inventée finit toujours par passer sous ou par-dessus
-  la mauvaise chose.
+  la mauvaise chose. **`zModal` est le seul écart avec la maquette**, qui le donne à 1000 comme la
+  production (`z/modal`, `@zindex-modal`) : à 1000, un overlay passerait sous les dropdowns et les
+  tooltips d'AntD, rendus dans un portail attaché au body. L'écart est assumé ici et n'a pas
+  vocation à être repris dans le produit.
 - **Pas d'animation sur ce qui bloque la lecture.** Un contenu qui apparaît en fondu pendant que
   l'utilisateur lit déjà est une gêne, pas une transition.
 

@@ -9,7 +9,7 @@ figma/
   SETUP.md               installation : Claude Code, le MCP Figma, l'aspiration, les skills
   DESKTOP-BRIDGE.md      le second accès à Figma : sans quota, API plugin complète
   skills/                les 23 skills de production + les 14 références RGAA
-  variables.json         les 121 variables exportées, avec leur cible de code
+  variables.json         les 123 variables exportées, avec leur cible de code
   export-variables.js    le script qui régénère variables.json
   *.fig                  instantané du fichier — voir plus bas, il périme
 ```
@@ -30,16 +30,16 @@ Voir le [README principal](../README.md).
 **Mediarithmics - MICS DS — Rebuild**
 → https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/
 
-Relevé au 31 juillet 2026 : **19 pages, 45 sets de variantes, 446 composants, 121 variables,
-12 styles de texte.**
+Relevé au 7 août 2026 : **18 pages (dont 2 séparateurs), 46 sets de variantes, 449 composants,
+123 variables, 12 styles de texte.**
 
 | Section | Pages |
 |---|---|
 | Entrée | 📕 Cover · 📋 Sommaire · 🎛️ General Rules |
 | Fondations | 🎨 Foundations · 🖼 Icons · 🎼 Layout |
-| Composants | 🧭 Navigation & Shell · 🔘 Button · 📝 Form Inputs · 🏷 Data Display · 💬 Feedback & Overlays · 📊 Table & Lists · 📊 Charts |
-| Produit | 🖥 Screens · 📋 Audit |
-| Travail | Aspiration · Test Skills |
+| Composants | 📊 Charts · 🧭 Navigation & Shell · 🔘 Button · 📝 Form Inputs · 🏷 Data Display · 💬 Feedback & Overlays · 📊 Table & Lists |
+| Produit | 🖥 Screens · 📋 Audit / Reco |
+| Travail | 🤖 Test Skills |
 
 Commencez par **📋 Sommaire** : chaque composant et chaque écran y a une carte cliquable. C'est la
 page qui doit rester à jour, toute création y ajoute la sienne.
@@ -52,14 +52,14 @@ sinon toute édition de texte échoue avec « Cannot load font ».
 
 ### Le passage design → code
 
-Les 121 variables portent leur cible de code dans leur description, sous la forme
-`CODE : → token.colorPrimary`. **120 sur 121** la renseignent aujourd'hui — la seule exception est
+Les 123 variables portent leur cible de code dans leur description, sous la forme
+`CODE : → token.colorPrimary`. **122 sur 123** la renseignent aujourd'hui — la seule exception est
 `showActionMore`, un booléen de propriété de composant rangé par erreur dans Primitives. C'est la
 passerelle entre le fichier et [`src/theme/micsTheme.ts`](../src/theme/micsTheme.ts) : ne la
 supprimez jamais, renseignez-la sur toute nouvelle variable.
 
 [`variables.json`](variables.json) en est l'export : nom, type, alias, valeur finale et cible de
-code, pour les trois collections (Primitives 47, Color 32, Scale 42). Contrairement au fichier
+code, pour les trois collections (Primitives 47, Color 32, Scale 44). Contrairement au fichier
 Figma, il se relit en revue et se compare d'une version à l'autre — c'est là que se voit une
 dérive entre la maquette et le thème du code.
 

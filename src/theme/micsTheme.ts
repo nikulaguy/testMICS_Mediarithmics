@@ -148,7 +148,13 @@ export const scale = {
   actionBarHeight: 52,
   /** Interlettrage des micro-libellés en capitales. Une seule valeur. */
   trackingCaps: 0.4,
-  /** z-index : quatre paliers, alignés sur ceux d'Ant Design. */
+  /**
+   * z-index : quatre paliers repris d'Ant Design, sauf `zModal`. La maquette et la
+   * production le donnent à 1000 (`z/modal`, `@zindex-modal`), ce qui le place SOUS
+   * les surfaces flottantes d'AntD — dropdown 1050, tooltip 1060 — rendues dans un
+   * portail attaché au body : un panneau de filtres passerait par-dessus l'overlay
+   * qui l'a ouvert. 1200 est un écart assumé du prototype, pas un oubli.
+   */
   zDropdown: 1050,
   zPopover: 1030,
   zModal: 1200,
