@@ -92,6 +92,50 @@ l'accès Figma n'est pas garanti. Pour travailler, ouvrez le lien.
 Pour le remplacer : **Fichier → Enregistrer une copie locale** depuis l'application Figma, puis
 écraser celui-ci en gardant le même nom (un nom stable évite d'accumuler les versions côte à côte).
 
+### « Some content didn't import, could be due to restricted access »
+
+Message affiché à l'import du `.fig` chez quelqu'un d'autre. Il ne parle **pas** des polices : il
+signale que le fichier référence du contenu **hébergé dans un autre fichier Figma** — composant,
+style ou variable venu d'une bibliothèque publiée ailleurs. Un `.fig` n'embarque pas ces
+références ; il ne garde que le lien, et le lien tombe chez qui n'a pas accès à la bibliothèque
+d'origine.
+
+Le fichier n'a plus aucune référence de ce type — deux styles de peinture hérités d'une
+bibliothèque externe traînaient sur la page 📊 Charts, ils ont été détachés. **Avant chaque export,
+relancer le contrôle** (via le MCP `figma-console`, ou collé dans un plugin de développement) :
+
+```js
+await figma.loadAllPagesAsync();
+const distants = new Set(); const vus = new Set();
+for (const page of figma.root.children)
+  for (const node of page.findAll(function () { return true; })) {
+    for (const k of ['fillStyleId','strokeStyleId','textStyleId','effectStyleId','gridStyleId'])
+      if (k in node && node[k] && !vus.has(node[k])) { vus.add(node[k]);
+        const s = await figma.getStyleByIdAsync(node[k]);
+        if (s && s.remote) distants.add('style · ' + s.name); }
+    if (node.type === 'INSTANCE') { const m = await node.getMainComponentAsync();
+      if (!m) distants.add('composant introuvable · ' + node.name);
+      else if (m.remote) distants.add('composant · ' + m.name); }
+    if (node.boundVariables) for (const k of Object.keys(node.boundVariables)) {
+      const b = node.boundVariables[k];
+      for (const x of (Array.isArray(b) ? b : [b])) if (x && x.id && !vus.has(x.id)) { vus.add(x.id);
+        const v = await figma.variables.getVariableByIdAsync(x.id);
+        if (v && v.remote) distants.add('variable · ' + v.name); } }
+  }
+return [...distants];   // doit renvoyer []
+```
+
+Ce qui **n'est pas** couvert par ce message, et qu'il ne faut pas confondre :
+
+- **La police Circular.** Elle est licenciée et n'est jamais embarquée dans un `.fig`. Chez qui ne
+  l'a pas, les textes se rendent dans une police de repli et l'édition échoue avec « Cannot load
+  font ». Symptôme différent, cause différente.
+- **Les images.** Elles sont embarquées dans le `.fig`, elles ne sont pas concernées.
+
+Et si l'accès Figma est possible, **il vaut mieux ne pas passer par le `.fig` du tout** :
+partagez le lien du fichier et laissez le destinataire faire **Dupliquer dans ses brouillons**. La
+copie est intégrale, elle emporte variables, composants et bibliothèques liées.
+
 ## Produire une maquette
 
 Une fois [`SETUP.md`](SETUP.md) suivi, il n'y a qu'un point d'entrée :
