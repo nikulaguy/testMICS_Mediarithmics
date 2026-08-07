@@ -127,7 +127,7 @@ Ouvrez une session `claude` et tapez `/md-` : l'autocomplétion doit proposer le
 1. **Lecture** :
    > Charge le skill md-ds-rules et résume-moi les 3 règles d'or.
 2. **Écriture réversible** :
-   > Dans le fichier https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/, page « Aspiration », crée un rectangle nommé test-mcp, fais un screenshot, puis supprime-le.
+   > Dans le fichier https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/Mediarithmics---MICS-DS-%E2%80%94-Rebuild?node-id=744-34361&p=f&t=d5U2djTyBFn3wNo4-11, page « Aspiration », crée un rectangle nommé test-mcp, fais un screenshot, puis supprime-le.
 
 Si les deux passent, l'installation est complète.
 
@@ -139,14 +139,14 @@ Reproduire un écran de mémoire ou d'après une capture, c'est en réinventer l
 
 ### Installer
 
-Deux moitiés qui vont ensemble, **html.to.design** :
+Deux moitiés qui vont ensemble, **Plugin Figma** :
 
 | Où | Quoi |
 |---|---|
-| Chrome | l'extension **html.to.design**, depuis le Chrome Web Store |
-| Figma | le plugin **html.to.design**, depuis la Community |
+| Chrome | Extension Figma pour Chrome (https://www.figma.com/downloads/chrome-extension/)
 
-L'extension sert à capturer une page derrière une authentification — ce qui est le cas de `navigator.mediarithmics.com`. Sans elle, le plugin ne voit qu'une page de connexion.
+L'extension sert à capturer une page derrière une authentification — ce qui est le cas de `navigator.mediarithmics.com`. 
+Sans elle, le plugin ne voit qu'une page de connexion.
 
 ### Aspirer
 
