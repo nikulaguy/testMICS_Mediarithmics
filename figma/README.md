@@ -104,6 +104,57 @@ Claude enchaîne seul : vocabulaire métier, choix du template parmi les 9, prod
 puis *pre-flight check* — screenshot et auto-contrôle, zéro défaut exigé avant de rendre la main.
 Les autres skills se chargent d'eux-mêmes selon le besoin.
 
+## Maintenir les skills — la partie qu'on oublie
+
+Un skill est une **photographie du fichier à un instant donné**. Il cite des identifiants de nœuds,
+des noms de variantes, des largeurs, des règles. Le jour où le fichier bouge et que le skill ne
+bouge pas, Claude produit avec application quelque chose de faux — et il le produit vite, donc
+l'erreur se répand plus vite qu'avant.
+
+C'est le seul vrai coût d'entretien du dispositif, et il est faible : quelques lignes de texte à
+chaque évolution. Mais il n'est pas optionnel.
+
+### Quand mettre un skill à jour
+
+| Ce qui change dans le fichier | Ce qu'il faut toucher |
+|---|---|
+| Un composant créé | Sa fiche dans le skill de sa famille (`md-data-display`, `md-forms`, `md-navigation`, `md-overlays`, `md-charts`), la description native, le Sommaire |
+| Une variante ou une prop ajoutée | La fiche du composant : variantes, props, et la règle d'usage si elle change |
+| Un composant renommé ou supprimé | Toutes les mentions — un `grep` sur l'ancien nom dans `skills/` |
+| Une variable ajoutée | Sa ligne `CODE :`, puis régénérer [`variables.json`](variables.json) |
+| Une règle d'écran tranchée en revue | Le skill du template concerné, ou `md-ds-rules` si elle vaut partout |
+| Un piège d'API rencontré | `md-figma-api`, avec le symptôme ET le remède |
+
+### Le processus, en cinq gestes
+
+1. **Relever le fait, pas l'impression.** Ouvrir le composant et lire ses variantes, ses props, sa
+   géométrie. Ne jamais écrire un skill de mémoire : c'est ainsi qu'on se retrouve avec un Tag
+   annoncé à 24 de haut alors qu'il en fait 26.
+2. **Trouver le bon skill.** Un fait ne va qu'à **un seul** endroit. S'il vaut pour tous les écrans,
+   il va dans `md-ds-rules` ; s'il vaut pour une famille, dans le skill de la famille ; s'il vaut
+   pour un template, dans ce template. Le répéter aux trois endroits garantit qu'ils divergeront.
+3. **Écrire la règle et sa raison.** « Prendre `Size=L` dès qu'il faut une icône » ne se retient
+   pas ; « les variantes `Size=M` n'ont pas de nœud icon » se retient, parce qu'on comprend
+   pourquoi. Un skill sans le pourquoi se fait contourner à la première contrainte.
+4. **Chercher les mentions périmées.** Un renommage touche plusieurs fichiers :
+
+   ```bash
+   grep -rn "AncienNom" figma/skills/
+   ```
+
+5. **Commiter avec le fait qui l'a déclenché.** Le message dit ce qui a changé dans le fichier, pas
+   seulement ce qui a changé dans le texte. C'est ce qui permet, six mois plus tard, de savoir si la
+   règle tient encore.
+
+### Le bon moment
+
+**Juste après la correction, pas à la fin du projet.** Une règle apprise en revue et notée le soir
+même coûte deux minutes ; la même règle retrouvée trois semaines plus tard coûte une enquête, et
+souvent elle est perdue.
+
+Le signal le plus fiable : **si vous corrigez Claude sur le même point une deuxième fois, c'est un
+skill qui manque ou qui ment.** Ne corrigez pas une troisième fois — écrivez-le.
+
 ## Les trois règles d'or du fichier
 
 1. **Aucune valeur en dur** : toute couleur, tout radius, tout espacement vient d'une variable ;
