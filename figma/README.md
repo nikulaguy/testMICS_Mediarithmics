@@ -11,7 +11,6 @@ figma/
   skills/                les 23 skills de production + les 14 références RGAA
   variables.json         les 123 variables exportées, avec leur cible de code
   export-variables.js    le script qui régénère variables.json
-  *.fig                  instantané du fichier — voir plus bas, il périme
 ```
 
 **Vous n'avez encore rien installé ?** Tout est dans **[`SETUP.md`](SETUP.md)** : Claude Code, la
@@ -71,31 +70,28 @@ script est en lecture seule et signale les variables sans cible de code et les a
 La table de correspondance composant Figma → composant React est dans
 [`ARCHITECTURE.md`](../ARCHITECTURE.md), section 3.
 
-## Le `.fig` versionné
+## Transmettre le fichier
 
-`Mediarithmics - MICS DS — Rebuild.fig` est un export « Enregistrer une copie locale », déposé ici
-comme instantané de référence. **Le lien ci-dessus reste la source de vérité** : le `.fig` est une
-photographie, pas une copie synchronisée.
+**Le dépôt ne versionne plus de `.fig`.** Un export local est une photographie : il périme dès la
+première modification en ligne, git ne sait ni le lire ni le fusionner, et chaque remplacement
+ajoute quatre mégaoctets à l'historique. Il ne remplaçait pas non plus
+[`variables.json`](variables.json), qui lui se relit en revue et se compare d'une version à
+l'autre. La source de vérité est le lien ci-dessus, et elle l'a toujours été.
 
-Trois choses à savoir avant de s'en servir :
+**Pour donner le fichier à quelqu'un**, dans l'ordre de préférence :
 
-- **Il périme.** Dès la première modification en ligne, il ne décrit plus le fichier réel.
-  Vérifiez sa date de commit avant de conclure quoi que ce soit à partir de lui.
-- **Git ne sait pas le lire.** Aucun diff, aucune fusion possible : chaque nouvelle version ajoute
-  une copie entière à l'historique du dépôt. Le remplacer souvent le fait grossir vite.
-- **Il ne remplace pas [`variables.json`](variables.json)**, qui lui se relit en revue et se compare
-  d'une version à l'autre.
-
-À quoi il sert : archivage, reprise hors ligne, transfert de propriété du fichier — les cas où
-l'accès Figma n'est pas garanti. Pour travailler, ouvrez le lien.
-
-Pour le remplacer : **Fichier → Enregistrer une copie locale** depuis l'application Figma, puis
-écraser celui-ci en gardant le même nom (un nom stable évite d'accumuler les versions côte à côte).
+1. **Partager le lien** et le laisser faire **Dupliquer dans ses brouillons**. La copie est
+   intégrale : variables, composants, bibliothèques liées.
+2. **Un dossier connecté** (*connected folder*), si les deux organisations ont un plan payant — pas
+   nécessairement le même. Chacune paie ses propres sièges, et c'est le plan de **l'hôte** qui
+   détermine les fonctionnalités disponibles dans le dossier.
+3. **Un export `.fig`** en dernier recours, quand l'accès Figma n'est pas possible. Lire alors la
+   section suivante avant d'exporter.
 
 ### « Some content didn't import, could be due to restricted access »
 
-Message affiché à l'import du `.fig` chez quelqu'un d'autre. Il ne parle **pas** des polices : il
-signale que le fichier référence du contenu **hébergé dans un autre fichier Figma** — composant,
+Message affiché quand quelqu'un importe un `.fig` exporté d'ici. Il ne parle **pas** des polices :
+il signale que le fichier référence du contenu **hébergé dans un autre fichier Figma** — composant,
 style ou variable venu d'une bibliothèque publiée ailleurs. Un `.fig` n'embarque pas ces
 références ; il ne garde que le lien, et le lien tombe chez qui n'a pas accès à la bibliothèque
 d'origine.
@@ -131,10 +127,6 @@ Ce qui **n'est pas** couvert par ce message, et qu'il ne faut pas confondre :
   l'a pas, les textes se rendent dans une police de repli et l'édition échoue avec « Cannot load
   font ». Symptôme différent, cause différente.
 - **Les images.** Elles sont embarquées dans le `.fig`, elles ne sont pas concernées.
-
-Et si l'accès Figma est possible, **il vaut mieux ne pas passer par le `.fig` du tout** :
-partagez le lien du fichier et laissez le destinataire faire **Dupliquer dans ses brouillons**. La
-copie est intégrale, elle emporte variables, composants et bibliothèques liées.
 
 ## Produire une maquette
 
