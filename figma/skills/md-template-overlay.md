@@ -72,6 +72,11 @@ fiche de documentation par écran, plus le cadre général en troisième colonne
 - Validation **toujours en bas à droite**, dans `Overlay / Footer` : « Back » en secondaire,
   « Next » en primaire. « Back » revient d'une étape et reste masqué sur la première. Le pied ne
   porte **pas** de « Cancel » : sortir du tunnel passe par la croix du header.
+- **Le pied est collé en bas de la fenêtre** et ne défile jamais avec le contenu. Seule la zone
+  entre le header et le pied défile. Quelle que soit la longueur de l'étape, les actions possibles
+  restent visibles sans avoir à faire défiler — un utilisateur qui doit chercher « Next » en bas
+  d'une page longue croit l'étape bloquée. Le padding bas du contenu est conservé en fin de
+  défilement : le dernier élément n'affleure jamais le pied et ne passe pas dessous.
 - **Étape facultative** : tag « Optional » à droite du titre **ET** lien « Skip this step » dans le
   pied — le tag décrit, le lien offre la sortie. Sauter équivaut à valider vide. Une étape
   facultative n'est jamais la dernière.
