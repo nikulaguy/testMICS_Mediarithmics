@@ -10,19 +10,44 @@ interface Props {
   onPointerDown?: (e: React.PointerEvent) => void;
   /** Le bouton ouvre un panneau : pilote aria-haspopup / aria-expanded. */
   expanded?: boolean;
+  /**
+   * Surface d'accueil. `onDark` par défaut : c'est la TopBar navy, seul contexte
+   * où le composant existait jusqu'ici.
+   */
+  theme?: 'onDark' | 'onLight';
 }
 
 /**
- * buttonIcon (Figma 666:110318) — bouton icône de la TopBar.
- * Icône 20×20 sans fond : seule la couleur change selon l'état.
- * Default = text/on-dark · Hover = bg/hover · Pressed = bg/selected.
+ * Rampe de couleur du glyphe, relevée sur le set Figma `buttonIcon` (666:110318).
+ * Dans les deux thèmes le glyphe s'estompe à mesure qu'on interagit — voir la
+ * réserve d'accessibilité sur `onLight` dans la page de documentation.
+ */
+const RAMPE = {
+  onDark: {
+    default: semantic.textOnDark,
+    hover: semantic.bgHover,
+    pressed: semantic.bgSelected,
+  },
+  onLight: {
+    default: semantic.textNormal,
+    hover: semantic.textLighter,
+    pressed: semantic.textLightest,
+  },
+} as const;
+
+/**
+ * buttonIcon (Figma 666:110318) — bouton icône des barres denses.
+ * Icône 20×20 sans fond : seule la couleur du glyphe change.
+ * onDark  : text/on-dark → bg/hover → bg/selected.
+ * onLight : text/normal → text/lighter → text/lightest.
  * La cible cliquable fait 32×32 même si le visible fait 20 (confort de pointage).
  */
-export function IconButton({ icon, label, onClick, onPointerDown, expanded }: Props) {
+export function IconButton({ icon, label, onClick, onPointerDown, expanded, theme = 'onDark' }: Props) {
   const [hover, setHover] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const color = pressed || expanded ? semantic.bgSelected : hover ? semantic.bgHover : semantic.textOnDark;
+  const rampe = RAMPE[theme];
+  const color = pressed || expanded ? rampe.pressed : hover ? rampe.hover : rampe.default;
 
   return (
     <button

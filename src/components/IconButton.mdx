@@ -13,11 +13,28 @@ import { DocMeta } from '../docs/DocMeta';
   <span><b>Maquette</b> : Figma <code>666:110318</code>, doc <code>669:71</code></span>
 </DocMeta>
 
-Bouton icône sans fond ni bordure. **Seule la couleur du glyphe change selon l'état** :
-`text/on-dark` au repos, `bg/hover` au survol, `bg/selected` pressé ou panneau ouvert.
-C'est le bouton des barres denses, TopBar en tête, là où un Button à paddings serait trop lourd.
+Bouton icône sans fond ni bordure. **Seule la couleur du glyphe change** : ni fond, ni bordure, ni
+ombre, dans aucun état. C'est le bouton des barres denses, TopBar en tête, là où un Button à
+paddings serait trop lourd.
 
-<Canvas of={IconButtonStories.Etats} />
+<Canvas of={IconButtonStories.Themes} />
+
+## Deux thèmes, deux rampes
+
+Le thème n'est pas une nuance : c'est la surface qui décide. `onDark` sur la TopBar navy, `onLight`
+sur une barre claire. Aucune valeur n'est partagée entre les deux.
+
+<DocTable
+  headers={['État', 'onDark', 'onLight']}
+  rows={[
+    ['Default', <code>text/on-dark</code>, <code>text/normal</code>],
+    ['Hover', <code>bg/hover</code>, <code>text/lighter</code>],
+    [<>Pressed / <code>expanded</code></>, <code>bg/selected</code>, <code>text/lightest</code>],
+  ]}
+/>
+
+`onDark` est la valeur par défaut : c'est le seul contexte où le composant existait, et la changer
+en silence aurait modifié la TopBar.
 
 ## Props
 
@@ -32,7 +49,8 @@ C'est le bouton des barres denses, TopBar en tête, là où un Button à padding
   la prop pilote à la fois l'apparence et `aria-haspopup` / `aria-expanded`.
 - La bascule d'un panneau se fait sur `onPointerDown`, pas sur `onClick` : sinon la fermeture au
   clic extérieur et l'ouverture au clic se marchent dessus, et le panneau clignote.
-- Variante **onLight** pour les surfaces claires : mêmes états, rampe de texte inversée.
+- **Le thème se choisit d'après la surface, pas d'après l'envie.** Un `onDark` sur fond clair est
+  illisible, et un `onLight` sur navy l'est tout autant.
 
 <Canvas of={IconButtonStories.RangeeTopBar} />
 
@@ -69,7 +87,11 @@ C'est le bouton des barres denses, TopBar en tête, là où un Button à padding
     ],
     [
       'Contraste',
-      'Le glyphe atteint 3:1 avec le fond navy dans les trois états, y compris au survol (RGAA 3.2).',
+      <>
+        <b>onDark</b> : 13,5:1, 11,7:1 et 12,3:1 sur le navy, très au-dessus du seuil.{' '}
+        <b>onLight</b> : 7:1, 3,2:1 puis <b>1,8:1</b> sur blanc — l’état Pressed passe sous les
+        3:1 exigés, voir la réserve ci-dessous (RGAA 3.2).
+      </>,
     ],
   ]}
 />
@@ -77,5 +99,16 @@ C'est le bouton des barres denses, TopBar en tête, là où un Button à padding
 ## Écarts et évolutions
 
 - **Ajouté en maquette.** En production, ces icônes sont posées sans état ni cible élargie.
+- **Rattrapé.** La maquette portait les deux thèmes depuis le début, le code n'avait que `onDark` —
+  et cette page annonçait déjà une variante `onLight` qui n'existait pas. La prop `theme` la
+  fournit.
+- **⚠ Réserve d'accessibilité sur l'état Pressed d'`onLight`.** La rampe *estompe* le glyphe à
+  l'interaction : 65 % au repos, 43 % au survol, 25 % pressé. Contrastes mesurés sur blanc :
+  **7:1**, **3,2:1**, **1,8:1**, pour un seuil de 3:1 sur un élément graphique porteur
+  d'information (RGAA 3.2). Default passe largement, Hover passe de justesse, **Pressed échoue**.
+  Pour comparaison, `onDark` reste entre 11,7:1 et 13,5:1 dans les trois états : le problème est
+  propre au thème clair. Le code applique fidèlement la maquette ; la correction est une décision
+  de design, la rampe claire devrait *foncer* (`text/normal` → `text/darker`) plutôt que
+  s'éclaircir. À trancher avant tout usage réel d'`onLight`.
 - **À construire.** L'anneau de focus clavier, distinct du survol, reste à décrire côté maquette :
   aujourd'hui l'utilisateur au clavier ne distingue pas le bouton ciblé.

@@ -13,6 +13,15 @@ Appliquer /md-ds-rules avant toute utilisation.
 - **Props** : `Org` (texte) · `showAppstore` · `showSettings` · `showUser` (bools, défaut true)
 - **Règle** : en mode édition, `showAppstore=false`.
 
+## buttonIcon — Set 666:110318 (6 variantes)
+- **Variantes** : `state` (Default | Hover | Pressed) × `theme` (onLight | onDark) · **Prop** : `iconSwap` (swap d'icône)
+- Glyphe 20×20, **aucun fond, aucune bordure, aucune ombre** dans aucun état : seule la couleur change.
+  - `onDark` : `text/on-dark` → `bg/hover` → `bg/selected`
+  - `onLight` : `text/normal` → `text/lighter` → `text/lightest`
+- **Code** : `IconButton`, prop `theme` (défaut `onDark`, la TopBar). Le composant maquette fait 20×20 ; le code l'entoure d'une **cible de 32×32** — la taille du glyphe ne dicte pas celle de la zone cliquable.
+- ⚠ **Contraste** : sur `onLight` la rampe estompe le glyphe. Mesuré sur blanc : 7:1 · 3,2:1 · **1,8:1**, pour un seuil de 3:1 (RGAA 3.2). **L'état Pressed n'est pas conforme.** `onDark` va de 11,7:1 à 13,5:1, il n'est pas concerné. Correction à trancher : sur fond clair la rampe devrait foncer (`text/normal` → `text/darker`) au lieu de s'éclaircir.
+- **Usage** : barres denses (TopBar, en-têtes de carte). Une action principale d'écran reste un Button. L'intitulé accessible est obligatoire.
+
 ## SideMenu — 19:32 (standalone)
 - l 200 fixe, hauteur FILL.
 - **Structure** : logo + groupes AUDIENCE / ACTIVATION / CONTEXTUAL / MEASUREMENT / DATA STUDIO, faits de `SideMenu / Item`.
