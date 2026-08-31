@@ -52,7 +52,22 @@ export const CAMPAIGN_STATUS_ALL = 'All status';
 /** Statuts filtrables, dérivés de la table des tons : une seule source. */
 export const CAMPAIGN_STATUSES = Object.keys(CAMPAIGN_STATUS_TONE) as CampaignStatus[];
 
-export const CAMPAIGN_PERIODS = ['Last 7 days', 'Last 30 days', 'Last 90 days'];
+/**
+ * Préréglages de période, alignés sur la dimension « Creation date » des segments :
+ * la même question doit proposer les mêmes réponses d'un écran à l'autre. Une plage
+ * absolue reste possible en plus, via le sélecteur de dates du panneau.
+ */
+export const CAMPAIGN_PERIODS = ['Today', 'Yesterday', 'Last 7 days', 'Last 30 days'];
+
+/** Colonnes de métriques pilotables depuis « Edit view ». */
+export const CAMPAIGN_METRIC_COLUMNS = [
+  { key: 'impressions', label: 'Imp.' },
+  { key: 'clicks', label: 'Clicks' },
+  { key: 'spent', label: 'Spent' },
+  { key: 'cpm', label: 'CPM' },
+  { key: 'ctr', label: 'CTR' },
+  { key: 'cpc', label: 'CPC' },
+] as const;
 
 /**
  * Filtrage de la liste. Les labels se cumulent en OU : cocher « test » puis

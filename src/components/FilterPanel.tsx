@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
 import { panelSurface } from './DropdownPanel';
 import { Input } from './Input';
-import { DropdownCheckboxItem, DropdownFooter, DropdownNavItem, DropdownOptionItem } from './DropdownItems';
-import { DIMENSIONS, VALUE_ICONS, isAbsoluteRange, parseAbsoluteRange, type FilterState } from '../data/segments';
+import { DropdownCheckboxItem, DropdownFooter, DropdownNavItem } from './DropdownItems';
+import { PeriodPanel } from './PeriodFilter';
+import { DIMENSIONS, VALUE_ICONS, type FilterState } from '../data/segments';
 import { scale, semantic } from '../theme/micsTheme';
 
 interface Props {
@@ -14,59 +13,6 @@ interface Props {
   onSet: (dimensionKey: string, values: string[]) => void;
   onClearDimension: (dimensionKey: string) => void;
   onClearAll: () => void;
-}
-
-/**
- * Contenu du niveau 2 pour une dimension de type période (Figma 145:73).
- * UNE seule valeur à la fois : soit une plage absolue, soit un préréglage relatif.
- * Choisir l'un efface l'autre.
- */
-function DateRangeContent({
-  values,
-  selected,
-  onSet,
-  dimensionKey,
-}: {
-  values: string[];
-  selected: string[];
-  onSet: (dimensionKey: string, values: string[]) => void;
-  dimensionKey: string;
-}) {
-  const current = selected[0];
-  const absolute = current && isAbsoluteRange(current) ? parseAbsoluteRange(current) : null;
-
-  return (
-    <div style={{ display: 'flex', gap: scale.space24, padding: scale.space16 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space8 }}>
-        <span style={{ color: semantic.textLighter, fontSize: 10 }}>Absolute time range</span>
-        <DatePicker.RangePicker
-          // Ancré au panneau (et non au body) : depuis une surface flottante,
-          // l'alignement par défaut projetait le calendrier hors de l'écran.
-          getPopupContainer={(trigger) =>
-            (trigger.closest('.mics-filter-level2') as HTMLElement) ?? document.body
-          }
-          placement="bottomLeft"
-          value={absolute ? [dayjs(absolute[0]), dayjs(absolute[1])] : null}
-          onChange={(range) => {
-            if (!range || !range[0] || !range[1]) onSet(dimensionKey, []);
-            else onSet(dimensionKey, [`abs:${range[0].format('YYYY-MM-DD')}..${range[1].format('YYYY-MM-DD')}`]);
-          }}
-          allowClear
-        />
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space8 }}>
-        <span style={{ color: semantic.textLighter, fontSize: 10 }}>Relative time ranges</span>
-        {values.map((v) => (
-          <DropdownOptionItem
-            key={v}
-            label={v}
-            selected={current === v}
-            onSelect={() => onSet(dimensionKey, current === v ? [] : [v])}
-          />
-        ))}
-      </div>
-    </div>
-  );
 }
 
 /**
@@ -113,11 +59,12 @@ export function FilterPanel({ filters, onToggle, onSet, onClearDimension, onClea
           }}
         >
           {active.key === 'creationDate' ? (
-            <DateRangeContent
-              dimensionKey={active.key}
-              values={active.values}
-              selected={filters[active.key] ?? []}
-              onSet={onSet}
+            <PeriodPanel
+              value={(filters[active.key] ?? [])[0] ?? ''}
+              presets={active.values}
+              onChange={(v) => onSet(active.key, v ? [v] : [])}
+              anchorSelector=".mics-filter-level2"
+              allowClear
             />
           ) : (
             <>

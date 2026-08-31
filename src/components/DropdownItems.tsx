@@ -32,6 +32,9 @@ const rowBase: React.CSSProperties = {
   font: 'inherit',
   textAlign: 'left',
   cursor: 'pointer',
+  // Une rangée de menu tient sur UNE ligne : l'icône ou la case reste à côté du
+  // libellé, jamais au-dessus. C'est le défaut de la dropdown de production.
+  whiteSpace: 'nowrap',
   padding: `6px ${scale.space16}px`,
 };
 

@@ -1,20 +1,24 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {
   Button,
+  DropdownCheckboxItem,
   Icon,
   LabelPicker,
   Link,
   ListTemplate,
   Pagination,
+  PeriodFilter,
   Select,
   StatusBadge,
   Table,
+  panelSurface,
   type ActiveFilter,
 } from '../ui';
 import {
   CAMPAIGNS,
   CAMPAIGN_LABELS,
+  CAMPAIGN_METRIC_COLUMNS,
   CAMPAIGN_PERIODS,
   CAMPAIGN_STATUS_ALL,
   CAMPAIGN_STATUS_TONE,
@@ -22,7 +26,7 @@ import {
   applyCampaignFilters,
   type Campaign,
 } from '../data/campaigns';
-import { semantic } from '../theme/micsTheme';
+import { scale, semantic } from '../theme/micsTheme';
 
 /*
   Campaigns — Liste (Figma 611:2, filtre ouvert 612:344).
@@ -89,6 +93,29 @@ export function CampaignsList() {
   const [period, setPeriod] = useState<string>('Last 30 days');
   const [status, setStatus] = useState<string>(CAMPAIGN_STATUS_ALL);
   const [page, setPage] = useState(1);
+  const [viewOpen, setViewOpen] = useState(false);
+  const [visibleMetrics, setVisibleMetrics] = useState<string[]>(
+    CAMPAIGN_METRIC_COLUMNS.map((c) => c.key),
+  );
+  const viewRef = useRef<HTMLDivElement>(null);
+
+  // Fermeture du menu des colonnes au clic extérieur et à Échap.
+  useEffect(() => {
+    if (!viewOpen) return;
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (viewRef.current && !viewRef.current.contains(target)) setViewOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setViewOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [viewOpen]);
 
   const rows = useMemo(
     () => applyCampaignFilters(CAMPAIGNS, { search, labels, status }),
@@ -127,10 +154,10 @@ export function CampaignsList() {
     },
     // Les six métriques partagent le même rendu : « - » quand la campagne n'a pas
     // diffusé, plutôt qu'un zéro qui se lirait comme une mesure.
-    ...(['impressions', 'clicks', 'spent', 'cpm', 'ctr', 'cpc'] as const).map((key, i) => ({
-      title: ['Imp.', 'Clicks', 'Spent', 'CPM', 'CTR', 'CPC'][i],
-      dataIndex: key,
-      key,
+    ...CAMPAIGN_METRIC_COLUMNS.filter((c) => visibleMetrics.includes(c.key)).map((c) => ({
+      title: c.label,
+      dataIndex: c.key,
+      key: c.key,
       width: 110,
       sorter: true,
       render: (value: number | null) => (value === null ? '-' : value.toLocaleString('en-US')),
@@ -168,13 +195,7 @@ export function CampaignsList() {
       actions={
         <>
             <LabelFilter selected={labels} onAdd={addLabel} />
-            <Select
-              width={160}
-              value={period}
-              onChange={setPeriod}
-              options={CAMPAIGN_PERIODS.map((p) => ({ value: p, label: p }))}
-              aria-label="Period"
-            />
+            <PeriodFilter value={period} presets={CAMPAIGN_PERIODS} onChange={setPeriod} />
             <Select
               width={140}
               value={status}
@@ -188,7 +209,42 @@ export function CampaignsList() {
               }))}
               aria-label="Status"
             />
-          <Button icon={<Icon name="view" size={14} />}>Edit view</Button>
+          <div ref={viewRef} style={{ position: 'relative' }}>
+              <Button
+                icon={<Icon name="view" size={14} />}
+                onClick={() => setViewOpen((v) => !v)}
+                aria-haspopup="true"
+                aria-expanded={viewOpen}
+              >
+                Edit view
+              </Button>
+              {viewOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 4px)',
+                    right: 0,
+                    zIndex: scale.zDropdown,
+                    width: 200,
+                    ...panelSurface,
+                    padding: `${scale.space8}px 0`,
+                  }}
+                >
+                  {CAMPAIGN_METRIC_COLUMNS.map((c) => (
+                    <DropdownCheckboxItem
+                      key={c.key}
+                      label={c.label}
+                      checked={visibleMetrics.includes(c.key)}
+                      onToggle={() =>
+                        setVisibleMetrics((prev) =>
+                          prev.includes(c.key) ? prev.filter((k) => k !== c.key) : [...prev, c.key],
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
         </>
       }
     >

@@ -66,6 +66,7 @@ export type { LauncherApp } from './components/AppLauncher';
 export { ActiveFilterBar } from './components/ActiveFilterBar';
 export type { ActiveFilter } from './components/ActiveFilterBar';
 export { FilterPanel } from './components/FilterPanel';
+export { PeriodFilter, PeriodPanel } from './components/PeriodFilter';
 export { SearchPalette } from './components/SearchPalette';
 export { AppShell } from './components/AppShell';
 export type { Crumb } from './components/Breadcrumb';
