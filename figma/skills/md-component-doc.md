@@ -38,7 +38,17 @@ Les pièges de manipulation Figma (swap qui re-taille, calque `vector`…) viven
 Frame « {Composant} — Documentation », largeur ~1180, fond `info`, radius `radius/card`, padding et gap `space/35`. Blocs dans l'ordre :
 
 1. **Titre** — Headline, `text/on-dark`.
-2. **`code-refs`** — deux lignes à chip (chip `bg/tooltip`, ~110, Caption/Medium inversé) : `Source code` (chemin repo exact) et `Storybook` (« à renseigner — {URL}/…?path=/story/{slug} » si inconnue).
+2. **`code-refs`** — deux lignes à chip (chip `bg/tooltip`, ~110, Caption/Medium inversé) : `Source code` (chemin repo exact) et `Storybook`.
+
+   La ligne Storybook porte **l'URL réelle du Storybook publié, posée en hyperlien Figma** (`setRangeHyperlink`), pas un texte de remplacement :
+
+   ```
+   https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/?path=/docs/<id>
+   ```
+
+   L'`id` se lit dans `storybook-static/index.json` (entrées `type: 'docs'`), jamais deviné : il encode les accents du titre (`composants-composés-tabs--docs`). Sans hyperlien, le texte n'est pas cliquable et la passation reste manuelle.
+
+   Composant non développé → écrire **« Pas de page : composant non développé »**, sans lien. Un lien mort coûte plus cher qu'une absence assumée.
 3. **`preview`** — le composant **MAÎTRE déplacé dans la frame** (jamais une instance avec le maître dehors), sur carte `bg/container`, radius card, padding 24.
 4. **`use case`** (« Exemples d'usage ») dès qu'il existe plusieurs cas réels : un wrapper `case/{libellé}` par cas, instance configurée comme en prod. Le maître garde ses libellés génériques.
 5. **Bandeau ① Existant ISO Prod** puis **bandeau ② Évolutions proposées** — frame `blue/100`, bordure `blue/300`, radius card, chip carrée 25 `primary` (numéro Body/Book inversé) + titre Headline 3 `primary`.
