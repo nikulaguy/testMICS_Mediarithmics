@@ -37,7 +37,7 @@ Toujours passer par les styles de texte du fichier :
 - **Primitives** = uniquement des noms de couleur (`blue/900`, `grey/250`, `red/vivid`, `black/65`, `neutral/400`, `white`) — jamais un nom d'usage.
 - **Sémantiques (collection Color)** = uniquement des **alias vers une primitive** — jamais une valeur hexa en dur. Une nouvelle sémantique sans primitive correspondante ⇒ créer la primitive d'abord.
 - Les alphas vivent dans les primitives (`black/78|65|43|25`) : les text/* (black/78…25) et bg/scrim (black/45) les aliasent.
-- **Chaque variable porte en description son token code cible** (ligne `CODE : → token.colorPrimary` / `--mics-space-24`…) : lire la description avant tout arbitrage design↔dev ; toute nouvelle variable doit recevoir la sienne. Le mapping complet vit dans les tickets de la page 📋 Audit.
+- **Chaque variable porte en description son token code cible** (ligne `CODE : → token.colorPrimary` / `--mics-space-24`…) : lire la description avant tout arbitrage design↔dev ; toute nouvelle variable doit recevoir la sienne. Le mapping complet vit dans `TOKENS.md`, à la racine du dépôt (la page 📋 Audit / Reco en porte la version présentable).
 
 ### Couleurs (collection Color)
 | Token | Usage |

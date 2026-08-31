@@ -49,6 +49,7 @@ src/
   assets/icons/    les 52 SVG
 figma/             le fichier de design system et les 23 skills de production (voir plus bas)
 ARCHITECTURE.md    la règle des trois catégories, la correspondance Figma → dev
+TOKENS.md          l'inventaire des tokens, leur mapping vers le code, les écarts à résorber
 PORTABILITE.md     ce que coûte la reprise de chaque composant dans le produit
 ```
 
@@ -157,6 +158,10 @@ copié depuis ce dépôt compile dans le produit sans passe d'adaptation liée a
 Ce qui reste à traiter au cas par cas : les **imports** (`../ui` ici, chemins Nx là-bas), les
 **tokens** (le produit lit encore deux systèmes en parallèle) et les **graphiques**, écrits en SVG
 plutôt qu'en Highcharts.
+
+**[`TOKENS.md`](TOKENS.md)** traite les tokens en entier : les 123 variables de la maquette, leur
+correspondance avec `defaultTheme.ts` et le LESS legacy, les seize écarts à arbitrer et un
+découpage en tâches chiffrées.
 
 **[`PORTABILITE.md`](PORTABILITE.md)** mesure la reprise composant par composant : 27 des 31
 compilent tels quels sous la chaîne exacte du produit, et la table de correspondance dit ce qui
