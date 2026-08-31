@@ -42,6 +42,16 @@ export const CAMPAIGN_STATUS_TONE: Record<CampaignStatus, 'success' | 'processin
   Paused: 'warning',
 };
 
+/**
+ * Entrée « tous les statuts » du filtre. C'est une valeur à part entière, pas
+ * l'absence de valeur : un Select vide ne se remet pas à zéro une fois qu'on a
+ * choisi, l'utilisateur reste coincé sur le dernier statut retenu.
+ */
+export const CAMPAIGN_STATUS_ALL = 'All status';
+
+/** Statuts filtrables, dérivés de la table des tons : une seule source. */
+export const CAMPAIGN_STATUSES = Object.keys(CAMPAIGN_STATUS_TONE) as CampaignStatus[];
+
 export const CAMPAIGN_PERIODS = ['Last 7 days', 'Last 30 days', 'Last 90 days'];
 
 /**
@@ -58,7 +68,7 @@ export function applyCampaignFilters(
   return rows.filter((c) => {
     if (q && !c.name.toLowerCase().includes(q)) return false;
     if (labels.length && !c.labels.some((l) => labels.includes(l))) return false;
-    if (status && c.status !== status) return false;
+    if (status && status !== CAMPAIGN_STATUS_ALL && c.status !== status) return false;
     return true;
   });
 }

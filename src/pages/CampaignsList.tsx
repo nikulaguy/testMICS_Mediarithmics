@@ -16,7 +16,9 @@ import {
   CAMPAIGNS,
   CAMPAIGN_LABELS,
   CAMPAIGN_PERIODS,
+  CAMPAIGN_STATUS_ALL,
   CAMPAIGN_STATUS_TONE,
+  CAMPAIGN_STATUSES,
   applyCampaignFilters,
   type Campaign,
 } from '../data/campaigns';
@@ -85,7 +87,7 @@ export function CampaignsList() {
   const [search, setSearch] = useState('');
   const [labels, setLabels] = useState<string[]>([]);
   const [period, setPeriod] = useState<string>('Last 30 days');
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<string>(CAMPAIGN_STATUS_ALL);
   const [page, setPage] = useState(1);
 
   const rows = useMemo(
@@ -174,18 +176,16 @@ export function CampaignsList() {
               aria-label="Period"
             />
             <Select
-              width={120}
-              placeholder="Status"
-              value={status ?? undefined}
+              width={140}
+              value={status}
               onChange={(v) => {
-                setStatus(v || null);
+                setStatus(v || CAMPAIGN_STATUS_ALL);
                 setPage(1);
               }}
-              options={[
-                { value: 'Active', label: 'Active' },
-                { value: 'Pending', label: 'Pending' },
-                { value: 'Paused', label: 'Paused' },
-              ]}
+              options={[CAMPAIGN_STATUS_ALL, ...CAMPAIGN_STATUSES].map((v) => ({
+                value: v,
+                label: v,
+              }))}
               aria-label="Status"
             />
           <Button icon={<Icon name="view" size={14} />}>Edit view</Button>
