@@ -15,11 +15,11 @@ Appliquer /md-ds-rules avant toute utilisation.
 
 ## buttonIcon — Set 666:110318 (6 variantes)
 - **Variantes** : `state` (Default | Hover | Pressed) × `theme` (onLight | onDark) · **Prop** : `iconSwap` (swap d'icône)
-- Glyphe 20×20, **aucun fond, aucune bordure, aucune ombre** dans aucun état : seule la couleur change.
+- Glyphe 20×20, **aucun fond, aucune bordure, aucune ombre** dans aucun état : seule la couleur change. **Chaque rampe s'éloigne de sa surface** — elle s'éclaircit sur le navy, elle fonce sur le clair.
   - `onDark` : `text/on-dark` → `bg/hover` → `bg/selected`
-  - `onLight` : `text/normal` → `text/lighter` → `text/lightest`
+  - `onLight` : `text/normal` → `text/darker` → `info` (le navy, miroir du `bg/selected` bleuté d'onDark)
 - **Code** : `IconButton`, prop `theme` (défaut `onDark`, la TopBar). Le composant maquette fait 20×20 ; le code l'entoure d'une **cible de 32×32** — la taille du glyphe ne dicte pas celle de la zone cliquable.
-- ⚠ **Contraste** : sur `onLight` la rampe estompe le glyphe. Mesuré sur blanc : 7:1 · 3,2:1 · **1,8:1**, pour un seuil de 3:1 (RGAA 3.2). **L'état Pressed n'est pas conforme.** `onDark` va de 11,7:1 à 13,5:1, il n'est pas concerné. Correction à trancher : sur fond clair la rampe devrait foncer (`text/normal` → `text/darker`) au lieu de s'éclaircir.
+- **Contraste** (RGAA 3.2, seuil 3:1) : onDark 13,5 / 11,7 / 12,3 · onLight 7 / 11,7 / 13,5 — conformes dans les six états. La première rampe onLight estompait le glyphe (65 → 43 → 25 %) et faisait tomber Pressed à 1,8:1 : ne pas la réintroduire, une rampe qui se rapproche de son fond finit toujours par disparaître dedans.
 - **Usage** : barres denses (TopBar, en-têtes de carte). Une action principale d'écran reste un Button. L'intitulé accessible est obligatoire.
 
 ## SideMenu — 19:32 (standalone)

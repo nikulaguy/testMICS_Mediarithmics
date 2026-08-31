@@ -28,10 +28,14 @@ sur une barre claire. Aucune valeur n'est partagée entre les deux.
   headers={['État', 'onDark', 'onLight']}
   rows={[
     ['Default', <code>text/on-dark</code>, <code>text/normal</code>],
-    ['Hover', <code>bg/hover</code>, <code>text/lighter</code>],
-    [<>Pressed / <code>expanded</code></>, <code>bg/selected</code>, <code>text/lightest</code>],
+    ['Hover', <code>bg/hover</code>, <code>text/darker</code>],
+    [<>Pressed / <code>expanded</code></>, <code>bg/selected</code>, <code>info</code>],
   ]}
 />
+
+**Chaque rampe s'éloigne de sa surface** : elle s'éclaircit sur le navy, elle fonce sur le clair.
+Le pressé d'`onLight` prend le navy `info`, miroir du `bg/selected` bleuté d'`onDark` — dans les
+deux thèmes, l'état ouvert tire vers le bleu de la marque.
 
 `onDark` est la valeur par défaut : c'est le seul contexte où le composant existait, et la changer
 en silence aurait modifié la TopBar.
@@ -88,9 +92,8 @@ en silence aurait modifié la TopBar.
     [
       'Contraste',
       <>
-        <b>onDark</b> : 13,5:1, 11,7:1 et 12,3:1 sur le navy, très au-dessus du seuil.{' '}
-        <b>onLight</b> : 7:1, 3,2:1 puis <b>1,8:1</b> sur blanc — l’état Pressed passe sous les
-        3:1 exigés, voir la réserve ci-dessous (RGAA 3.2).
+        <b>onDark</b> : 13,5:1, 11,7:1 et 12,3:1 sur le navy. <b>onLight</b> : 7:1, 11,7:1 et
+        13,5:1 sur blanc. Les six états dépassent largement le seuil de 3:1 (RGAA 3.2).
       </>,
     ],
   ]}
@@ -102,13 +105,10 @@ en silence aurait modifié la TopBar.
 - **Rattrapé.** La maquette portait les deux thèmes depuis le début, le code n'avait que `onDark` —
   et cette page annonçait déjà une variante `onLight` qui n'existait pas. La prop `theme` la
   fournit.
-- **⚠ Réserve d'accessibilité sur l'état Pressed d'`onLight`.** La rampe *estompe* le glyphe à
-  l'interaction : 65 % au repos, 43 % au survol, 25 % pressé. Contrastes mesurés sur blanc :
-  **7:1**, **3,2:1**, **1,8:1**, pour un seuil de 3:1 sur un élément graphique porteur
-  d'information (RGAA 3.2). Default passe largement, Hover passe de justesse, **Pressed échoue**.
-  Pour comparaison, `onDark` reste entre 11,7:1 et 13,5:1 dans les trois états : le problème est
-  propre au thème clair. Le code applique fidèlement la maquette ; la correction est une décision
-  de design, la rampe claire devrait *foncer* (`text/normal` → `text/darker`) plutôt que
-  s'éclaircir. À trancher avant tout usage réel d'`onLight`.
+- **Corrigé.** La première rampe `onLight` *estompait* le glyphe à l'interaction (65 % → 43 % →
+  25 %), calquée sur le geste d'`onDark` sans tenir compte du fond : l'état Pressed tombait à
+  **1,8:1** de contraste pour un seuil de 3:1 (RGAA 3.2). La rampe fonce désormais
+  (`text/normal` → `text/darker` → `info`) et les trois états tiennent entre 7:1 et 13,5:1.
+  Corrigé le même jour dans la maquette et dans le code.
 - **À construire.** L'anneau de focus clavier, distinct du survol, reste à décrire côté maquette :
   aujourd'hui l'utilisateur au clavier ne distingue pas le bouton ciblé.

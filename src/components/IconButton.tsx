@@ -18,9 +18,12 @@ interface Props {
 }
 
 /**
- * Rampe de couleur du glyphe, relevée sur le set Figma `buttonIcon` (666:110318).
- * Dans les deux thèmes le glyphe s'estompe à mesure qu'on interagit — voir la
- * réserve d'accessibilité sur `onLight` dans la page de documentation.
+ * Rampe de couleur du glyphe, alignée sur le set Figma `buttonIcon` (666:110318).
+ * Chaque rampe s'ÉLOIGNE de sa surface : elle s'éclaircit sur le navy, elle fonce
+ * sur le clair. Le pressé d'onLight est le navy `info` — miroir du bg/selected
+ * bleuté d'onDark. La première version d'onLight estompait le glyphe (65 → 43 →
+ * 25 %), ce qui faisait tomber le contraste du pressé à 1,8:1 pour un seuil de
+ * 3:1 (RGAA 3.2) : corrigée des deux côtés le 8 août 2026.
  */
 const RAMPE = {
   onDark: {
@@ -30,8 +33,8 @@ const RAMPE = {
   },
   onLight: {
     default: semantic.textNormal,
-    hover: semantic.textLighter,
-    pressed: semantic.textLightest,
+    hover: semantic.textDarker,
+    pressed: semantic.info,
   },
 } as const;
 
@@ -39,7 +42,7 @@ const RAMPE = {
  * buttonIcon (Figma 666:110318) — bouton icône des barres denses.
  * Icône 20×20 sans fond : seule la couleur du glyphe change.
  * onDark  : text/on-dark → bg/hover → bg/selected.
- * onLight : text/normal → text/lighter → text/lightest.
+ * onLight : text/normal → text/darker → info.
  * La cible cliquable fait 32×32 même si le visible fait 20 (confort de pointage).
  */
 export function IconButton({ icon, label, onClick, onPointerDown, expanded, theme = 'onDark' }: Props) {
