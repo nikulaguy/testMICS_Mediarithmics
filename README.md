@@ -68,7 +68,7 @@ tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **constru
 ## Figma — la moitié amont
 
 Tout ce qui concerne la conception est dans **[`figma/`](figma/)** : le fichier de design system
-(19 pages, 449 composants, 123 variables) et les **23 skills** de production, plus un pack de
+(19 pages, 449 composants, 128 variables) et les **23 skills** de production, plus un pack de
 14 références RGAA. Le fichier est dans un **projet connecté** entre Frontguys et mediarithmics :
 les deux organisations l'éditent en même temps, chacune avec ses propres sièges. Les skills sont les règles du DS écrites dans un format que Claude Code charge
 automatiquement : règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma,
@@ -128,7 +128,7 @@ Pour la production en lot, le serveur officiel bute sur un quota par siège. Le 
 plugin **Desktop Bridge**, exécution locale, API plugin complète — est documenté dans
 **[`figma/DESKTOP-BRIDGE.md`](figma/DESKTOP-BRIDGE.md)**.
 
-Le contenu du fichier, les conditions d'accès et l'export des 123 variables
+Le contenu du fichier, les conditions d'accès et l'export des 128 variables
 ([`figma/variables.json`](figma/variables.json)) sont décrits dans
 **[`figma/README.md`](figma/README.md)**.
 
@@ -160,7 +160,7 @@ Ce qui reste à traiter au cas par cas : les **imports** (`../ui` ici, chemins N
 **tokens** (le produit lit encore deux systèmes en parallèle) et les **graphiques**, écrits en SVG
 plutôt qu'en Highcharts.
 
-**[`TOKENS.md`](TOKENS.md)** traite les tokens en entier : les 123 variables de la maquette, leur
+**[`TOKENS.md`](TOKENS.md)** traite les tokens en entier : les 128 variables de la maquette, leur
 correspondance avec `defaultTheme.ts` et le LESS legacy, les seize écarts à arbitrer et un
 découpage en tâches chiffrées.
 

@@ -1,0 +1,135 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+import { DocTable } from '../docs/DocTable';
+import { DocMeta } from '../docs/DocMeta';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+<DocMeta>
+  <span><b>Catégorie</b> : thémé</span>
+  <span><b>Source code</b> : `antd`, exposé par `src/ui.ts`, habillé par `src/theme/micsTheme.ts`</span>
+  <span><b>Maquette</b> : Figma `Button` <code>13:98</code>, 32 variantes</span>
+</DocMeta>
+
+Le Button d'Ant Design, habillé par les tokens. **Le DS ne l'enveloppe pas** : il n'y a donc aucune
+prop inventée, l'API est celle d'AntD, restreinte à ce que la maquette prévoit.
+
+<Canvas of={ButtonStories.Types} />
+
+## Props
+
+<Controls of={ButtonStories.BacASable} />
+
+## Ce que la maquette appelle autrement
+
+Les noms diffèrent des deux côtés. La correspondance est fixe, elle ne se devine pas.
+
+<DocTable
+  headers={['Maquette', 'Code', 'Remarque']}
+  rows={[
+    ['`Type=Primary`', <code>type="primary"</code>, 'Action principale'],
+    ['`Type=Default`', <>aucun <code>type</code></>, 'La valeur par défaut d’AntD'],
+    ['`Type=Link`', <code>type="link"</code>, 'Action légère, sans fond ni bordure'],
+    [
+      '`Type=Danger`',
+      <code>danger</code>,
+      <><b>Un booléen, pas un type.</b> Il se combine à <code>type</code> : <code>danger</code> seul donne un bouton par défaut rouge, <code>type="primary" danger</code> un bouton plein rouge.</>,
+    ],
+    ['`Size=L`', <>défaut (<code>middle</code>)</>, 'h32, padding 15'],
+    ['`Size=M`', <code>size="small"</code>, 'h24, padding 7'],
+    ['`Show icon` + `Icon`', <code>icon={'{<Icon …/>}'}</code>, 'Toujours à gauche du libellé'],
+    ['`Label`', 'children', 'Un verbe d’action'],
+  ]}
+/>
+
+<Canvas of={ButtonStories.Tailles} />
+
+**Les deux tailles portent le même texte**, 12/20. Seules la hauteur et le padding changent. La
+maquette a longtemps donné la taille M en 25 de haut avec un texte de 10 : c'était faux des deux
+côtés, la valeur mesurée dans le DOM est 24 avec le même texte que la taille L.
+
+<Canvas of={ButtonStories.AvecIcone} />
+
+## Deux halos bleus, qui ne veulent pas dire la même chose
+
+C'est le point qui trompe le plus : au clic, deux choses se produisent, et une seule est un état.
+
+<DocTable
+  headers={['', 'Liseré de focus', 'Onde de clic']}
+  rows={[
+    ['Ce que c’est', 'L’outline de `:focus-visible`', <>L’onde d’AntD (<code>.ant-wave</code>)</>],
+    ['Quand', 'Tant que le bouton a le focus', 'Au clic, une seule fois'],
+    ['Durée', 'Persistant', <>~0,4 s d’expansion, puis effacement sur 2 s</>],
+    ['Aspect', <>3 px de <code>focus/ring</code> (#7ae7ff), décalé de 1 px</>, <>Anneau <code>primary</code> qui part du bord et s’étend de 6 px</>],
+    ['Dans la maquette', <><code>State=Focus</code></>, 'Absent : une animation ne se maquette pas'],
+    ['À quoi ça sert', 'Dire où est le clavier', 'Accuser réception du clic'],
+  ]}
+/>
+
+**Le liseré est un état, l'onde est une animation.** L'un se spécifie dans la maquette, l'autre se
+décrit ici. Ne pas demander à un designer de dessiner l'onde, ni à un développeur de rendre le
+liseré permanent après un clic à la souris : `:focus-visible` ne se déclenche qu'au clavier, et
+c'est voulu.
+
+<Canvas of={ButtonStories.Etats} />
+
+## Règles d'usage
+
+- **Un seul `primary` par zone d'action**, et c'est le dernier à droite. Deux boutons pleins côte à
+  côte, c'est une question posée à l'utilisateur sans lui dire laquelle est la bonne réponse.
+- **`danger` est réservé à une destruction**, jamais utilisé pour attirer l'œil sur l'action
+  principale. Sur une confirmation de suppression, le bouton qui détruit est `danger`, pas
+  `primary`.
+- **Le libellé est un verbe d'action** : « Create resource », pas « OK » ni « Valider ». Un libellé
+  qui nomme l'action reste compréhensible hors contexte, dans un lecteur d'écran comme dans une
+  capture d'écran.
+- **Pas d'état Loading.** Ce qui portait ce nom dans la maquette n'était qu'un bouton à icône
+  gauche. Pour une action longue, désactiver le bouton et annoncer l'attente à côté.
+- **L'icône ne remplace pas le texte.** Un bouton sans libellé visible, c'est un `IconButton`, qui
+  porte alors un intitulé accessible obligatoire.
+
+## Accessibilité (RGAA)
+
+<DocTable
+  headers={['Thème', 'Exigence']}
+  rows={[
+    [
+      'Prise de focus',
+      <>
+        Le liseré <code>:focus-visible</code> ne doit jamais être supprimé sans remplacement : c’est
+        le seul repère d’un utilisateur au clavier (RGAA 10.7).
+      </>,
+    ],
+    [
+      'Contraste',
+      <>
+        Le liseré <code>focus/ring</code> est clair : il tient sur une surface blanche, pas sur une
+        surface navy. Sur fond sombre, prévoir le liseré en <code>text/on-dark</code> (RGAA 3.2).
+      </>,
+    ],
+    [
+      'Bouton désactivé',
+      <>
+        Un bouton <code>disabled</code> ne reçoit ni focus ni clic : il ne peut donc rien expliquer.
+        Si l’utilisateur doit comprendre pourquoi il est bloqué, utiliser{' '}
+        <code>aria-disabled</code> et garder le bouton atteignable (RGAA 7.1, 11.10).
+      </>,
+    ],
+    [
+      'Intitulé',
+      'Le libellé visible est l’intitulé accessible. Un bouton dont le texte est une icône seule n’en a pas (RGAA 6.1).',
+    ],
+  ]}
+/>
+
+## Écarts et évolutions
+
+- **Corrigé.** La maquette portait un état `Loading` qui n'en était pas un : les instances qui
+  l'utilisaient étaient des boutons à icône gauche. Elles ont été migrées vers `State=Default` avec
+  `Show icon`, et l'état a été remplacé par `State=Focus`.
+- **Corrigé.** Deux variantes (`Link` / `Hover` et `Link` / `Disabled` en taille M) n'avaient pas de
+  nœud `icon` : `Show icon` n'y faisait rien.
+- **À faire côté produit.** `controlHeightSM` n'était pas déclaré : la taille M tournait sur un
+  calcul interne d'AntD (`controlHeight × 0,75`). Le thème la déclare maintenant.

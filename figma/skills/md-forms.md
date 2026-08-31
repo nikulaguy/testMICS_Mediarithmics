@@ -8,9 +8,14 @@ description: Composants de formulaire MICS — Button, Input, Select, Checkbox, 
 Appliquer /md-ds-rules avant toute utilisation. Tous les IDs ci-dessous sont vérifiés sur le fichier (le **Set ID** désigne le component set ; instancier la variante voulue).
 
 ## Button — Set 13:98 (32 variantes)
-- **Variantes** : Type (Primary | Default | Danger | Link) × State (Default | Hover | Disabled | Loading) × Size (L h32 | M h25)
-- **Props** : `Label` (texte) · `Show icon` (bool, défaut false) · `Icon` (swap d'icône)
+- **Variantes** : Type (Primary | Default | Danger | Link) × State (Default | Hover | **Focus** | Disabled) × Size (**L h32 pad 15** | **M h24 pad 7**)
+- **Props** : `Label` (texte) · `Show icon` (bool, défaut false) · `Icon` (swap d'icône, toujours à gauche du libellé)
 - **Défaut** : Type=Primary, State=Default, Size=L (13:6)
+- **Les deux tailles portent le même texte**, Body/Medium 12/20. Seuls la hauteur et le padding changent. (La maquette a longtemps donné M en h25 avec un texte de 10 : c'était faux, la valeur mesurée dans le DOM est h24.)
+- **Correspondance code** (catégorie THÉMÉ, c'est le Button d'AntD) : Primary → `type="primary"` · Default → aucun `type` · Link → `type="link"` · **Danger → la prop booléenne `danger`, pas un type** · Size=L → défaut (`middle`) · Size=M → `size="small"`.
+- **`State=Focus`** = l'outline de `:focus-visible` : liseré `focus/ring` de 3, décalé de 1 vers l'extérieur. Rendu par un rectangle enfant `focus-ring` en position absolue, bordure OUTSIDE — une ombre portée d'étalement ne se rend pas à l'export.
+- ⚠ **Ne pas confondre avec le halo du clic.** AntD dessine en plus une onde (`.ant-wave`) : un anneau `primary` qui part du bord, s'étend de 6 et s'efface en 2 s. C'est une **animation**, pas un état : elle ne se maquette pas, elle se spécifie. Le liseré, lui, persiste tant que le bouton a le focus.
+- **Pas d'état Loading.** Ce qui portait ce nom n'était qu'un bouton à icône gauche : les instances ont été migrées vers `State=Default` + `Show icon`. Pour une action longue, désactiver le bouton et annoncer l'attente à côté.
 - **Règles** : un seul Primary par zone d'action ; Primary = dernière action à droite ; Danger jamais à la place du Primary par défaut ; label = verbe d'action, jamais « OK » seul.
 
 ## Link — Set 567:140 (12 variantes)

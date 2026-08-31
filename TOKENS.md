@@ -32,7 +32,7 @@ au moment de la rédaction — la revérifier avant d'ouvrir les tickets, la pro
 
 # 1. Couleurs
 
-## Primitives — 46 valeurs, source unique
+## Primitives — 47 valeurs, source unique
 
 À implémenter en variables CSS ou en objet de thème unique (`--mics-blue-900`). Les alphas sont
 portés par `black/*` et `white/*`, pas recalculés à l'usage.
@@ -47,6 +47,7 @@ portés par `black/*` et `white/*`, pas recalculés à l'usage.
 |  |  |
 | `blue/100` | `#e8f7fc` |
 | `blue/200` | `#c5efff` |
+| `blue/250` | `#7ae7ff` |
 | `blue/300` | `#6ed5f7` |
 | `blue/500` | `#4087bf` |
 | `blue/700` | `#005e91` |
@@ -118,6 +119,7 @@ portés par `black/*` et `white/*`, pas recalculés à l'usage.
 | `bg/scrim` | black/45 | masque AntD par défaut rgba(0,0,0,.45) — implicite | À TOKENISER |
 | `border/default` | grey/400 `#d3dbe1` | `token.colorBorderSecondary` (mapping croisé, écart 2) | **ÉCART** |
 | `border/input` | grey/300 `#e0e1e1` | `token.colorBorder` (mapping croisé, écart 2) | **ÉCART** |
+| `focus/ring` | blue/250 `#7ae7ff` | outline de `:focus-visible` — `colorPrimaryBorder` dérivé par AntD, jamais déclaré | À DÉCLARER |
 | `link/default` | blue/900 `#003056` | `colorLink` jamais défini en v5 — hérite du primary | À TOKENISER |
 | `link/hover` | blue/700 `#005e91` | — | NOUVEAU |
 | `link/on-dark` | blue/200 `#c5efff` | en dur dans les styles (breadcrumb sur navy) | À TOKENISER |
@@ -159,7 +161,7 @@ portés par `black/*` et `white/*`, pas recalculés à l'usage.
 
 | | Charge | Tâche |
 |---|---|---|
-| **T1** | M | Créer le module de primitives : 46 variables uniques (`--mics-blue-900`…), nomenclature couleur seule, alphas dans `black/*` et `white/*`. Aucune valeur dupliquée ailleurs. |
+| **T1** | M | Créer le module de primitives : 47 variables uniques (`--mics-blue-900`…), nomenclature couleur seule, alphas dans `black/*` et `white/*`. Aucune valeur dupliquée ailleurs. |
 | **T2** | M | Recâbler `defaultTheme.ts` sur les primitives selon le tableau de correspondance. Plus aucun hexadécimal littéral dans le thème. |
 | **T3** | S | Ajouter les tokens absents du code : `bg/subtle`, `bg/selected`, `bg/scrim`, `link/default`, `link/hover`, `link/on-dark`, `text/on-dark`, `text/on-dark-disabled`, `text/darker`. |
 | **T4** | M | Résorber les écarts 2, 5, 6, 7 et 8. |
@@ -188,7 +190,7 @@ tokenisés (en LESS) ; l'audit initial comptait **478 `px` bruts** dans les `.le
 
 ## Espacements
 
-Échelle : **2 · 4 · 6 · 8 · 10 · 12 · 15 · 16 · 20 · 24 · 35 · 60 · 96**. Aucune échelle
+Échelle : **2 · 4 · 6 · 7 · 8 · 10 · 12 · 15 · 16 · 20 · 24 · 35 · 60 · 96**. Aucune échelle
 d'espacement centralisée n'existe en production : tout est à tokeniser. Les cinq alias d'usage
 ci-dessous nomment les cas récurrents.
 
@@ -196,6 +198,7 @@ ci-dessous nomment les cas récurrents.
 |---|---|---|---|
 | `space/form-item-mb` | 24 | LESS `@form-item-margin-bottom` 24 (défaut AntD) | ISO |
 | `space/input-pad-h` | 7 | padding horizontal interne des champs — à expliciter (`Input.paddingInline`) | À DÉCLARER |
+| `space/7` | 7 | padding horizontal des contrôles compacts : bouton taille M et Input. Même valeur que l'alias ci-dessus, sortie dans la rampe générique | À TOKENISER |
 | `space/card-pad` | 20 | padding horizontal des cartes — en dur en production | À TOKENISER |
 | `space/card-pad-v` | 15 | padding vertical des cartes — en dur en production | À TOKENISER |
 | `space/card-title-gap` | 10 | écart titre / contenu de carte — en dur en production | À TOKENISER |
@@ -207,6 +210,7 @@ ci-dessous nomment les cas récurrents.
 | Token maquette | Valeur | Équivalent code | Statut |
 |---|---|---|---|
 | `size/control` | 32 | `controlHeight` AntD (défaut implicite 32) — à déclarer explicitement | À DÉCLARER |
+| `size/control-sm` | 24 | `controlHeightSM` — AntD le dérivait de `controlHeight × 0,75` ; mesuré à 24 dans le DOM | À DÉCLARER |
 | `size/header` | 40 | `Layout.headerHeight` 40 | ISO |
 | `size/input-base` | 40 | LESS `@input-height-base` 40px | ISO |
 | `size/input-lg` | 32 | LESS `@input-height-lg` 32px — ⚠ « lg » < « base », nommage hérité incohérent (écart 1) | **ÉCART** |
@@ -226,6 +230,7 @@ ci-dessous nomment les cas récurrents.
 | Token maquette | Valeur | Équivalent code | Statut |
 |---|---|---|---|
 | `border/width` | 1 | `lineWidth` AntD (défaut 1) ; override `Menu.lineWidth 0` conservé | ISO |
+| `border/focus-width` | 3 | épaisseur de l'outline `:focus-visible` (3 px, offset 1 px) | À DÉCLARER |
 | `motion/fast-ms` | 100 | LESS animations .1s | ISO |
 | `motion/base-ms` | 200 | LESS animations .2s | ISO |
 | `motion/slow-ms` | 300 | LESS animations .3s | ISO |
@@ -282,7 +287,7 @@ une fois et se copie — il n'y a pas de dépendance à Vite ni au reste du dép
 
 Deux réserves avant de le reprendre tel quel :
 
-- Il couvre ce dont le prototype avait besoin, **pas les 123 variables** : la collection Scale porte
+- Il couvre ce dont le prototype avait besoin, **pas les 128 variables** : la collection Scale porte
   des alias legacy (`space/card-*`, `size/input-*`) que le prototype n'utilise pas.
 - **`zModal` y vaut 1200, contre 1000 dans la maquette et en production.** C'est un écart assumé du
   prototype : à 1000, un overlay passerait sous les dropdowns (1050) et les tooltips (1060) d'AntD,

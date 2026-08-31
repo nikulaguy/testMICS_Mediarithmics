@@ -126,6 +126,12 @@ export const scale = {
   radiusSm: 2,
   radiusCard: 6,
   sizeControl: 32,
+  /**
+   * Taille M des contrôles. AntD la dérive de `controlHeight` (32 × 0,75) ; on la
+   * déclare pour que le rendu ne dépende plus d'un calcul interne de la librairie.
+   * Mesurée à 24 dans le DOM, la maquette annonçait 25 à tort.
+   */
+  sizeControlSm: 24,
   sizeHeader: 40,
   sizeRow: 44,
   /** Hauteur du Tag. Relevée sur le composant Figma, qui fait 26 et non 24. */
@@ -192,6 +198,7 @@ export const micsTheme: ThemeConfig = {
     borderRadius: scale.radiusBase,
     borderRadiusLG: scale.radiusCard,
     controlHeight: scale.sizeControl,
+    controlHeightSM: scale.sizeControlSm,
   },
   components: {
     Button: { fontSizeLG: 14, primaryShadow: '0 2px 0 rgba(0, 48, 86, 0.1)' },
