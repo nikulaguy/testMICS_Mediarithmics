@@ -29,7 +29,7 @@ Voir le [README principal](../README.md).
 **Mediarithmics - MICS DS — Rebuild**
 → https://www.figma.com/design/OnvlU9azeM4rffD83XnEGI/
 
-Relevé au 7 août 2026 : **18 pages (dont 2 séparateurs), 46 sets de variantes, 449 composants,
+Relevé au 7 août 2026 : **19 pages (dont 2 séparateurs), 46 sets de variantes, 449 composants,
 123 variables, 12 styles de texte.**
 
 | Section | Pages |
@@ -38,12 +38,16 @@ Relevé au 7 août 2026 : **18 pages (dont 2 séparateurs), 46 sets de variantes
 | Fondations | 🎨 Foundations · 🖼 Icons · 🎼 Layout |
 | Composants | 📊 Charts · 🧭 Navigation & Shell · 🔘 Button · 📝 Form Inputs · 🏷 Data Display · 💬 Feedback & Overlays · 📊 Table & Lists |
 | Produit | 🖥 Screens · 📋 Audit / Reco |
-| Travail | 🤖 Test Skills |
+| Travail | 🤖 Test Skills · 💨 Aspiration |
 
 Commencez par **📋 Sommaire** : chaque composant et chaque écran y a une carte cliquable. C'est la
 page qui doit rester à jour, toute création y ajoute la sienne.
 
 ### Accès
+
+Le fichier vit dans un **projet connecté** (*connected project*) entre Frontguys et mediarithmics :
+les deux organisations éditent le **même** fichier, chacune avec ses propres sièges, jusqu'à la
+livraison. Il n'y a donc rien à transmettre ni à resynchroniser pendant la mission.
 
 Lecture : le lien ci-dessus suffit. **Édition** : il faut un siège payant Figma (Professional,
 Organization ou Enterprise) et la police **Circular** (LLCircularWeb) disponible pour votre compte,
@@ -70,23 +74,31 @@ script est en lecture seule et signale les variables sans cible de code et les a
 La table de correspondance composant Figma → composant React est dans
 [`ARCHITECTURE.md`](../ARCHITECTURE.md), section 3.
 
-## Transmettre le fichier
+## Travailler à deux organisations, et transmettre
+
+Le projet connecté est en place : **le fichier est édité des deux côtés en même temps**. Trois
+conséquences pratiques.
+
+- **On n'est jamais seul dans le fichier.** Relever un identifiant de nœud, une largeur ou un
+  nombre de variantes, puis produire une heure plus tard, c'est risquer de travailler sur un état
+  périmé. Relire juste avant d'écrire, et se méfier des relevés chiffrés de ce README, qui datent
+  de leur dernière vérification.
+- **Les skills deviennent le contrat commun.** Ils sont ce qui empêche deux équipes de diverger sur
+  les mêmes composants. Une règle apprise en revue et non écrite se perd deux fois plus vite à
+  deux.
+- **Chacun paie ses sièges**, et c'est le plan de l'organisation **hôte** qui détermine les
+  fonctionnalités disponibles dans le projet connecté.
+
+À la livraison, le fichier reste chez l'hôte du projet connecté. S'il doit changer de mains, la
+voie propre est de **partager le lien** et de laisser le destinataire faire **Dupliquer dans ses
+brouillons** : la copie est intégrale, elle emporte variables, composants et bibliothèques liées.
 
 **Le dépôt ne versionne plus de `.fig`.** Un export local est une photographie : il périme dès la
 première modification en ligne, git ne sait ni le lire ni le fusionner, et chaque remplacement
-ajoute quatre mégaoctets à l'historique. Il ne remplaçait pas non plus
+ajoutait quatre mégaoctets à l'historique. Il ne remplaçait pas non plus
 [`variables.json`](variables.json), qui lui se relit en revue et se compare d'une version à
-l'autre. La source de vérité est le lien ci-dessus, et elle l'a toujours été.
-
-**Pour donner le fichier à quelqu'un**, dans l'ordre de préférence :
-
-1. **Partager le lien** et le laisser faire **Dupliquer dans ses brouillons**. La copie est
-   intégrale : variables, composants, bibliothèques liées.
-2. **Un dossier connecté** (*connected folder*), si les deux organisations ont un plan payant — pas
-   nécessairement le même. Chacune paie ses propres sièges, et c'est le plan de **l'hôte** qui
-   détermine les fonctionnalités disponibles dans le dossier.
-3. **Un export `.fig`** en dernier recours, quand l'accès Figma n'est pas possible. Lire alors la
-   section suivante avant d'exporter.
+l'autre. L'export `.fig` reste un dernier recours, quand l'accès Figma n'est pas possible : lire
+alors la section suivante avant d'exporter.
 
 ### « Some content didn't import, could be due to restricted access »
 

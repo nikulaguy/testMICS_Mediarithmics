@@ -68,8 +68,9 @@ tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **constru
 ## Figma — la moitié amont
 
 Tout ce qui concerne la conception est dans **[`figma/`](figma/)** : le fichier de design system
-(18 pages, 449 composants, 123 variables) et les **23 skills** de production, plus un pack de
-14 références RGAA. Les skills sont les règles du DS écrites dans un format que Claude Code charge
+(19 pages, 449 composants, 123 variables) et les **23 skills** de production, plus un pack de
+14 références RGAA. Le fichier est dans un **projet connecté** entre Frontguys et mediarithmics :
+les deux organisations l'éditent en même temps, chacune avec ses propres sièges. Les skills sont les règles du DS écrites dans un format que Claude Code charge
 automatiquement : règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma,
 accessibilité.
 
