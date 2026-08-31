@@ -50,6 +50,7 @@ Produire la doc avec **/md-component-doc** (description native + frame 2 zones) 
 
 Frame « {Composant} — Documentation », fond navy `info`, largeur ~1100 :
 1. Titre + chips `Source code` / `Storybook`.
+   Et poser le lien Storybook dans `documentationLinks` du composant lui-même — voir /md-ds-rules.
 2. **`preview`** : le composant **MAÎTRE**, déplacé dans la frame (jamais une instance avec le maître dehors).
 3. **`use case`** (« Exemples d'usage ») dès qu'il y a plusieurs cas réels : un wrapper par cas, instance configurée comme en prod.
 4. Bandeau **① Existant ISO Prod** : Description, Props, Règles d'usage, Accessibilité.

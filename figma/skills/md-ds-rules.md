@@ -68,6 +68,41 @@ Toujours passer par les styles de texte du fichier :
 
 La collection Scale contient aussi des alias legacy (`space/card-pad`, `size/input-*`…) : ne pas les utiliser dans de nouvelles maquettes — toujours les tokens `space/N` génériques.
 
+## Lien Storybook (obligatoire sur tout composant)
+
+Chaque **component set** et chaque **composant hors set** porte le lien de sa page Storybook dans
+`documentationLinks` — le champ « Documentation » que Figma affiche dans le panneau de droite et en
+Dev Mode. C'est le chemin le plus court entre la maquette et le code : un développeur qui inspecte
+un composant arrive sur sa fiche sans avoir à chercher.
+
+Forme du lien :
+
+```
+https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/?path=/docs/<id-de-la-page>
+```
+
+L'`id` se lit dans `storybook-static/index.json` (entrées de type `docs`), jamais deviné : il est
+dérivé du `title` de la story, accents compris (`composants-composés-tabs--docs`).
+
+- Les 185 `icon/*` et `logo/*` pointent tous vers la page **Icon**, les `Table / *` vers le
+  **template Liste** : un composant sans page à lui rejoint celle qui le décrit.
+- **39 composants n'ont pas de page** parce qu'ils ne sont pas développés (Alert, Tooltip,
+  Progress, Spin, les Chart, SearchBar, Selection Card…). Ne pas leur inventer de lien : l'absence
+  se lit, un lien mort ment.
+- À la création d'un composant : poser le lien dans la foulée. À la création d'une page Storybook :
+  poser le lien sur le composant Figma correspondant.
+
+```js
+// Contrôle : quels composants n'ont pas de lien ?
+await figma.loadAllPagesAsync();
+const sans = [];
+for (const page of figma.root.children)
+  for (const n of page.findAll(function (x) {
+    return x.type === 'COMPONENT_SET' || (x.type === 'COMPONENT' && (!x.parent || x.parent.type !== 'COMPONENT_SET'));
+  })) if (!(n.documentationLinks || []).length) sans.push(n.name);
+return sans;
+```
+
 ## Nomenclature (obligatoire, vérifiée au pre-flight)
 
 - Composant : Title Case « Famille / Nom » — ex. `Dropdown / Nav Item`, `Table / Header Row`.
