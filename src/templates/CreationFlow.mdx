@@ -1,0 +1,60 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as C from './CreationFlow.stories';
+
+<Meta of={C} />
+
+# Parcours de création de ressource
+
+Coque du **tunnel plein écran** qui recouvre l'application pour créer une ressource
+(segment, dataset, campagne, feed). Template §12 de la maquette — section de référence :
+« Test — Parcours création de segment » du fichier Figma, 10 écrans.
+
+Implémentation vivante : le bouton **New segment** de la liste des segments ouvre le
+parcours complet (`src/pages/SegmentCreation.tsx`), choix du type → 3 étapes → retour
+à la liste avec l'Alert de succès.
+
+## Anatomie
+
+<Canvas of={C.Coque} />
+
+1. **TopBar réduite** : le nom de l'organisation, sans le chevron d'en changer — la
+   ressource se rattache à l'organisation d'où l'on est parti — ni recherche ni actions.
+2. **Actionbar `Type=Creation`** : fond `info`, titre de la ressource (`h1`) et, une fois
+   le type choisi, sous-titre « Segment type : … ». Pas de fil d'Ariane : le tunnel est
+   hors navigation. La croix est la seule sortie.
+3. **Contenu** : centré sur 1026 (la colonne de la maquette), seule zone défilante.
+4. **Pied sticky** : collé en bas de la fenêtre, il ne défile jamais — chercher « Next »
+   en bas d'une page longue fait croire l'étape bloquée.
+
+<Canvas of={C.Actionbar} />
+
+## Les règles du tunnel
+
+Trois temps, toujours dans cet ordre : **choix du type → tunnel d'étapes → confirmation**.
+
+- **Le choix du type est hors tunnel** : il n'est jamais un jalon du stepper. Le clic
+  sur une rangée vaut choix, pas de bouton de validation. Un type indisponible se grise,
+  il ne disparaît pas.
+- **Stepper horizontal** dès 2 étapes (jamais pour une seule) ; au-delà de 4, revoir le
+  découpage.
+- **« Next » présenté désactivé, jamais `disabled`** tant qu'un champ obligatoire
+  manque : `aria-disabled="true"`, le bouton reste focusable et cliquable — au clic, les
+  champs manquants passent en erreur et le focus va au premier (RGAA 7.1, 11.10).
+- **Étape facultative** : tag « Optional » à droite du titre **et** « Skip this step »
+  dans le pied. Sauter = valider vide. Jamais la dernière étape.
+- **Dernière étape** : le primaire nomme l'action (« Create segment »), jamais « Next ».
+- **Sortir en cours de route** : dès qu'une saisie existe, la croix (et Échap) ouvre la
+  modale d'abandon — « Continue editing » secondaire, « Leave without saving » primaire
+  danger. Sur le choix du type, rien n'est saisi : la croix ferme directement.
+- **Sélection d'éléments dans une étape** (Processing Activities) : drawer avec
+  recherche + header-row de colonnes + rangées à cocher ; la liste des éléments choisis
+  reprend le même header-row ; **supprimer passe par une modale de confirmation**,
+  jamais un popconfirm ancré.
+- **Confirmation sans donnée à emporter** : Alert de succès en tête de liste, entre
+  l'Actionbar et le contenu. Retour sur la liste d'origine, jamais sur le détail.
+
+## Échap et surfaces empilées
+
+La coque écoute Échap pour la sortie, mais s'efface dès qu'une surface est ouverte
+par-dessus (drawer, modale) : la prop `overlayOpen` le lui dit, sinon une même touche
+fermerait la modale **et** demanderait la sortie du tunnel.

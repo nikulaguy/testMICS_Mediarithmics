@@ -305,6 +305,8 @@ se rattache à celle d'où l'on est parti. Le header du tunnel est l'**Actionbar
 pas de fil d'Ariane, le tunnel est hors navigation) et sa croix est la seule sortie.
 Gabarit de toute création (segment, dataset, campagne, feed). Référence : page 📋 Audit, section
 « Parcours générique — Création de ressource » — 12 écrans, une fiche par écran + cadre général.
+Côté code : coque `CreationFlow` (src/templates) + parcours vivant `SegmentCreation`, ouvert par
+« New segment » sur la liste des segments.
 
 **Trois temps, toujours dans cet ordre** : choix du type → tunnel d'étapes → confirmation.
 

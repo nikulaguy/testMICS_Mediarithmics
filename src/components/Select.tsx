@@ -24,6 +24,12 @@ interface Props extends FieldProps {
   loading?: boolean;
   /** Recherche dans les options. À activer au-delà d'une dizaine d'entrées. */
   showSearch?: boolean;
+  /**
+   * Nom accessible, pour un select sans `label` visible — l'unité d'un champ
+   * composé (« 1 | Days »), par exemple. Même règle que sur l'Input : un
+   * placeholder ne remplace pas un intitulé (RGAA 11.1).
+   */
+  'aria-label'?: string;
 }
 
 /**
@@ -50,12 +56,15 @@ export function Select({
   allowClear,
   loading,
   showSearch,
+  'aria-label': ariaLabel,
 }: Props) {
   return (
     <Field label={label} message={message} state={state} required={required} width={width}>
       {(control) => (
         <AntSelect
           id={control.id}
+          // Le label visible prime : le doubler d'un aria-label le remplacerait.
+          aria-label={label ? undefined : ariaLabel}
           aria-describedby={control['aria-describedby']}
           aria-invalid={control['aria-invalid']}
           disabled={control.disabled}

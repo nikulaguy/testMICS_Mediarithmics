@@ -14,7 +14,7 @@
 // Règle : un besoin = UNE entrée. Un composant AntD dont le DS a sa propre version
 // (Badge → CountBadge, Tag → Tag, Empty → EmptyState) n'est PAS réexporté ici :
 // deux portes d'entrée pour le même besoin, et les écrans finissent par diverger.
-export { Button, Checkbox, Radio, Table, DatePicker, Tooltip, Steps } from 'antd';
+export { Alert, Button, Checkbox, Radio, Table, DatePicker, Tooltip, Steps } from 'antd';
 export type { TableColumnsType } from 'antd';
 
 // --- ENVELOPPÉS -------------------------------------------------------------
@@ -77,6 +77,7 @@ export { SideMenuItem } from './components/SideMenuItem';
 // Coques d'écran : elles fixent l'ordre des blocs et les espacements, jamais le
 // contenu. Une page les remplit, elle ne les recompose pas.
 export { ListTemplate } from './templates/ListTemplate';
+export { CreationFlow, ActionbarCreation } from './templates/CreationFlow';
 
 // --- TOKENS -----------------------------------------------------------------
 export { micsTheme, primitives, semantic, scale, elevation, typography } from './theme/micsTheme';

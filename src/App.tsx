@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ConfigProvider, App as AntApp } from 'antd';
+import { Alert } from './ui';
 import { micsTheme, scale, semantic } from './theme/micsTheme';
 import { AppShell, Button, Icon, TabBar, type Crumb } from './ui';
 import { Boards } from './pages/Boards';
@@ -9,6 +10,7 @@ import { SegmentsList } from './pages/SegmentsList';
 import { UsageOverview } from './pages/UsageOverview';
 import { AlertsPage, ALERT_SECTIONS } from './pages/AlertsPage';
 import { SegmentDetail } from './pages/SegmentDetail';
+import { SegmentCreation } from './pages/SegmentCreation';
 import { SegmentDetailActions } from './pages/SegmentDetailActions';
 import { SEGMENTS, type Segment } from './data/segments';
 
@@ -45,24 +47,29 @@ interface Route {
   tab: Tab;
   board: string;
   segmentId: string | null;
+  /** Parcours de création ouvert (#/segments/new). */
+  creating: boolean;
 }
 
 function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   const section = entryFromSlug(parts[0] ?? '') ?? 'Boards';
   if (section === 'Segments') {
-    if (parts[1] === 's' && parts[2]) return { section, tab: 'segments', board: 'activities', segmentId: parts[2] };
+    if (parts[1] === 'new') return { section, tab: 'segments', board: 'activities', segmentId: null, creating: true };
+    if (parts[1] === 's' && parts[2])
+      return { section, tab: 'segments', board: 'activities', segmentId: parts[2], creating: false };
     const tab = (['usage', 'alerts'].includes(parts[1]) ? parts[1] : 'segments') as Tab;
-    return { section, tab, board: 'activities', segmentId: null };
+    return { section, tab, board: 'activities', segmentId: null, creating: false };
   }
   if (section === 'Boards') {
-    return { section, tab: 'segments', board: parts[1] || 'activities', segmentId: null };
+    return { section, tab: 'segments', board: parts[1] || 'activities', segmentId: null, creating: false };
   }
-  return { section, tab: 'segments', board: 'activities', segmentId: null };
+  return { section, tab: 'segments', board: 'activities', segmentId: null, creating: false };
 }
 
 function toHash(r: Route) {
   if (r.section === 'Segments') {
+    if (r.creating) return '#/segments/new';
     if (r.segmentId) return `#/segments/s/${r.segmentId}`;
     return r.tab === 'segments' ? '#/segments' : `#/segments/${r.tab}`;
   }
@@ -92,6 +99,12 @@ export default function App() {
     initial.segmentId ? SEGMENTS.find((s) => s.id === initial.segmentId) ?? null : null,
   );
   const [searchOpen, setSearchOpen] = useState(false);
+  const [creating, setCreating] = useState(initial.creating);
+  /*
+    Confirmation SANS donnée à emporter (§12) : une Alert de succès en tête de
+    liste, entre l'Actionbar et le contenu — pas de Toast dans le produit.
+  */
+  const [createdAlert, setCreatedAlert] = useState(false);
   /*
     Les alertes vivent ici et non dans AlertsPage : la pastille de l'onglet compte les
     mêmes lignes que les cartes. En la laissant en dur, fermer la dernière alerte
@@ -113,9 +126,9 @@ export default function App() {
     remonterait plus nulle part.
   */
   useEffect(() => {
-    const next = toHash({ section, tab, board, segmentId: detail?.id ?? null });
+    const next = toHash({ section, tab, board, segmentId: detail?.id ?? null, creating });
     if (window.location.hash !== next) window.history.replaceState(null, '', next);
-  }, [section, tab, board, detail]);
+  }, [section, tab, board, detail, creating]);
 
   // Retour / Suivant du navigateur : l'état suit l'URL, dans l'autre sens.
   useEffect(() => {
@@ -125,6 +138,7 @@ export default function App() {
       setTab(r.tab);
       setBoard(r.board);
       setDetail(r.segmentId ? SEGMENTS.find((s) => s.id === r.segmentId) ?? null : null);
+      setCreating(r.creating);
     };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
@@ -189,7 +203,7 @@ export default function App() {
         contient vraiment.
       */}
       <Button icon={<Icon name="download" size={14} />}>Export</Button>
-      <Button type="primary" icon={<Icon name="plus" size={14} />}>
+      <Button type="primary" icon={<Icon name="plus" size={14} />} onClick={() => setCreating(true)}>
         New segment
       </Button>
     </>
@@ -225,6 +239,16 @@ export default function App() {
             <SegmentDetail segment={detail} />
           ) : (
             <>
+              {createdAlert && (
+                <Alert
+                  type="success"
+                  showIcon
+                  closable
+                  message="Audience segment created"
+                  onClose={() => setCreatedAlert(false)}
+                  style={{ marginBottom: scale.space16 }}
+                />
+              )}
               <div style={{ marginBottom: scale.space16 }}>
                 <TabBar
                   active={tab}
@@ -242,6 +266,18 @@ export default function App() {
             </>
           )}
         </AppShell>
+        {creating && (
+          <SegmentCreation
+            onClose={() => setCreating(false)}
+            onCreated={() => {
+              setCreating(false);
+              setSection('Segments');
+              setTab('segments');
+              setDetail(null);
+              setCreatedAlert(true);
+            }}
+          />
+        )}
       </AntApp>
     </ConfigProvider>
   );
