@@ -102,9 +102,17 @@ export default function App() {
   const [creating, setCreating] = useState(initial.creating);
   /*
     Confirmation SANS donnée à emporter (§12) : une Alert de succès en tête de
-    liste, entre l'Actionbar et le contenu — pas de Toast dans le produit.
+    liste, entre l'Actionbar et le contenu — pas de Toast dans le produit. Elle
+    part d'elle-même au bout de 5 s, en fondu (200 ms, la durée « apparition de
+    surface » du DS) — la croix reste là pour qui veut la fermer avant.
   */
-  const [createdAlert, setCreatedAlert] = useState(false);
+  const [createdAlert, setCreatedAlert] = useState<'visible' | 'leaving' | null>(null);
+
+  useEffect(() => {
+    if (createdAlert !== 'visible') return;
+    const t = setTimeout(() => setCreatedAlert('leaving'), 5000);
+    return () => clearTimeout(t);
+  }, [createdAlert]);
   /*
     Les alertes vivent ici et non dans AlertsPage : la pastille de l'onglet compte les
     mêmes lignes que les cartes. En la laissant en dur, fermer la dernière alerte
@@ -240,14 +248,24 @@ export default function App() {
           ) : (
             <>
               {createdAlert && (
-                <Alert
-                  type="success"
-                  showIcon
-                  closable
-                  message="Audience segment created"
-                  onClose={() => setCreatedAlert(false)}
-                  style={{ marginBottom: scale.space16 }}
-                />
+                <div
+                  style={{
+                    marginBottom: scale.space16,
+                    opacity: createdAlert === 'leaving' ? 0 : 1,
+                    transition: 'opacity 200ms ease-out',
+                  }}
+                  onTransitionEnd={() => {
+                    if (createdAlert === 'leaving') setCreatedAlert(null);
+                  }}
+                >
+                  <Alert
+                    type="success"
+                    showIcon
+                    closable
+                    message="Audience segment created"
+                    onClose={() => setCreatedAlert(null)}
+                  />
+                </div>
               )}
               <div style={{ marginBottom: scale.space16 }}>
                 <TabBar
@@ -274,7 +292,7 @@ export default function App() {
               setSection('Segments');
               setTab('segments');
               setDetail(null);
-              setCreatedAlert(true);
+              setCreatedAlert('visible');
             }}
           />
         )}

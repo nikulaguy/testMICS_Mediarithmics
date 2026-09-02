@@ -26,7 +26,37 @@ import { PROCESSING_ACTIVITIES, SEGMENT_TYPES, type ProcessingActivity } from '.
   écrans 2 à 9 — l'écran 1 est la liste de départ, le 10 la confirmation.
 */
 
-const STEP_ITEMS = [{ title: 'General Information' }, { title: 'Processing Activities' }, { title: 'User Query' }];
+const STEP_TITLES = ['General Information', 'Processing Activities', 'User Query'];
+
+/**
+ * Pastille d'étape validée : coche blanche dans un cercle plein primary, comme la
+ * maquette. AntD ne remplit pas la pastille « finish » (cercle blanc bordé, coche
+ * bleue) : on lui passe l'icône complète. Le ✓ est un glyphe texte, comme dans le
+ * composant Figma.
+ */
+function StepDot({ state, children }: { state: 'finished' | 'waiting'; children: ReactNode }) {
+  const finished = state === 'finished';
+  return (
+    <span
+      aria-hidden
+      style={{
+        width: 24,
+        height: 24,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '50%',
+        background: finished ? semantic.primary : semantic.bgContainer,
+        border: finished ? undefined : `1px solid ${semantic.borderInput}`,
+        color: finished ? semantic.textOnDark : semantic.textLighter,
+        fontSize: 12,
+        lineHeight: 1,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
 
 /** En-tête d'étape : titre, tag Optional le cas échéant, phrase d'explication. */
 function StepHead({ title, optional, description }: { title: string; optional?: boolean; description: string }) {
@@ -287,7 +317,7 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
         description="Select the Processing Activities on behalf of which you are creating this audience segment. mediarithmics platform will automatically take the related User Choices into account to include or exclude them from the segment."
       />
       {selected.length === 0 ? (
-        <Card style={{ minHeight: 420 }}>
+        <Card style={{ padding: scale.space24, gap: scale.space24, minHeight: 420 }}>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: scale.space12, padding: scale.space35, textAlign: 'center' }}>
             <Icon name="users" size={44} color={semantic.textLightest} />
             <p style={{ margin: 0, ...typography.headline4, color: semantic.textLighter }}>
@@ -297,7 +327,7 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
           </div>
         </Card>
       ) : (
-        <Card actions={addButton} style={{ minHeight: 420 }}>
+        <Card actions={addButton} style={{ padding: scale.space24, gap: scale.space24, minHeight: 420 }}>
           <div>
             <PaHeaderRow trailing />
             {selected.map((p) => (
@@ -326,7 +356,7 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
   const step3 = (
     <>
       <StepHead title="User Query" description="Select the user you want to add to your segment." />
-      <Card style={{ minHeight: 420 }}>
+      <Card style={{ padding: scale.space24, gap: scale.space24, minHeight: 420 }}>
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Button onClick={() => setEditQueryOpen(true)}>Edit Query</Button>
         </div>
@@ -374,7 +404,17 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
       footer={footer}
     >
       {phase !== 'type' && (
-        <Steps direction="horizontal" current={phase} items={STEP_ITEMS} style={{ paddingBlock: scale.space8 }} />
+        <Steps
+          direction="horizontal"
+          current={phase}
+          items={STEP_TITLES.map((title, i) => ({
+            title,
+            // Validée = coche blanche sur cercle plein ; à venir = cercle vide
+            // bordé, comme la maquette. L'étape courante garde le rendu AntD
+            // (cercle plein + numéro blanc), déjà conforme.
+            icon: i < phase ? <StepDot state="finished">✓</StepDot> : i > phase ? <StepDot state="waiting">{i + 1}</StepDot> : undefined,
+          }))}
+        />
       )}
       {phase === 'type' && typeChoice}
       {phase === 0 && step1}

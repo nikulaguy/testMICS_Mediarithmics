@@ -51,7 +51,12 @@ Trois temps, toujours dans cet ordre : **choix du type → tunnel d'étapes → 
   reprend le même header-row ; **supprimer passe par une modale de confirmation**,
   jamais un popconfirm ancré.
 - **Confirmation sans donnée à emporter** : Alert de succès en tête de liste, entre
-  l'Actionbar et le contenu. Retour sur la liste d'origine, jamais sur le détail.
+  l'Actionbar et le contenu. Retour sur la liste d'origine, jamais sur le détail. La
+  bannière disparaît d'elle-même au bout de 5 s, en fondu (200 ms) ; la croix reste
+  disponible pour la fermer avant.
+- **Stepper** : pastilles de 24, glyphe 12 (thème `Steps` de `micsTheme`). Validée =
+  coche blanche sur cercle plein primary, courante = numéro blanc sur cercle plein,
+  à venir = numéro gris sur cercle vide bordé — jamais la couleur seule.
 
 ## Échap et surfaces empilées
 

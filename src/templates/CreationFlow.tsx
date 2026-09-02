@@ -59,7 +59,8 @@ export function ActionbarCreation({
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space8, minWidth: 0 }}>
-        <h1 style={{ margin: 0, ...typography.headline, color: 'inherit' }}>{title}</h1>
+        {/* Headline 3 (20/24), relevé sur le variant Figma — pas Headline 24. */}
+        <h1 style={{ margin: 0, ...typography.headline3, color: 'inherit' }}>{title}</h1>
         {subtitle && <span style={{ ...typography.body, color: 'inherit' }}>{subtitle}</span>}
       </div>
       <button
@@ -155,7 +156,9 @@ export function CreationFlow({ title, subtitle, orgName = 'mediarithmics - produ
             alignItems: 'center',
             justifyContent: 'flex-end',
             gap: scale.space8,
-            padding: `10px ${scale.space16}px`,
+            // 35 horizontal = la marge de page : les actions s'alignent sur la croix
+            // de l'Actionbar au-dessus, pas sur un retrait qui n'existe qu'ici.
+            padding: `10px ${scale.space35}px`,
             background: semantic.bgWindow,
             borderTop: `1px solid ${semantic.borderDefault}`,
           }}

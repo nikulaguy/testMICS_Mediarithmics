@@ -395,7 +395,8 @@ test 805:36419).
   est terminé). Un seul bouton « I understand » ; une Alert d'info rappelle que la donnée reste
   récupérable depuis la ressource.
 - **Sans donnée** → `Alert Type=Success` en tête de liste, entre Actionbar et contenu. Pas de
-  Toast dans le produit : un message transitoire se rend avec Alert.
+  Toast dans le produit : un message transitoire se rend avec Alert. Elle disparaît d'elle-même
+  au bout de **5 s, en fondu** (200 ms) ; la croix reste disponible pour la fermer avant.
 - Jamais les deux. Retour sur la **liste d'origine**, jamais sur le détail de la ressource créée.
 
 ⚠ Le stepper horizontal et le bloc de code ne sont **pas componentés** dans le fichier — passer

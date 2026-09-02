@@ -231,6 +231,10 @@ export const micsTheme: ThemeConfig = {
       separatorColor: semantic.textLighter,
     },
     Tag: { defaultBg: semantic.bgSubtle, defaultColor: semantic.textNormal },
+    // Stepper du parcours de création : pastilles 24 et glyphe 12, relevés sur la
+    // maquette (stepper du template §12). Les 32 par défaut d'AntD surdimensionnent
+    // la rangée par rapport au reste de l'écran.
+    Steps: { iconSize: 24, iconFontSize: 12 },
     Pagination: { borderRadius: scale.radiusBase },
     Dropdown: { borderRadiusLG: scale.radiusBase },
   },
