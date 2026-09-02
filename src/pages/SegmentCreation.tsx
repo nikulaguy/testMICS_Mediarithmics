@@ -28,27 +28,34 @@ import { PROCESSING_ACTIVITIES, SEGMENT_TYPES, type ProcessingActivity } from '.
 
 const STEP_TITLES = ['General Information', 'Processing Activities', 'User Query'];
 
+/*
+  Les tooltips du tunnel se rendent dans leur conteneur, pas dans un portail sur le
+  body : le tunnel (z 1150) passerait au-dessus du z-index global des popups (1060)
+  et les infobulles seraient invisibles.
+*/
+const popupInParent = (trigger: HTMLElement) => trigger.parentElement ?? document.body;
+
 /**
  * Pastille d'étape validée : coche blanche dans un cercle plein primary, comme la
  * maquette. AntD ne remplit pas la pastille « finish » (cercle blanc bordé, coche
  * bleue) : on lui passe l'icône complète. Le ✓ est un glyphe texte, comme dans le
  * composant Figma.
  */
-function StepDot({ state, children }: { state: 'finished' | 'waiting'; children: ReactNode }) {
-  const finished = state === 'finished';
+function StepDot({ state, children }: { state: 'finished' | 'current' | 'waiting'; children: ReactNode }) {
+  const filled = state !== 'waiting';
   return (
     <span
       aria-hidden
       style={{
         width: 24,
         height: 24,
-        display: 'inline-flex',
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '50%',
-        background: finished ? semantic.primary : semantic.bgContainer,
-        border: finished ? undefined : `1px solid ${semantic.borderInput}`,
-        color: finished ? semantic.textOnDark : semantic.textLighter,
+        background: filled ? semantic.primary : semantic.bgContainer,
+        border: filled ? undefined : `1px solid ${semantic.borderInput}`,
+        color: filled ? semantic.textOnDark : semantic.textLighter,
         fontSize: 12,
         lineHeight: 1,
       }}
@@ -79,7 +86,7 @@ function FieldRow({ info, children }: { info: string; children: ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: scale.space16 }}>
       <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
-      <Tooltip title={info}>
+      <Tooltip title={info} getPopupContainer={popupInParent}>
         <span tabIndex={0} aria-label={info} style={{ display: 'inline-flex', paddingTop: 2, outlineOffset: 2 }}>
           <Icon name="info" size={16} color={semantic.info} />
         </span>
@@ -146,7 +153,17 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
   const [abandonOpen, setAbandonOpen] = useState(false);
 
   const overlayOpen = drawerOpen || deleteTarget !== null || editQueryOpen || abandonOpen;
-  const hasData = name.trim() !== '' || description.trim() !== '' || technicalName.trim() !== '' || selected.length > 0;
+  const hasData =
+    name.trim() !== '' ||
+    description.trim() !== '' ||
+    technicalName.trim() !== '' ||
+    selected.length > 0 ||
+    // Les champs avancés partent avec un défaut : c'est l'écart au défaut qui
+    // fait la saisie, pas la valeur elle-même.
+    evaluationPeriod !== '1' ||
+    evaluationUnit !== 'Days' ||
+    !persisted ||
+    paused;
 
   /*
     La croix (et Échap) ne détruit jamais une saisie sans prévenir : dès qu'une
@@ -271,14 +288,21 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
               <FieldRow info="How often the segment is recomputed.">
                 <div style={{ display: 'flex', gap: scale.space8, alignItems: 'flex-end' }}>
                   <div style={{ flex: 1 }}>
-                    <Input label="Evaluation Period" value={evaluationPeriod} onChange={setEvaluationPeriod} />
+                    <Input
+                      label="Evaluation Period"
+                      value={evaluationPeriod}
+                      // Un nombre de jours, de semaines ou de mois : la saisie ne
+                      // laisse passer que des chiffres.
+                      onChange={(v) => setEvaluationPeriod(v.replace(/\D/g, ''))}
+                    />
                   </div>
                   <div style={{ width: 96 }}>
                     <Select
                       aria-label="Evaluation period unit"
                       options={[
                         { value: 'Days', label: 'Days' },
-                        { value: 'Hours', label: 'Hours' },
+                        { value: 'Weeks', label: 'Weeks' },
+                        { value: 'Months', label: 'Months' },
                       ]}
                       value={evaluationUnit}
                       onChange={(v) => setEvaluationUnit(v as string)}
@@ -409,10 +433,19 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
           current={phase}
           items={STEP_TITLES.map((title, i) => ({
             title,
-            // Validée = coche blanche sur cercle plein ; à venir = cercle vide
-            // bordé, comme la maquette. L'étape courante garde le rendu AntD
-            // (cercle plein + numéro blanc), déjà conforme.
-            icon: i < phase ? <StepDot state="finished">✓</StepDot> : i > phase ? <StepDot state="waiting">{i + 1}</StepDot> : undefined,
+            // Les TROIS états passent par la même pastille : mélanger le rendu
+            // AntD (courante) et le custom (les autres) donnait deux géométries,
+            // un titre désaligné et un stepper qui bougeait à chaque étape.
+            // Validée = coche blanche sur cercle plein ; courante = numéro blanc
+            // sur cercle plein ; à venir = numéro gris sur cercle vide bordé.
+            icon:
+              i < phase ? (
+                <StepDot state="finished">✓</StepDot>
+              ) : i === phase ? (
+                <StepDot state="current">{i + 1}</StepDot>
+              ) : (
+                <StepDot state="waiting">{i + 1}</StepDot>
+              ),
           }))}
         />
       )}

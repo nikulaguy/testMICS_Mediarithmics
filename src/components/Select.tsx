@@ -79,6 +79,12 @@ export function Select({
           showSearch={showSearch}
           optionFilterProp="label"
           style={{ width: '100%' }}
+          // Le panneau se rend DANS le parent du champ, pas dans un portail sur le
+          // body : il partage ainsi le contexte d'empilement de la surface qui
+          // l'héberge (tunnel de création z 1150, Overlay z 1200) au lieu de passer
+          // dessous avec le z-index global des popups (1050). Il suit aussi le
+          // défilement de son conteneur.
+          getPopupContainer={(trigger) => (trigger.parentElement ?? document.body) as HTMLElement}
           // Le panneau fait la largeur du déclencheur : une liste plus large déborde
           // de la colonne du formulaire et se lit comme un élément détaché.
           popupMatchSelectWidth
