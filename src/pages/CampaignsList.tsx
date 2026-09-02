@@ -92,10 +92,11 @@ function FilterTrigger({
 }
 
 /**
- * Filtre par label (Figma 612:344) : une dropdown dont le déclencheur dit
- * toujours « Label ». Au clic il se déploie en champ de recherche — le chevron
- * devient une loupe — et la liste des labels se filtre à la frappe. Chaque label
- * choisi part dans la barre de chips, le champ reste ouvert pour en cumuler.
+ * Filtre par label (Figma 797:25218, ouvert 612:344) : une dropdown dont le
+ * déclencheur dit toujours « Label », loupe comprise — fermé, il annonce déjà
+ * la recherche qu'il ouvre. Au clic il se déploie en champ, et la liste des
+ * labels se filtre à la frappe. Chaque label choisi part dans la barre de
+ * chips, le champ reste ouvert pour en cumuler.
  */
 function LabelFilter({
   selected,
@@ -107,7 +108,7 @@ function LabelFilter({
   const [open, setOpen] = useState(false);
 
   if (!open) {
-    return <FilterTrigger label="Label" icon="chevron-bottom" open={false} onClick={() => setOpen(true)} width={120} />;
+    return <FilterTrigger label="Label" icon="magnifier" open={false} onClick={() => setOpen(true)} width={120} />;
   }
 
   return (
@@ -120,7 +121,8 @@ function LabelFilter({
       width={220}
       placeholder="Search a label"
       ariaLabel="Search a label"
-      // Loupe à droite : le chevron du déclencheur devient la loupe du champ.
+      // Loupe à droite, comme sur le déclencheur : la même icône au même
+      // endroit, seul le champ s'élargit.
       iconSide="right"
     />
   );
