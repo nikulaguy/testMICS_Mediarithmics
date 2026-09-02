@@ -35,19 +35,15 @@ export const CAMPAIGNS: Campaign[] = [
   { id: 'c6', name: 'CAMPAIGN-2_auto_generated', status: 'Active', labels: ['titi'], impressions: null, clicks: null, spent: null, cpm: null, ctr: null, cpc: null },
 ];
 
-/** Couleur du Badge par statut, alignée sur la maquette (Success / Processing). */
+/**
+ * Couleur du Badge par statut, alignée sur la maquette (Success / Processing).
+ * L'ordre des clés est celui de la dropdown de filtre (écran 797:25218).
+ */
 export const CAMPAIGN_STATUS_TONE: Record<CampaignStatus, 'success' | 'processing' | 'warning'> = {
   Active: 'success',
-  Pending: 'processing',
   Paused: 'warning',
+  Pending: 'processing',
 };
-
-/**
- * Entrée « tous les statuts » du filtre. C'est une valeur à part entière, pas
- * l'absence de valeur : un Select vide ne se remet pas à zéro une fois qu'on a
- * choisi, l'utilisateur reste coincé sur le dernier statut retenu.
- */
-export const CAMPAIGN_STATUS_ALL = 'All status';
 
 /** Statuts filtrables, dérivés de la table des tons : une seule source. */
 export const CAMPAIGN_STATUSES = Object.keys(CAMPAIGN_STATUS_TONE) as CampaignStatus[];
@@ -77,13 +73,15 @@ export const CAMPAIGN_METRIC_COLUMNS = [
  */
 export function applyCampaignFilters(
   rows: Campaign[],
-  { search, labels, status }: { search: string; labels: string[]; status: string | null },
+  { search, labels, statuses }: { search: string; labels: string[]; statuses: string[] },
 ): Campaign[] {
   const q = search.trim().toLowerCase();
   return rows.filter((c) => {
     if (q && !c.name.toLowerCase().includes(q)) return false;
     if (labels.length && !c.labels.some((l) => labels.includes(l))) return false;
-    if (status && status !== CAMPAIGN_STATUS_ALL && c.status !== status) return false;
+    // Statut : multi-sélection. Rien de coché = tous — c'est la dropdown qui le
+    // dit, il n'y a plus d'entrée « All status » à porter dans la liste.
+    if (statuses.length && !statuses.includes(c.status)) return false;
     return true;
   });
 }

@@ -43,10 +43,10 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Les surfaces flottantes d'AntD (calendrier, select, filtre de colonne) sont
+      // Les surfaces flottantes d'AntD (calendrier, select) sont
       // rendues dans un portail attaché au body : un clic dedans n'est PAS un clic
       // en dehors du panneau, sinon choisir une date de début le refermerait.
-      if (target.closest?.('.ant-picker-dropdown, .ant-select-dropdown, .ant-table-filter-dropdown')) return;
+      if (target.closest?.('.ant-picker-dropdown, .ant-select-dropdown')) return;
       if (panelRef.current && !panelRef.current.contains(target)) setPanelOpen(false);
       if (viewRef.current && !viewRef.current.contains(target)) setViewOpen(false);
     };
@@ -116,8 +116,6 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
 
   const rows = useMemo(() => applyFilters(SEGMENTS, filters, search), [filters, search]);
 
-  const typeDimension = DIMENSIONS.find((d) => d.key === 'type')!;
-  const typeFilterActive = (filters.type ?? []).length > 0;
 
   const allColumns: ColumnsType<Segment> = [
     {
@@ -125,29 +123,14 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
       dataIndex: 'type',
       key: 'type',
       width: 150,
-      // Filtre de colonne : même clé d'état que le panneau, donc une seule chip.
-      // Application immédiate, ni OK ni Reset.
-      filterIcon: () => (
-        <Icon name="filter" size={14} color={typeFilterActive ? semantic.primary : semantic.textLighter} />
-      ),
+      // Le filtre de colonne qui vivait ici a été retiré (revue client du
+      // 1er septembre 2026) : il doublait la dimension « Segment type » du
+      // panneau Filters, pour un usage marginal. Une seule porte d'entrée.
       render: (value: string) => (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: scale.space8 }}>
           <Icon name={VALUE_ICONS[value]} size={16} color={semantic.textLighter} />
           {value}
         </span>
-      ),
-      filterDropdown: () => (
-        <div style={{ padding: `${scale.space8}px 0`, minWidth: 200 }}>
-          {typeDimension.values.map((value) => (
-            <DropdownCheckboxItem
-              key={value}
-              label={value}
-              icon={VALUE_ICONS[value]}
-              checked={(filters.type ?? []).includes(value)}
-              onToggle={() => toggleValue('type', value)}
-            />
-          ))}
-        </div>
       ),
     },
     {

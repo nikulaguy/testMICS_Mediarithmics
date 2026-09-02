@@ -19,9 +19,9 @@ Appliquer /md-ds-rules avant toute utilisation. Pour les graphiques : /md-charts
 - **State** : Default (les chips tiennent sur une ligne) | Overflow (lien « +n autres ») | Expanded (toutes les chips, lien « Réduire »).
 - Surface `bg/subtle`, `radius/card`, padding `space/8`, gap `space/12`. Zone chips en FILL, « Clear all filters » en HUG à droite.
 - Les chips sont des instances de **Tag** (`Color=Default`, `Closable` activé) — jamais un rectangle redessiné. La réinitialisation est un **Button `Type=Link` + `icon/broom`**, le même balai que le pied des panneaux de filtres.
-- **Une chip par filtre appliqué**, jamais de regroupement : grouper supprime ce que la barre existe pour montrer. Le libellé nomme la dimension puis la valeur (« Segment type : Campaign +2 »).
-- **Quand la poser** : modèle panneau (bouton Filters unique) → toujours, c'est le seul endroit où l'état est lisible panneau fermé. Modèle exposé (un sélecteur par dimension) → uniquement pour les dimensions que la barre d'outils ne montre plus. Aucun filtre actif → la barre n'existe pas, elle ne réserve pas de hauteur.
-- Une seule barre par écran, quelle que soit l'origine des filtres (cascade, filtre de colonne).
+- **Une chip par filtre appliqué**, jamais de regroupement : grouper supprime ce que la barre existe pour montrer. Le libellé porte la **valeur seule** quand elle se comprend sans sa dimension (« Active », « E commerce » — écran 614:97211) ; il se préfixe de la dimension quand la valeur seule serait ambiguë (« Persistence : Persisted »).
+- **Quand la poser** : modèle panneau (bouton Filters unique) → toujours, c'est le seul endroit où l'état est lisible panneau fermé. Modèle exposé → pour les **multi-sélections** (statut, label), dont le déclencheur ne dit que le nom de la dimension ; jamais pour un filtre à valeur unique lisible dans son sélecteur (période). Aucun filtre actif → la barre n'existe pas, elle ne réserve pas de hauteur.
+- Une seule barre par écran, quelle que soit l'origine des filtres (cascade ou sélecteurs exposés). Le filtre de colonne n'existe plus (revue du 1er septembre 2026).
 - ⚠ Les variantes **Button `Type=Link` `Size=M`** (Default/Hover/Disabled) n'ont pas de nœud `icon`, contrairement à `Size=L`. Prendre `Size=L` dès qu'une icône est nécessaire.
 
 ## Alert — Set 15:55 (4 variantes)

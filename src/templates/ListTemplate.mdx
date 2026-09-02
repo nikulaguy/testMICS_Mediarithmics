@@ -47,6 +47,19 @@ composant `Pagination` renseigné — le nombre de pages dépend du filtrage, qu
 
 <Canvas of={ListStories.AvecFiltresActifs} />
 
+## Exposé ou panneau : la règle des trois dimensions
+
+Décision de la revue client du 1er septembre 2026. Jusqu'à **trois dimensions de filtrage**,
+chaque filtre a son déclencheur dans la barre d'outils (modèle **exposé** — Campaigns : label,
+période, statut). Au-delà, un seul bouton **Filters** ouvre le panneau en cascade (modèle
+**panneau** — Segments). Jamais les deux à la fois, et **plus de filtre dans les en-têtes de
+colonnes** : il doublait une dimension du panneau pour un usage marginal, une dimension a une
+seule porte d'entrée.
+
+Sur le modèle exposé, le déclencheur d'une multi-sélection porte le **nom de la dimension, jamais
+sa valeur** : « Status », « Label », quel que soit l'état. Ce qui est coché se lit dans le panneau
+ouvert et dans la barre de rappel — voir la page ActiveFilterBar.
+
 ## Les deux actions de barre d'outils
 
 Tout écran de liste porte les mêmes deux actions à droite : **Filters** et **Edit view**. Le
@@ -90,8 +103,9 @@ donnerait 1, et le badge contredirait la barre.
 - **L'état vide remplace le tableau, pas la page.** La barre d'outils et les chips restent
   affichées : c'est ce qui permet de comprendre *pourquoi* il n'y a rien. Un écran qui se vide
   entièrement laisse l'utilisateur sans moyen d'annuler ce qu'il vient de faire.
-- **Les chips ne portent que ce que la barre d'outils ne montre plus.** Un filtre lisible dans son
-  sélecteur n'a pas besoin d'une chip ; il en aurait deux représentations concurrentes.
+- **Les chips ne portent que ce que la barre d'outils ne montre plus.** Les multi-sélections y
+  vont toujours ; un filtre à valeur unique lisible dans son sélecteur n'a pas besoin d'une chip,
+  il en aurait deux représentations concurrentes.
 - **Pas de second niveau de surface.** Le contenu est posé directement dans la carte du template :
   l'envelopper dans une `Card` doublerait le padding.
 
@@ -99,8 +113,10 @@ donnerait 1, et le badge contredirait la barre.
 
 ## Écrans qui l'utilisent
 
-`Campaigns` aujourd'hui. `Segments`, dont il est extrait, porte encore sa propre coque : la
-migration est mécanique mais touche un écran très instrumenté, elle est faite à part.
+`Campaigns` aujourd'hui — c'est aussi l'écran de référence du modèle exposé : trois dimensions,
+dont deux multi-sélections (Label, Status) rappelées en chips. `Segments`, dont il est extrait,
+porte encore sa propre coque : la migration est mécanique mais touche un écran très instrumenté,
+elle est faite à part.
 
 <Canvas of={ListStories.Minimal} />
 

@@ -180,7 +180,7 @@ et les **52 icônes**, exportées du Figma.
   type Partition retombe sur l'icône `cluster`.
 - Le panneau Filters est un popover maîtrisé plutôt qu'un `Dropdown` AntD, qui se ferme au clic
   interne — incompatible avec une application immédiate multi-valeurs.
-- Les surfaces flottantes d'AntD (calendrier, select, filtre de colonne) sont rendues dans un
+- Les surfaces flottantes d'AntD (calendrier, select) sont rendues dans un
   portail attaché au body : le détecteur de clic extérieur doit les exclure, sinon choisir une date
   de début referme tout avant la date de fin.
 

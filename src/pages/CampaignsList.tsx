@@ -3,13 +3,13 @@ import type { ColumnsType } from 'antd/es/table';
 import {
   Button,
   DropdownCheckboxItem,
+  DropdownFooter,
   Icon,
   LabelPicker,
   Link,
   ListTemplate,
   Pagination,
   PeriodFilter,
-  Select,
   StatusBadge,
   Table,
   panelSurface,
@@ -20,7 +20,6 @@ import {
   CAMPAIGN_LABELS,
   CAMPAIGN_METRIC_COLUMNS,
   CAMPAIGN_PERIODS,
-  CAMPAIGN_STATUS_ALL,
   CAMPAIGN_STATUS_TONE,
   CAMPAIGN_STATUSES,
   applyCampaignFilters,
@@ -29,12 +28,15 @@ import {
 import { scale, semantic } from '../theme/micsTheme';
 
 /*
-  Campaigns — Liste (Figma 611:2, filtre ouvert 612:344).
+  Campaigns — Liste (Figma 797:25218 ; filtres actifs 614:97211 ; label ouvert
+  612:344 — décisions de la revue client du 1er septembre 2026).
 
   Écran du MODÈLE EXPOSÉ : trois dimensions seulement (label, période, statut),
   donc un sélecteur par dimension dans la barre d'outils plutôt qu'un bouton
-  « Filters » unique. La règle est dans la doc du FilterPanel : au-delà de trois
-  dimensions on bascule sur le panneau, en deçà on expose.
+  « Filters » unique. La règle : au-delà de trois dimensions on bascule sur le
+  panneau, en deçà on expose. Les multi-sélections (labels, statuts) se rappellent
+  dans la barre de chips ; la période, à valeur unique et lisible dans son
+  sélecteur, n'y va pas.
 
   Les métriques valent toutes « - » : c'est ce que rend la maquette, relevée sur
   une organisation dont les campagnes n'ont jamais diffusé.
@@ -43,12 +45,57 @@ import { scale, semantic } from '../theme/micsTheme';
 const PAGE_SIZE = 10;
 
 /**
- * Filtre par label : un bouton qui se remplace par son champ de recherche.
- *
- * Le déclencheur disparaît au profit du champ, à la même place et à la même
- * largeur que la liste qu'il ouvre. C'est ce que fait la maquette, et c'est ce qui
- * distingue ce motif d'un menu déroulant : on ne survole pas une liste figée, on
- * cherche dans un ensemble que l'utilisateur a lui-même créé.
+ * Déclencheur de filtre à l'apparence d'un champ : même hauteur, même bordure et
+ * même padding qu'un Select, mais il porte le NOM de la dimension, jamais sa
+ * valeur — le contenu se lit dans le panneau qu'il ouvre et dans la barre de
+ * chips, pas dans le déclencheur.
+ */
+function FilterTrigger({
+  label,
+  icon,
+  open,
+  onClick,
+  width,
+}: {
+  label: string;
+  icon: string;
+  open: boolean;
+  onClick: () => void;
+  width: number;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-haspopup="true"
+      aria-expanded={open}
+      style={{
+        width,
+        height: scale.sizeControl,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: scale.space8,
+        padding: `0 ${scale.spaceInputPadH}px`,
+        background: semantic.bgContainer,
+        border: `${scale.borderWidth}px solid ${open ? semantic.primary : semantic.borderInput}`,
+        borderRadius: scale.radiusBase,
+        font: 'inherit',
+        color: semantic.textNormal,
+        cursor: 'pointer',
+      }}
+    >
+      {label}
+      <Icon name={icon} size={12} color={semantic.textLighter} />
+    </button>
+  );
+}
+
+/**
+ * Filtre par label (Figma 612:344) : une dropdown dont le déclencheur dit
+ * toujours « Label ». Au clic il se déploie en champ de recherche — le chevron
+ * devient une loupe — et la liste des labels se filtre à la frappe. Chaque label
+ * choisi part dans la barre de chips, le champ reste ouvert pour en cumuler.
  */
 function LabelFilter({
   selected,
@@ -60,11 +107,7 @@ function LabelFilter({
   const [open, setOpen] = useState(false);
 
   if (!open) {
-    return (
-      <Button icon={<Icon name="plus" size={14} />} onClick={() => setOpen(true)} aria-haspopup="listbox">
-        Filter by Label
-      </Button>
-    );
+    return <FilterTrigger label="Label" icon="chevron-bottom" open={false} onClick={() => setOpen(true)} width={120} />;
   }
 
   return (
@@ -72,18 +115,80 @@ function LabelFilter({
       // Les labels déjà retenus sortent de la liste : les reproposer laisserait
       // croire qu'on peut cumuler deux fois le même filtre.
       options={CAMPAIGN_LABELS.filter((l) => !selected.includes(l))}
-      onSelect={(label) => {
-        onAdd(label);
-        setOpen(false);
-      }}
+      onSelect={onAdd}
       onCancel={() => setOpen(false)}
       width={220}
       placeholder="Search a label"
       ariaLabel="Search a label"
-      // Loupe à droite : c'est ce que porte la maquette Campaigns. L'ajout de
-      // label sur un segment la met à gauche — divergence à arbitrer.
+      // Loupe à droite : le chevron du déclencheur devient la loupe du champ.
       iconSide="right"
     />
+  );
+}
+
+/**
+ * Filtre par statut (Figma 797:25218) : multi-sélection à cases. Le déclencheur
+ * dit toujours « Status », quel que soit l'état — les statuts cochés se lisent
+ * dans le panneau et dans la barre de chips. Le pied reprend le composant
+ * Dropdown / Clear de la maquette et vide la sélection.
+ */
+function StatusFilter({
+  selected,
+  onToggle,
+  onClear,
+}: {
+  selected: string[];
+  onToggle: (status: string) => void;
+  onClear: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const zone = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (zone.current && !zone.current.contains(e.target as HTMLElement)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={zone} style={{ position: 'relative' }}>
+      <FilterTrigger label="Status" icon="chevron-bottom" open={open} onClick={() => setOpen((v) => !v)} width={120} />
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            right: 0,
+            zIndex: scale.zDropdown,
+            width: 220,
+            ...panelSurface,
+            overflow: 'hidden',
+          }}
+        >
+          <div style={{ padding: `${scale.space8}px 0` }}>
+            {CAMPAIGN_STATUSES.map((v) => (
+              <DropdownCheckboxItem
+                key={v}
+                label={v}
+                checked={selected.includes(v)}
+                onToggle={() => onToggle(v)}
+              />
+            ))}
+          </div>
+          <DropdownFooter label="Clear all filters" onClick={onClear} disabled={!selected.length} />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -91,7 +196,7 @@ export function CampaignsList() {
   const [search, setSearch] = useState('');
   const [labels, setLabels] = useState<string[]>([]);
   const [period, setPeriod] = useState<string>('Last 30 days');
-  const [status, setStatus] = useState<string>(CAMPAIGN_STATUS_ALL);
+  const [statuses, setStatuses] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [viewOpen, setViewOpen] = useState(false);
   const [visibleMetrics, setVisibleMetrics] = useState<string[]>(
@@ -118,18 +223,27 @@ export function CampaignsList() {
   }, [viewOpen]);
 
   const rows = useMemo(
-    () => applyCampaignFilters(CAMPAIGNS, { search, labels, status }),
-    [search, labels, status],
+    () => applyCampaignFilters(CAMPAIGNS, { search, labels, statuses }),
+    [search, labels, statuses],
   );
 
   /*
-    Chips de rappel. La période et le statut se lisent dans leur sélecteur, donc
-    n'en ont pas besoin. Le label, lui, redevient invisible dès que le champ
-    repasse en bouton : sans chip, un filtre actif ne serait plus signalé nulle
-    part. C'est exactement le cas prévu par la règle « barre de chips seulement si
-    un filtre actif n'est pas lisible dans la barre ».
+    Chips de rappel — la règle de la revue du 1er septembre : seules les
+    MULTI-SÉLECTIONS y vont, parce que leurs déclencheurs ne disent jamais leur
+    contenu (« Label », « Status »). La période, à valeur unique et lisible dans
+    son sélecteur (« Yesterday »), n'y est pas dupliquée. Les chips portent la
+    valeur seule, comme la maquette 614:97211 : préfixer chaque chip de sa
+    dimension doublerait la longueur de la barre sans lever d'ambiguïté ici.
   */
-  const activeFilters: ActiveFilter[] = labels.map((l) => ({ key: `label:${l}`, label: `Label : ${l}` }));
+  const activeFilters: ActiveFilter[] = [
+    ...labels.map((l) => ({ key: `label:${l}`, label: l })),
+    ...statuses.map((v) => ({ key: `status:${v}`, label: v })),
+  ];
+
+  const toggleStatus = (v: string) => {
+    setStatuses((prev) => (prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v]));
+    setPage(1);
+  };
 
   const addLabel = (label: string) => {
     setLabels((prev) => (prev.includes(label) ? prev : [...prev, label]));
@@ -183,10 +297,12 @@ export function CampaignsList() {
       activeFilters={activeFilters}
       onRemoveFilter={(key) => {
         setLabels((prev) => prev.filter((l) => `label:${l}` !== key));
+        setStatuses((prev) => prev.filter((v) => `status:${v}` !== key));
         setPage(1);
       }}
       onClearFilters={() => {
         setLabels([]);
+        setStatuses([]);
         setPage(1);
       }}
       pagination={
@@ -196,18 +312,13 @@ export function CampaignsList() {
         <>
             <LabelFilter selected={labels} onAdd={addLabel} />
             <PeriodFilter value={period} presets={CAMPAIGN_PERIODS} onChange={setPeriod} />
-            <Select
-              width={140}
-              value={status}
-              onChange={(v) => {
-                setStatus(v || CAMPAIGN_STATUS_ALL);
+            <StatusFilter
+              selected={statuses}
+              onToggle={toggleStatus}
+              onClear={() => {
+                setStatuses([]);
                 setPage(1);
               }}
-              options={[CAMPAIGN_STATUS_ALL, ...CAMPAIGN_STATUSES].map((v) => ({
-                value: v,
-                label: v,
-              }))}
-              aria-label="Status"
             />
           <div ref={viewRef} style={{ position: 'relative' }}>
               <Button
