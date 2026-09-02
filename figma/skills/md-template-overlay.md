@@ -59,6 +59,16 @@ fiche de documentation par écran, plus le cadre général en troisième colonne
   maximum), rangées enfants cliquables, la catégorie ne l'est pas. Deux niveaux, jamais trois.
 - Le clic sur une rangée vaut choix : pas de bouton de validation sur cet écran. Un type
   indisponible se grise, il ne disparaît pas.
+- **L'icône « i » d'un item ouvre un Tooltip**, au survol comme au focus clavier (écran de
+  référence : « infobulle au survol »). Explication courte du type, sans lien ni action ; dans une
+  même carte, tous les types en ont une ou aucun ; la flèche pointe l'icône et l'infobulle ne
+  recouvre jamais l'item qu'elle décrit.
+- **Au-delà de trois items dans une carte** (listes dynamiques : 48 types de dataset), la carte
+  garde SA DIMENSION et la liste d'items défile à l'intérieur — illustration, titre et description
+  restent fixes. L'indice qu'il y a plus : à l'arrivée, l'item suivant est coupé en deux par le
+  bord bas, avec un ascenseur discret. La règle qui garantit la coupe : la hauteur de la zone
+  visible n'est JAMAIS un multiple du pas des items (écran « carte défilante » : zone 244 pour un
+  pas de 72). Pas de pagination interne ni de « Show more ».
 
 ### Le tunnel — 1 à 4 étapes
 - **1 étape** → pas de stepper : un stepper à un jalon n'informe de rien.
