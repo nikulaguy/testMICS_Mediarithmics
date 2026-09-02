@@ -40,7 +40,7 @@ Ces cinq-là reproduisent des données de production : leurs barres/courbes sont
 - Décomposer un total → Mode=Stacking. Deux séries de même nature → Mode=Double. Plus de deux → Mode=Multi.
 - Parts d'un tout → `Chart / Pie`, 7 dimensions max ; au-delà, revenir aux barres.
 - Profils sur axes identiques → `Chart / Radar`, uniquement ce cas.
-- Quelques chiffres sans dimension temporelle → `Metrics Column` ou `Counter` (voir /md-data-display), pas un graphique.
+- Quelques chiffres sans dimension temporelle → `Metrics Column` ou `Counter` (voir /md-components), pas un graphique.
 
 ## Couleurs de série
 

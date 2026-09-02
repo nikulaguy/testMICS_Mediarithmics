@@ -70,38 +70,14 @@ La collection Scale contient aussi des alias legacy (`space/card-pad`, `size/inp
 
 ## Lien Storybook (obligatoire sur tout composant)
 
-Chaque **component set** et chaque **composant hors set** porte le lien de sa page Storybook dans
-`documentationLinks` — le champ « Documentation » que Figma affiche dans le panneau de droite et en
-Dev Mode. C'est le chemin le plus court entre la maquette et le code : un développeur qui inspecte
-un composant arrive sur sa fiche sans avoir à chercher.
-
-Forme du lien :
-
-```
-https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/?path=/docs/<id-de-la-page>
-```
-
-L'`id` se lit dans `storybook-static/index.json` (entrées de type `docs`), jamais deviné : il est
-dérivé du `title` de la story, accents compris (`composants-composés-tabs--docs`).
-
-- Les 185 `icon/*` et `logo/*` pointent tous vers la page **Icon**, les `Table / *` vers le
-  **template Liste** : un composant sans page à lui rejoint celle qui le décrit.
-- **39 composants n'ont pas de page** parce qu'ils ne sont pas développés (Alert, Tooltip,
-  Progress, Spin, les Chart, SearchBar, Selection Card…). Ne pas leur inventer de lien : l'absence
-  se lit, un lien mort ment.
-- À la création d'un composant : poser le lien dans la foulée. À la création d'une page Storybook :
-  poser le lien sur le composant Figma correspondant.
-
-```js
-// Contrôle : quels composants n'ont pas de lien ?
-await figma.loadAllPagesAsync();
-const sans = [];
-for (const page of figma.root.children)
-  for (const n of page.findAll(function (x) {
-    return x.type === 'COMPONENT_SET' || (x.type === 'COMPONENT' && (!x.parent || x.parent.type !== 'COMPONENT_SET'));
-  })) if (!(n.documentationLinks || []).length) sans.push(n.name);
-return sans;
-```
+Chaque **component set** et chaque **composant hors set** porte l'URL de sa page Storybook dans
+`documentationLinks` (le champ « Documentation » du panneau de droite et du Dev Mode) — le chemin
+le plus court entre la maquette et le code. Forme :
+`https://nikulaguy.github.io/testMICS_Mediarithmics/storybook/?path=/docs/<id>`, l'`id` lu dans
+`storybook-static/index.json` (jamais deviné : il encode les accents). Un composant sans page à lui
+pointe celle qui le décrit (icônes → Icon, Table/* → template Liste) ; un composant **non
+développé n'a pas de lien** — un lien mort ment. À la création d'un composant comme d'une page
+Storybook : poser le lien dans la foulée. Script de contrôle : figma/README.md, § Maintenir.
 
 ## Nomenclature (obligatoire, vérifiée au pre-flight)
 
@@ -129,23 +105,23 @@ Largeur de référence d'un écran : **1496 px**. La coque est fluide, seules ce
 
 ## Matrice des templates (aiguillage)
 
-Avant de choisir un template, s'assurer qu'on construit bien une **page** : /md-choose-surface tranche entre page, modale, drawer et composant non modal.
+Avant de choisir un template, s'assurer qu'on construit bien une **page** : l'arbre de /md-produce-screen tranche entre page, modale, drawer et composant non modal.
 
 Tout écran du produit se rattache à **un et un seul** de ces templates (page 🎼 Layout, section « ✅ Templates — Clean », pour les références visuelles) :
 
-| # | Template | Skill | SideMenu | Actionbar | Autre navigation |
-|---|---|---|---|---|---|
-| 1 | Liste | /md-template-list | oui | oui, dans main | Tab Bar |
-| 2 | Détail de ressource | /md-template-detail | oui | oui, dans main | Tab Bar |
-| 3 | Board | /md-template-board | oui | **aucune** | Tab Bar + Board Action Bar |
-| 4 | Formulaire d'édition | /md-template-edition | **non** | pleine largeur, Type=Edition | step-nav 200 |
-| 5 | Choix du type | /md-template-selection | **non** | pleine largeur, Type=Light | aucune |
-| 6 | Settings | /md-template-settings | **non** | aucune (Settings Bar) | subnav 200 |
-| 7 | État vide | — état du template hôte | hérité | hérité | hérité |
-| 8 | Overlay Drawer | /md-template-overlay | hérité | hérité | aucune |
-| 9 | Overlay Modale | /md-template-overlay | hérité | hérité | aucune |
-| 10 | Analytics requêtable | /md-template-analytics | oui | **Analytics Action Bar** | aucune |
-| 11 | Fiche 3 colonnes (lookup) | /md-template-lookup | oui | oui, dans main | rail de timeline |
+| # | Template (§ de /md-templates) | SideMenu | Actionbar | Autre navigation |
+|---|---|---|---|---|
+| 1 | Liste | oui | oui, dans main | Tab Bar |
+| 2 | Détail de ressource | oui | oui, dans main | Tab Bar |
+| 3 | Board | oui | **aucune** | Tab Bar + Board Action Bar |
+| 4 | Formulaire d'édition | **non** | pleine largeur, Type=Edition | step-nav 200 |
+| 5 | Choix du type | **non** | pleine largeur, Type=Light | aucune |
+| 6 | Settings | **non** | aucune (Settings Bar) | subnav 200 |
+| 7 | État vide | hérité | hérité | hérité |
+| 8-9 | Overlay Drawer / Modale | hérité | hérité | aucune |
+| 10 | Analytics requêtable | oui | **Analytics Action Bar** | aucune |
+| 11 | Fiche 3 colonnes (lookup) | oui | oui, dans main | rail de timeline |
+| 12 | Parcours de création | **non** | header de création | stepper horizontal |
 
 L'« État vide » n'est pas un template : c'est le composant `Empty State` (285:151) centré sur les deux axes dans la coque du template hôte, panel blanc retiré.
 
@@ -193,7 +169,7 @@ Deux conséquences à respecter en maquette comme en dev :
 - Tout élément interactif est un élément natif (`button`, `a`, `input`) avec un nom accessible explicite, atteignable au clavier, focus visible (RGAA 10.7).
 - Icône décorative masquée aux TA (`aria-hidden`) ; icône seule porteuse de sens = nom accessible (RGAA 1.1/1.2).
 - Un graphique porteur d'information a une alternative : description ou table de données équivalente.
-- La doc a11y d'un composant se produit avec **/md-a11y-specs** et se rattache à un critère RGAA ; la doc complète avec **/md-component-doc**.
+- La doc a11y d'un composant se produit avec **/md-a11y-specs** et se rattache à un critère RGAA ; la doc complète avec **/md-new-component**.
 
 ### Données de démonstration (maquettes)
 - IDs : 8 chiffres (ex. 18280553). Technical names : kebab-case (ex. georgia-pizza-winner-ack). Dates : relatives (« 8 days ago »). Noms de ressources : réalistes et variés, jamais « Lorem » ni « Test 1/2/3 ».

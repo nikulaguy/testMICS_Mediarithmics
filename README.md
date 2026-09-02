@@ -68,7 +68,7 @@ tokens), **enveloppé** (composant du DS qui rend un AntD en dessous), **constru
 ## Figma — la moitié amont
 
 Tout ce qui concerne la conception est dans **[`figma/`](figma/)** : le fichier de design system
-(19 pages, 449 composants, 128 variables) et les **23 skills** de production, plus un pack de
+(19 pages, 449 composants, 128 variables) et les **9 skills** de production, plus un pack de
 14 références RGAA. Le fichier est dans un **projet connecté** entre Frontguys et mediarithmics :
 les deux organisations l'éditent en même temps, chacune avec ses propres sièges. Les skills sont les règles du DS écrites dans un format que Claude Code charge
 automatiquement : règles d'or, templates d'écran, catalogue de composants, pièges de l'API Figma,
@@ -111,12 +111,11 @@ rarement utile.
 
 | Famille | Skills |
 |---|---|
-| Point d'entrée | `md-produce-screen` |
-| Choix de la surface | `md-choose-surface` — page, modale, drawer ou composant non modal, en 7 étapes |
+| Point d'entrée | `md-produce-screen` — cadrage, arbre de surface (page, modale, drawer), production, pre-flight |
 | Fondation | `md-ds-rules` (chargé avant tout), `md-business`, `md-figma-api` |
-| Templates d'écran | `md-template-` `list` · `detail` · `board` · `edition` · `selection` · `settings` · `overlay` · `analytics` · `lookup` |
-| Familles de composants | `md-navigation`, `md-forms`, `md-data-display`, `md-overlays`, `md-charts`, `md-icons` |
-| Création et documentation | `md-new-component`, `md-component-doc`, `md-a11y-specs` (+ `md-a11y-rgaa/`) |
+| Templates d'écran | `md-templates` — les 12, coque commune décrite une fois puis un delta par template |
+| Catalogue de composants | `md-components` (navigation, formulaires, affichage de données, overlays), `md-charts`, `md-icons` |
+| Création et documentation | `md-new-component` (création, extension et documentation), `md-a11y-specs` (+ `md-a11y-rgaa/`) |
 
 **Prérequis** : un compte Figma avec accès en édition et un siège payant, la police Circular
 disponible, et le **MCP Figma** connecté — c'est le pont qui permet à Claude de lire et d'écrire

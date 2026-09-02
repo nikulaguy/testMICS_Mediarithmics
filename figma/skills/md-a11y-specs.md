@@ -1,6 +1,6 @@
 ---
 name: md-a11y-specs
-description: Spécifications d'accessibilité MICS — tickets ou annotations RGAA. Duplication du skill a11y-specs d'origine, packagée avec son référentiel (md-a11y-rgaa/references). Invoqué par md-component-doc et md-new-component pour les blocs Accessibilité.
+description: Spécifications d'accessibilité MICS — tickets ou annotations RGAA. Duplication du skill a11y-specs d'origine, packagée avec son référentiel (md-a11y-rgaa/references). Invoqué par md-new-component pour les blocs Accessibilité.
 ---
 
 

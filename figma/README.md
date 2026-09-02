@@ -8,7 +8,7 @@ figma/
   README.md              ce fichier — le fichier Figma, son contenu, l'accès
   SETUP.md               installation : Claude Code, le MCP Figma, l'aspiration, les skills
   DESKTOP-BRIDGE.md      le second accès à Figma : sans quota, API plugin complète
-  skills/                les 23 skills de production + les 14 références RGAA
+  skills/                les 9 skills de production + les 14 références RGAA
   variables.json         les 128 variables exportées, avec leur cible de code
   export-variables.js    le script qui régénère variables.json
 ```
@@ -166,11 +166,11 @@ chaque évolution. Mais il n'est pas optionnel.
 
 | Ce qui change dans le fichier | Ce qu'il faut toucher |
 |---|---|
-| Un composant créé | Sa fiche dans le skill de sa famille (`md-data-display`, `md-forms`, `md-navigation`, `md-overlays`, `md-charts`), la description native, le Sommaire |
+| Un composant créé | Sa fiche dans `md-components` (ou `md-charts`), la description native, le Sommaire |
 | Une variante ou une prop ajoutée | La fiche du composant : variantes, props, et la règle d'usage si elle change |
 | Un composant renommé ou supprimé | Toutes les mentions — un `grep` sur l'ancien nom dans `skills/` |
 | Une variable ajoutée | Sa ligne `CODE :`, puis régénérer [`variables.json`](variables.json) |
-| Une règle d'écran tranchée en revue | Le skill du template concerné, ou `md-ds-rules` si elle vaut partout |
+| Une règle d'écran tranchée en revue | La section du template dans `md-templates`, ou `md-ds-rules` si elle vaut partout |
 | Un piège d'API rencontré | `md-figma-api`, avec le symptôme ET le remède |
 
 ### Le processus, en cinq gestes
@@ -193,6 +193,23 @@ chaque évolution. Mais il n'est pas optionnel.
 5. **Commiter avec le fait qui l'a déclenché.** Le message dit ce qui a changé dans le fichier, pas
    seulement ce qui a changé dans le texte. C'est ce qui permet, six mois plus tard, de savoir si la
    règle tient encore.
+
+### Contrôles périodiques
+
+Deux scripts à exécuter dans le contexte plugin (MCP `figma-console`, ou collés dans un plugin de
+développement). Le premier est aussi à lancer avant tout export `.fig` (voir plus haut) ; le second
+liste les composants sans lien Storybook :
+
+```js
+// Composants sans lien de documentation
+await figma.loadAllPagesAsync();
+const sans = [];
+for (const page of figma.root.children)
+  for (const n of page.findAll(function (x) {
+    return x.type === 'COMPONENT_SET' || (x.type === 'COMPONENT' && (!x.parent || x.parent.type !== 'COMPONENT_SET'));
+  })) if (!(n.documentationLinks || []).length) sans.push(n.name);
+return sans;
+```
 
 ### Le bon moment
 

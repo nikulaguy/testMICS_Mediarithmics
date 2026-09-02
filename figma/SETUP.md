@@ -186,7 +186,7 @@ Ce qui va se passer, dans l'ordre — c'est normal, laissez-le dérouler :
 
 Deux cas particuliers :
 - **Aucun composant existant ne convient** → Claude doit passer par `/md-new-component`, dont l'étape 0 est bloquante : prouver qu'aucun composant du catalogue ne fait déjà le travail (un chip gris est un Tag, même s'il affiche une date).
-- **Documenter un composant** → `/md-component-doc` (+ `/md-a11y-specs` pour le bloc accessibilité).
+- **Documenter un composant** → `/md-new-component` (+ `/md-a11y-specs` pour le bloc accessibilité).
 
 ---
 
