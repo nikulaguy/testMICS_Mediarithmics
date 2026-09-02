@@ -7,11 +7,9 @@ description: Contexte métier mediarithmics — ce que fait la plateforme, gloss
 
 ## La règle d'or : ne pas deviner le métier, aller le lire
 
-Le user guide officiel est conçu pour être lu par des agents comme par des humains :
-- **Index complet** : https://userguides.mediarithmics.io/llms.txt
-- **Toute page existe en Markdown brut** : ajouter `.md` à l'URL (ex. `/audience/segments.md`).
-- Avant de maquetter un écran d'un module que vous ne maîtrisez pas, **récupérer et lire la page correspondante** (carte ci-dessous). Une maquette juste visuellement mais fausse métier sera refusée.
-- Le guide évolue avec le produit : il fait foi sur ce skill en cas d'écart. Côté technique : developer.mediarithmics.com.
+Le user guide officiel se lit par agents comme par humains :
+- Index : https://userguides.mediarithmics.io/llms.txt · toute page en Markdown brut en ajoutant `.md` (ex. `/audience/segments.md`) · technique : developer.mediarithmics.com.
+- Avant de maquetter un module non maîtrisé : **lire sa page** (carte ci-dessous). Une maquette juste visuellement mais fausse métier sera refusée. Le guide fait foi sur ce skill en cas d'écart.
 
 ## Ce qu'est la plateforme
 

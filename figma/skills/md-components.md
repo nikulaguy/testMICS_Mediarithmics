@@ -154,9 +154,7 @@ Espacement entre champs : gap 16 ou 24 selon la densité de la section (voir /md
 - Surface `bg/subtle`, `radius/card`, padding `space/8`, gap `space/12`. Zone chips en FILL, « Clear all filters » en HUG à droite.
 - Les chips sont des instances de **Tag** (`Color=Default`, `Closable` activé) — jamais un rectangle redessiné. La réinitialisation est un **Button `Type=Link` + `icon/broom`**, le même balai que le pied des panneaux de filtres.
 - **Une chip par filtre appliqué**, jamais de regroupement : grouper supprime ce que la barre existe pour montrer. Le libellé porte la **valeur seule** quand elle se comprend sans sa dimension (« Active », « E commerce » — écran 614:97211) ; il se préfixe de la dimension quand la valeur seule serait ambiguë (« Persistence : Persisted »).
-- **Quand la poser** : modèle panneau (bouton Filters unique) → toujours, c'est le seul endroit où l'état est lisible panneau fermé. Modèle exposé → pour les **multi-sélections** (statut, label), dont le déclencheur ne dit que le nom de la dimension ; jamais pour un filtre à valeur unique lisible dans son sélecteur (période). Aucun filtre actif → la barre n'existe pas, elle ne réserve pas de hauteur.
-- Une seule barre par écran, quelle que soit l'origine des filtres (cascade ou sélecteurs exposés). Le filtre de colonne n'existe plus (revue du 1er septembre 2026).
-- ⚠ Les variantes **Button `Type=Link` `Size=M`** (Default/Hover/Disabled) n'ont pas de nœud `icon`, contrairement à `Size=L`. Prendre `Size=L` dès qu'une icône est nécessaire.
+- **Quand la poser, quoi y mettre** : règles dans /md-templates §1 (multi-sélections seulement, jamais de duplication d'un filtre lisible ailleurs, pas de barre sans filtre actif). Une seule barre par écran, quelle que soit l'origine des filtres.
 
 ### Alert — Set 15:55 (4 variantes)
 - **Type** : Info | Success | Warning | Error · largeur FILL
@@ -294,19 +292,14 @@ Recherche (Input) à gauche · boutons Filter / Edit view / Export · action Pri
 
 - **Menu d'actions contextuelles** (kebab ⋮ de ligne de tableau) : c'est aussi un `Dropdown / Container`, slot rempli d'`Option Item`. Action destructive en dernier, en couleur error. Actions ponctuelles uniquement — pas de navigation. (L'ancien composant monolithique DropdownMenu a été supprimé du fichier.)
 
-### Choisir la surface : drawer, modale ou page
+### Choisir la surface
 
-Question de coût d'interruption et de besoin de contexte, pas d'esthétique. Repères : Nielsen Norman Group (Modal & Nonmodal Dialogs ; Popups: 10 Problematic Trends) et Material 3 (Side sheets). Exemples visuels : frame « Overlay — choisir la bonne surface », page 💬 Feedback & Overlays.
-
-| Surface | Quand | Jamais |
-|---|---|---|
-| **Drawer** | Tâche secondaire qui a besoin du contexte : consulter ou éditer un élément sans perdre la liste, filtrer, comparer, prévisualiser | Un formulaire de création ou d'édition dense (Material 3 renvoie explicitement vers une page) |
-| **Modale** | Décision courte qui doit bloquer : confirmer une action destructive, réclamer l'information sans laquelle l'action lancée ne peut pas aboutir | Une décision qui dépend du contenu masqué · un contenu qui scrolle · une information non sollicitée |
-| **Page dédiée** | Tâche longue ou structurée : création multi-étapes, formulaire dense, contenu de référence | C'est la surface par défaut : c'est l'overlay qui doit se justifier |
-
-- **Jamais deux surfaces empilées** (modale par-dessus drawer) : plus de sortie lisible, focus clavier perdu. Un enchaînement d'étapes reste dans la MÊME surface.
-- Le drawer prend toute la hauteur : à réserver aux cas où le contexte sert vraiment, largeur constante (520) dans un même parcours.
-- Test rapide : si l'utilisateur doit relire ce que la surface masque pour répondre, changer de surface.
+L'arbre de décision (page, modale, drawer, non modal) est dans /md-produce-screen ; la
+construction dans /md-templates §8-9. Repères sources : Nielsen Norman Group (Modal & Nonmodal
+Dialogs ; Popups: 10 Problematic Trends), Material 3 (Side sheets — un formulaire dense renvoie
+vers une page). Exemples visuels : frame « Overlay — choisir la bonne surface », page 💬 Feedback
+& Overlays. Test rapide : si l'utilisateur doit relire ce que la surface masque pour répondre,
+changer de surface.
 
 ### Search — palette de recherche globale (Cmd+K)
 

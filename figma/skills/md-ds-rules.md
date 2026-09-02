@@ -5,14 +5,14 @@ description: Fondation du DS mediarithmics (fichier « MICS DS — Rebuild »). 
 
 # md-ds-rules — Règles fondamentales du DS MICS
 
-Ces règles sont agnostiques : elles valent que vous construisiez à la main dans Figma ou via un agent. Les IDs de nœuds (ex. `17:26`) sont des aides de ciblage dans le fichier `Mediarithmics - MICS DS — Rebuild` (fileKey `OnvlU9azeM4rffD83XnEGI`) ; le nom du composant fait foi si un ID a bougé.
+Règles agnostiques : à la main dans Figma ou via un agent. Les IDs (ex. `17:26`) ciblent le fichier `Mediarithmics - MICS DS — Rebuild` (fileKey `OnvlU9azeM4rffD83XnEGI`) ; le nom du composant fait foi si un ID a bougé.
 
 ## Les 3 règles d'or
 
 1. **Aucune valeur en dur.** Couleur, spacing, radius, font : tout est lié à une variable ou un style du fichier. Jamais de hex libre, jamais de nombre libre, jamais de calque vide pour espacer (padding/gap uniquement).
-   **La règle vaut aussi pour la documentation.** Une doc qui écrit « padding 8 » apprend à recopier 8 ; une doc qui écrit `space/8` apprend à chercher le token. On nomme la variable, pas sa valeur — y compris dans les skills. Deux exceptions, à signaler comme telles : les conventions de canevas (largeur d'écran 1496, gap de 120 entre écrans) et les valeurs héritées qu'on n'a pas tokenisées, qui se citent avec la mention « hors échelle ».
-2. **Composants = instances.** Jamais reconstruits à la main. Toujours instanciés depuis la librairie du fichier ; on swappe les variantes et on override les textes. Si aucun composant ne convient : voir /md-new-component, on n'improvise pas.
-3. **Zéro défaut au pre-flight check.** Après production, prendre un screenshot de ce qui a été produit, le vérifier visuellement, et corriger soi-même ses erreurs (alignement, débordement, composant manquant, couleur hors palette) avant de livrer.
+   **Vaut aussi pour la documentation** : écrire `space/8`, pas « padding 8 » — on nomme la variable, pas sa valeur, skills compris. Deux exceptions à signaler comme telles : les conventions de canevas (écran 1496, gap 120 entre écrans) et les valeurs héritées non tokenisées, citées « hors échelle ».
+2. **Composants = instances.** Jamais reconstruits à la main : instancier depuis la librairie, swapper les variantes, overrider les textes. Aucun composant ne convient → /md-new-component, on n'improvise pas.
+3. **Zéro défaut au pre-flight check.** Screenshot de ce qui a été produit, vérification visuelle, correction de ses propres erreurs (alignement, débordement, composant manquant, couleur hors palette) avant de livrer.
 
 ## Typographie
 
@@ -127,9 +127,9 @@ L'« État vide » n'est pas un template : c'est le composant `Empty State` (285
 
 ## Passerelle vers le développement (règle des trois catégories)
 
-Le produit est bâti sur **Ant Design v5** : le DS ne le remplace pas, il l'encadre. Pour chaque
-composant de la maquette, un seul critère décide de son sort côté code : *AntD a-t-il la même
-anatomie et les mêmes états ?*
+Le produit est bâti sur **Ant Design v5** : le DS l'encadre, il ne le remplace pas. Un seul
+critère décide du sort d'un composant côté code : *AntD a-t-il la même anatomie et les mêmes
+états ?*
 
 | Réponse | Traitement | Exemples |
 |---|---|---|
@@ -145,7 +145,7 @@ Deux conséquences à respecter en maquette comme en dev :
 - **Actions de page vs actions de tableau** : les actions qui portent sur la page ou la ressource (New …, Export, Edit, menu ⋮) vivent dans l'**Actionbar** ; la **Table / Toolbar** ne porte que ce qui agit sur le tableau (recherche, filtres, Edit view, actions de masse). Test : si l'action garde du sens quand le tableau est vide, elle est de page.
 
 ### Actions et validation
-- Actions de validation : **bas-droite du contenu** (secondaire à gauche du primaire — le primaire est la dernière chose que l'œil rencontre). Un seul bouton Primary par zone, jamais deux côte à côte.
+- Validation : **bas-droite du contenu**, secondaire à gauche du primaire (le primaire est la dernière chose que l'œil rencontre). Un seul Primary par zone.
 - **Jamais de séparateur entre les boutons** : les espaces suffisent à hiérarchiser.
 - Jusqu'à 3 actions dans un pied d'overlay (ex. Close / Save and activate later / Save and activate) ; au-delà, repenser le parcours.
 - Une action **destructive** ne prend jamais la place du primaire : secondaire ou isolée à gauche, et elle demande confirmation.
@@ -161,7 +161,7 @@ Deux conséquences à respecter en maquette comme en dev :
 - Le contenu défile **à l'intérieur** de la surface ; header et pied restent fixes.
 
 ### Contenu et états
-- Toujours prévoir 3 états : **vide** (`Empty State`, message qui explique l'absence de données — pas une erreur), **chargement** (squelette ou `Spin`, avec `aria-busy`, jamais une zone vide sans explication), **erreur** (message explicite + moyen de réessayer — la bordure rouge seule ne suffit pas).
+- 3 états toujours prévus : **vide** (`Empty State`, message qui explique l'absence — pas une erreur), **chargement** (squelette ou `Spin`, `aria-busy`, jamais une zone vide muette), **erreur** (message explicite + moyen de réessayer — la bordure rouge seule ne suffit pas).
 - Padding de contenu d'une carte ou d'un overlay : 24. Gouttière entre blocs : 16 ou 24. Toujours des tokens Scale.
 
 ### Accessibilité (socle non négociable)
@@ -176,7 +176,7 @@ Deux conséquences à respecter en maquette comme en dev :
 - Le maître reste générique (« Label », « Segment name ») : les données réalistes sont des overrides d'écran.
 
 ### Structure des frames (leçons des revues d'écrans)
-- **Aucun frame de contenu en hauteur fixe.** Tout wrapper créé (rangée de méta, groupe de textes) est en HUG vertical ; seuls la racine d'écran et les éléments de coque à hauteur constante (TopBar, Actionbar…) sont fixes. Une hauteur figée crée des espaces sans signification dès que le contenu change.
+- **Aucun frame de contenu en hauteur fixe** : tout wrapper est en HUG vertical ; seuls la racine d'écran et la coque à hauteur constante (TopBar, Actionbar…) sont fixes. Une hauteur figée crée des espaces sans signification dès que le contenu change.
 - **Un texte accolé à une icône prend la couleur de l'icône** (et réciproquement) : la paire icône + libellé est UN objet visuel — jamais icône text/normal avec libellé text/lighter.
 - Les petits gaps aussi se bindent (space/2, space/4, space/8) : « zéro valeur en dur » n'a pas de seuil.
 
