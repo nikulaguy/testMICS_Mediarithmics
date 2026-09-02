@@ -46,7 +46,7 @@ l'application**. SideMenu et Actionbar disparaissent, la TopBar ne garde que le 
 l'organisation — sans le chevron qui permet d'en changer, puisque la ressource se rattache à celle
 d'où l'on est parti — et la croix du header est la seule sortie. C'est le gabarit de toute création
 de ressource (segment, dataset, campagne, feed).
-Référence : page 📋 Audit, section « Parcours générique — Création de ressource » — 11 écrans, une
+Référence : page 📋 Audit, section « Parcours générique — Création de ressource » — 12 écrans, une
 fiche de documentation par écran, plus le cadre général en troisième colonne.
 
 **Trois temps, toujours dans cet ordre** : choix du type → tunnel d'étapes → confirmation.
