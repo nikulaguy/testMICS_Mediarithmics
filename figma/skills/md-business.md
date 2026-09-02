@@ -82,5 +82,5 @@ mediarithmics est une **CDP / marketing cloud « data-first »** : elle collecte
 ## Display Campaigns (MEASUREMENT > Campaigns)
 - Liste des campagnes display d'une organisation. Métriques de colonnes : **Imp.** (impressions), **Clicks**, **Spent**, **CPM**, **CTR**, **CPC** — vides (« - ») tant que la campagne n'a pas délivré.
 - Statuts observés : actif (vert) et en attente (pastille sombre en prod → traduit par `Pending`, à confirmer côté produit).
-- Filtres : recherche par nom, plage de dates (« Last 30 days »), statut, et **Filter by Label** — bouton qui ouvre un champ de recherche + un `Dropdown / Container` listant les labels de l'organisation (E commerce, test…). Les labels sont posés sur les ressources et servent de filtre transverse.
+- Filtres : recherche par nom, période (« Last 30 days », relatif ou plage absolue), **Status** — multi-sélection à cases dont le déclencheur dit toujours « Status » — et **Label** — champ à loupe qui se déploie en recherche et liste les labels de l'organisation (E commerce, test…). Les valeurs choisies se rappellent dans l'Active Filter Bar ; règles complètes dans /md-template-list. Les labels sont posés sur les ressources et servent de filtre transverse.
 - Sélection multiple par cases à cocher (actions de masse), export CSV, création via « New Campaign ».

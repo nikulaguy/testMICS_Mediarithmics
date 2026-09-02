@@ -12,7 +12,7 @@ export interface Campaign {
   id: string;
   name: string;
   status: CampaignStatus;
-  /** Labels posés sur la campagne. C'est sur eux que porte « Filter by Label ». */
+  /** Labels posés sur la campagne. C'est sur eux que porte le filtre « Label ». */
   labels: string[];
   /** Impressions, clics, dépensé, CPM, CTR, CPC. `null` s'affiche « - ». */
   impressions: number | null;
