@@ -136,6 +136,8 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
   const [description, setDescription] = useState('');
   const [technicalName, setTechnicalName] = useState('');
   const [evaluationPeriod, setEvaluationPeriod] = useState('1');
+  /** L'utilisateur vient de taper autre chose qu'un chiffre : on le lui dit. */
+  const [periodRejected, setPeriodRejected] = useState(false);
   const [evaluationUnit, setEvaluationUnit] = useState('Days');
   const [persisted, setPersisted] = useState(true);
   const [paused, setPaused] = useState(false);
@@ -286,17 +288,29 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
                 <Input label="Technical Name" value={technicalName} onChange={setTechnicalName} placeholder="georgia-pizza-winner-ack" />
               </FieldRow>
               <FieldRow info="How often the segment is recomputed.">
-                <div style={{ display: 'flex', gap: scale.space8, alignItems: 'flex-end' }}>
+                {/*
+                  Alignés en haut, et le select descend de la hauteur du label
+                  (20 + gap 4) : calé sur le bas de la rangée, il suivrait le
+                  message d'erreur quand il apparaît.
+                */}
+                <div style={{ display: 'flex', gap: scale.space8, alignItems: 'flex-start' }}>
                   <div style={{ flex: 1 }}>
                     <Input
                       label="Evaluation Period"
                       value={evaluationPeriod}
                       // Un nombre de jours, de semaines ou de mois : la saisie ne
-                      // laisse passer que des chiffres.
-                      onChange={(v) => setEvaluationPeriod(v.replace(/\D/g, ''))}
+                      // laisse passer que des chiffres. Un caractère refusé ne
+                      // disparaît pas en silence : le message sous le champ dit
+                      // pourquoi, et se lève à la première saisie valide.
+                      onChange={(v) => {
+                        setPeriodRejected(/\D/.test(v));
+                        setEvaluationPeriod(v.replace(/\D/g, ''));
+                      }}
+                      state={periodRejected ? 'error' : 'default'}
+                      message={periodRejected ? 'This field only accepts numbers.' : undefined}
                     />
                   </div>
-                  <div style={{ width: 96 }}>
+                  <div style={{ width: 96, paddingTop: 24 }}>
                     <Select
                       aria-label="Evaluation period unit"
                       options={[
