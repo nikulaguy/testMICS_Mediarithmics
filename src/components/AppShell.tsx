@@ -28,13 +28,13 @@ export function AppShell({ crumbs, actions, children, searchOpen, onSearchOpenCh
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           <div
             style={{
-              height: scale.actionBarHeight,
               flex: '0 0 auto',
               background: semantic.bgContainer,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              paddingInline: scale.space24,
+              paddingBlock: scale.space12,
+              paddingInline: scale.space35,
               gap: scale.space16,
             }}
           >

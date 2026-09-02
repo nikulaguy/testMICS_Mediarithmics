@@ -151,6 +151,11 @@ export const scale = {
   /** Épaisseur de filet, unique dans tout le produit. */
   borderWidth: 1,
   sideMenuWidth: 200,
+  /**
+   * Hauteur du bandeau d'en-tête d'un Overlay (drawer, modale). L'Actionbar ne
+   * l'utilise plus : elle est en padding 12 / 35 (35 = marge de page) et sa
+   * hauteur suit le contenu, comme la maquette.
+   */
   actionBarHeight: 52,
   /** Interlettrage des micro-libellés en capitales. Une seule valeur. */
   trackingCaps: 0.4,

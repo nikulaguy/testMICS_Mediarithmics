@@ -298,9 +298,11 @@ columns (HORIZONTAL, gap 16, alignées en haut)
 
 ## 12 · Parcours de création de ressource (overlay plein écran)
 
-Troisième forme d'overlay : un **plein écran qui recouvre l'application**. SideMenu et Actionbar
-disparaissent, la TopBar ne garde que le **nom** de l'organisation — sans le chevron d'en changer,
-la ressource se rattache à celle d'où l'on est parti — et la croix du header est la seule sortie.
+Troisième forme d'overlay : un **plein écran qui recouvre l'application**. Le SideMenu disparaît,
+la TopBar ne garde que le **nom** de l'organisation — sans le chevron d'en changer, la ressource
+se rattache à celle d'où l'on est parti. Le header du tunnel est l'**Actionbar `Type=Creation`**
+(fond `info`, `Title` = nom de la ressource, `Subtitle` = type choisi, croix seule à droite —
+pas de fil d'Ariane, le tunnel est hors navigation) et sa croix est la seule sortie.
 Gabarit de toute création (segment, dataset, campagne, feed). Référence : page 📋 Audit, section
 « Parcours générique — Création de ressource » — 12 écrans, une fiche par écran + cadre général.
 
@@ -353,6 +355,26 @@ Gabarit de toute création (segment, dataset, campagne, feed). Référence : pag
 - **Pas d'Alert globale** tant que les erreurs sont visibles sur les champs ; au-delà de cinq, ou
   pour une erreur serveur : `Alert Type=Error` en tête d'étape. Le facultatif reste neutre ;
   « Back » et la croix restent actifs — une étape invalide n'emprisonne jamais.
+
+### Sélectionner des éléments dans une étape — le drawer de sélection
+Pattern relevé et retravaillé sur l'étape « Processing Activities » (écrans 4 à 7 de la section de
+test 805:36419).
+- **Étape vide** : Empty State avec un bouton au libellé explicite — « + Add Processing
+  Activity ». Jamais un crayon : le crayon dit « modifier », pas « ajouter » (défaut prod corrigé).
+- Le bouton ouvre un **Drawer** (Overlay Mode=Drawer, 520) : recherche en tête (Input, loupe),
+  **header-row** de colonnes, rangées `Checkbox` (nom à gauche, métadonnée à droite). Pied : un
+  seul primaire « Add » ; la croix du drawer annule.
+- **Header-row** — obligatoire au-dessus de toute liste à colonnes, drawer comme étape : libellés
+  de colonnes en Body/Medium `text/lighter`, h 40, bordure basse `border/default`, aligné sur les
+  colonnes qu'il titre (« Name » / « Legal Basis »).
+- **Éléments choisis** : liste dans l'étape avec le même header-row — icône (16, `text/lighter`)
+  + nom Body/Book + métadonnée Caption `text/lighter` + **corbeille** en bout de rangée,
+  séparateurs `border/default`.
+- **Supprimer = modale de confirmation** (Overlay Mode=Modal 600) : titre qui nomme l'action
+  (« Delete Processing Activity »), un paragraphe qui dit la portée réelle (l'élément est retiré
+  de la sélection, pas détruit), « Cancel » secondaire + « Delete » primaire `Type=Danger`.
+  **Jamais un popconfirm ancré** (pattern prod remplacé — écran « Aspiration — Suppression ») :
+  une destruction se confirme au même endroit et de la même façon partout.
 
 ### Sortir en cours de route — la modale d'abandon
 - La croix est disponible à tout moment. Dès qu'une saisie existe, elle ouvre une **modale

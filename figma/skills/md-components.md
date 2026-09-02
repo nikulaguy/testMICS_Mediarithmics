@@ -32,11 +32,12 @@ vérifiés sur le fichier (le **Set ID** désigne le component set ; instancier 
 - **SideMenu / Item** — Set 19:31 : State (Default | Hover | Active) · Props `Label`, `Icon` (swap).
 - **Règle** : un seul item Active, celui de la section courante de l'écran. **Piège vérifié** : le maître a « Boards » en Active — sur chaque instance, activer le bon item ET repasser Boards en Default.
 
-### Actionbar — Set 245:4156 (3 variantes)
-- h 52. **Variantes** :
-  - `Type=Light` (245:4117) — fil d'Ariane seul.
+### Actionbar — Set 245:4156 (4 variantes)
+- Padding **12 vertical / 35 horizontal** (35 = marge de page `space/35`) sur les quatre variantes ; hauteur au contenu (44 · 50 · 49 · 76), plus de hauteur fixe. **Variantes** :
+  - `Type=Light` (245:4117) — fil d'Ariane seul, bordure basse.
   - `Type=Light with actions` — fil d'Ariane + boutons d'action à droite.
   - `Type=Edition` — barre navy pleine largeur : Breadcrumb On dark + bouton Save + croix de fermeture.
+  - `Type=Creation` (806:39046) — header du **parcours de création plein écran** (/md-templates §12) : fond `info`, pas de fil d'Ariane (le tunnel est hors navigation) mais un Header `Title` (nom de la ressource) + `Subtitle` (« Segment type : … ») et la croix seule à droite. Figma seulement, pas d'équivalent code à ce jour.
 - **Périmètre (règle transverse)** : l'Actionbar est le SEUL emplacement des actions de page ou de ressource (New …, Export, Edit, menu ⋮) — elles ne descendent jamais dans la Table / Toolbar, qui ne porte que la recherche, les filtres, Edit view et les actions de masse. Une page de liste qui a une action de page est donc en `Type=Light with actions` (le menu ⋮ y est structurel), `Type=Light` uniquement si la page n'a aucune action. Voir /md-templates et la démonstration avant/après (page 📋 Audit, section « ActionBar vs Toolbar »).
 - **Props** : `Show primary` · `Show secondary 1` · `Show secondary 2` · `Show link action` (bools) — dosent les actions visibles.
 - **Règles** : dans `main` (démarre au bord du SideMenu) sur les templates Liste/Détail ; pleine largeur sans SideMenu en Édition. Jamais d'Actionbar sur un Board ou un Settings.

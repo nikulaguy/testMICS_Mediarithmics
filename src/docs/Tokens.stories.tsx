@@ -143,7 +143,8 @@ export const Echelle: Story = {
 
       <Title sub="Hauteurs fixes de la coque et des contrôles.">Tailles</Title>
       <div style={{ color: semantic.textNormal, display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <span>TopBar : {scale.sizeHeader} · Actionbar : {scale.actionBarHeight} · SideMenu : {scale.sideMenuWidth}</span>
+        <span>TopBar : {scale.sizeHeader} · Bandeau d'overlay : {scale.actionBarHeight} · SideMenu : {scale.sideMenuWidth}</span>
+        <span>Actionbar : padding 12 / 35, hauteur au contenu (plus de hauteur fixe)</span>
         <span>Contrôle (bouton, champ, select) : {scale.sizeControl} · Ligne de tableau : {scale.sizeRow}</span>
       </div>
     </>

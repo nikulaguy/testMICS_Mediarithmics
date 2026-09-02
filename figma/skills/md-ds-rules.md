@@ -96,7 +96,7 @@ Largeur de référence d'un écran : **1496 px**. La coque est fluide, seules ce
 |---|---|---|
 | TopBar | `TopBar` (17:26) | hauteur `size/header`, pleine largeur, **toujours premier enfant** |
 | SideMenu | `SideMenu` (19:32) | l 200 fixe, hauteur FILL |
-| Actionbar | `Actionbar` (245:4156) | hauteur `actionBarHeight` (52) ; dans `main` s'il y a un SideMenu, pleine largeur sinon |
+| Actionbar | `Actionbar` (245:4156) | padding 12/35, hauteur au contenu ; dans `main` s'il y a un SideMenu, pleine largeur sinon ; `Type=Creation` = header du tunnel de création |
 | Settings Bar | `Settings Bar` (309:161) | hauteur `size/row`, pleine largeur |
 | step-nav / subnav | — | l 200 |
 | content | — | padding `space/35`, gap `space/16` (données) ou `space/35` (réglages/tunnels) |
@@ -121,7 +121,7 @@ Tout écran du produit se rattache à **un et un seul** de ces templates (page �
 | 8-9 | Overlay Drawer / Modale | hérité | hérité | aucune |
 | 10 | Analytics requêtable | oui | **Analytics Action Bar** | aucune |
 | 11 | Fiche 3 colonnes (lookup) | oui | oui, dans main | rail de timeline |
-| 12 | Parcours de création | **non** | header de création | stepper horizontal |
+| 12 | Parcours de création | **non** | pleine largeur, Type=Creation | stepper horizontal |
 
 L'« État vide » n'est pas un template : c'est le composant `Empty State` (285:151) centré sur les deux axes dans la coque du template hôte, panel blanc retiré.
 
