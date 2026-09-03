@@ -67,7 +67,7 @@ export const ActionsSeules: Story = {
     <Toolbar
       actions={
         <>
-          <Button icon={<Icon name="filter" size={14} />}>Filters</Button>
+          <Button icon={<Icon name="filter" size={14} />}>Filter</Button>
           <Button icon={<Icon name="view" size={14} />}>Edit view</Button>
         </>
       }
@@ -83,7 +83,7 @@ export const Dont: Story = {
         search={<SearchDemo />}
         actions={
           <>
-            <Button icon={<Icon name="filter" size={14} />}>Filters</Button>
+            <Button icon={<Icon name="filter" size={14} />}>Filter</Button>
             <Button icon={<Icon name="download" size={14} />}>Export</Button>
             <Button type="primary" icon={<Icon name="plus" size={14} />}>
               New segment

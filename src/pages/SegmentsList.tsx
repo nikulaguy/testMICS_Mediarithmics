@@ -197,10 +197,26 @@ export function SegmentsList({ onOpenDetail }: { onOpenDetail: (s: Segment) => v
         actions={
           <>
           <div ref={panelRef} style={{ position: 'relative' }}>
-            <Button icon={<Icon name="filter" size={14} />} onClick={() => setPanelOpen((v) => !v)}>
-              Filters
-              {activeFilterCount > 0 && <CountBadge count={activeFilterCount} />}
+            <Button
+              icon={<Icon name="filter" size={14} />}
+              onClick={() => setPanelOpen((v) => !v)}
+              // La pastille est hors du bouton : le compte passe par le nom
+              // accessible, qui commence par le libellé visible (RGAA 11.9).
+              aria-label={activeFilterCount > 0 ? `Filter, ${activeFilterCount} active` : undefined}
+            >
+              Filter
             </Button>
+            {/*
+              Pastille débordante du coin haut-droit (relevé Figma : -7 / -10),
+              comme le master — l'exception documentée sur CountBadge, qui se pose
+              sinon dans le flux. pointer-events none : le coin du bouton reste
+              cliquable sous elle.
+            */}
+            {activeFilterCount > 0 && (
+              <span aria-hidden style={{ position: 'absolute', top: -7, right: -10, pointerEvents: 'none' }}>
+                <CountBadge count={activeFilterCount} />
+              </span>
+            )}
             {panelOpen && (
               <div style={{ position: 'absolute', top: 'calc(100% + 4px)', right: 0, zIndex: 1050 }}>
                 <FilterPanel

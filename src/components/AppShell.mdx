@@ -31,13 +31,13 @@ C'est la règle qui a motivé ce composant, et elle ne souffre pas d'exception.
   headers={['', 'ActionBar', 'Toolbar']}
   rows={[
     ['Portée', 'La page ou la ressource entière', 'Le tableau et son contenu'],
-    ['Exemples', 'Export, New segment, Edit, Delete', 'Recherche, Filters, Edit view, Colonnes, actions de sélection'],
+    ['Exemples', 'Export, New segment, Edit, Delete', 'Recherche, Filter, Edit view, Colonnes, actions de sélection'],
     ['Position', "En haut de l'écran, à droite du fil d'ariane", 'Au-dessus du tableau'],
   ]}
 />
 
 **Pourquoi.** Une action de page rangée dans la barre d'outils du tableau perd sa portée : « New
-segment » posé à côté de « Filters » se lit comme une action sur la liste filtrée, alors qu'il crée
+segment » posé à côté de « Filter » se lit comme une action sur la liste filtrée, alors qu'il crée
 une ressource indépendante de tout filtre. Inversement, remonter « Edit view » dans l'ActionBar
 l'éloigne du tableau qu'il configure et oblige l'œil à faire l'aller-retour. La position **est** la
 portée : deux zones, deux niveaux de conséquence, aucun arbitrage au cas par cas.

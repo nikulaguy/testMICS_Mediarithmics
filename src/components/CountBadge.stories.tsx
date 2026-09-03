@@ -40,23 +40,33 @@ export const Tons: Story = {
   ),
 };
 
-/** Cas d'usage 1 : nombre de filtres actifs sur le bouton Filters. */
+/**
+ * Cas d'usage 1 : nombre de filtres actifs, débordant du coin haut-droit du
+ * bouton Filter (relevé Figma : top −7 / right −10) — l'exception à la règle
+ * « dans le flux ». La pastille est aria-hidden et laisse passer les clics ;
+ * le compte vit dans le nom accessible du bouton.
+ */
 export const SurBoutonFiltre: Story = {
   render: () => (
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: scale.space8,
-        height: 32,
-        paddingInline: scale.space12,
-        border: `1px solid ${semantic.borderInput}`,
-        borderRadius: scale.radiusBase,
-        background: semantic.bgContainer,
-        color: semantic.textNormal,
-      }}
-    >
-      <Icon name="filter" size={14} /> Filters <CountBadge count={3} />
+    <span style={{ position: 'relative', display: 'inline-flex', margin: 10 }}>
+      <span
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: scale.space8,
+          height: 32,
+          paddingInline: scale.space12,
+          border: `1px solid ${semantic.borderInput}`,
+          borderRadius: scale.radiusBase,
+          background: semantic.bgContainer,
+          color: semantic.textNormal,
+        }}
+      >
+        <Icon name="filter" size={14} /> Filter
+      </span>
+      <span aria-hidden style={{ position: 'absolute', top: -7, right: -10, pointerEvents: 'none' }}>
+        <CountBadge count={3} />
+      </span>
     </span>
   ),
 };

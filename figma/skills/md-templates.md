@@ -56,8 +56,10 @@ panel (VERTICAL, FILL, bg/container, radius/card, padding space/20, gap space/20
 - **Filtres — exposé ou panneau (revue client du 01/09/2026)** : jusqu'à TROIS dimensions, un
   déclencheur par filtre dans une `toolbar` composée à même le panel (rangée : Input de recherche
   à gauche, SPACE_BETWEEN, groupe droit de déclencheurs + Button « Edit view » ; l'action primaire
-  remonte dans l'Actionbar). Au-delà : un seul bouton « Filters » ouvre le panneau en cascade
-  (modèle Segments). Jamais les deux. Écrans : Campaigns 797:25218 / 614:97211 / 612:344.
+  remonte dans l'Actionbar). Au-delà : un seul bouton « Filter » (libellé du master) ouvre le
+  panneau en cascade (modèle Segments) ; son compteur est un `CountBadge` `info` qui **déborde du
+  coin haut-droit du bouton** (top −7 / right −10, hors flux — l'exception documentée sur
+  CountBadge). Jamais les deux modèles. Écrans : Campaigns 797:25218 / 614:97211 / 612:344.
 - **Le déclencheur d'une multi-sélection porte le NOM de la dimension, jamais sa valeur**
   (« Status », « Label »). Status : dropdown à `Dropdown / Checkbox Item` + pied `Dropdown /
   Clear`. Label : déclencheur à **loupe** dès l'état fermé (il annonce la recherche qu'il ouvre),

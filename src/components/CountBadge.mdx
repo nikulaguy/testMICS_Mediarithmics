@@ -14,9 +14,11 @@ import { DocMeta } from '../docs/DocMeta';
 </DocMeta>
 
 Pastille de comptage : hauteur `size/badge`, `radius/card`, chiffre en `text/on-dark`. Elle se pose **dans le flux**,
-à côté d'un libellé, et non en exposant sur une icône. La couleur porte le sens : `info` pour un
-état neutre (nombre de filtres actifs), `warning` pour des éléments à traiter, `success` pour
-« rien à traiter ».
+à côté d'un libellé, et non en exposant sur une icône. **Une exception, alignée sur la maquette** :
+sur le déclencheur « Filter » du panneau de filtres, elle déborde du coin haut-droit du bouton
+(top −7 / right −10, `pointer-events: none`, `aria-hidden` — le compte passe dans le nom accessible
+du bouton). La couleur porte le sens : `info` pour un état neutre (nombre de filtres actifs),
+`warning` pour des éléments à traiter, `success` pour « rien à traiter ».
 
 <Canvas of={CountBadgeStories.Tons} />
 
@@ -37,7 +39,7 @@ Pastille de comptage : hauteur `size/badge`, `radius/card`, chiffre en `text/on-
 
 ## Exemples d'usage
 
-**Nombre de filtres actifs** sur le bouton Filters :
+**Nombre de filtres actifs**, débordant du bouton Filter :
 
 <Canvas of={CountBadgeStories.SurBoutonFiltre} />
 

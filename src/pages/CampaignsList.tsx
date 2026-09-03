@@ -33,7 +33,7 @@ import { scale, semantic } from '../theme/micsTheme';
 
   Écran du MODÈLE EXPOSÉ : trois dimensions seulement (label, période, statut),
   donc un sélecteur par dimension dans la barre d'outils plutôt qu'un bouton
-  « Filters » unique. La règle : au-delà de trois dimensions on bascule sur le
+  « Filter » unique. La règle : au-delà de trois dimensions on bascule sur le
   panneau, en deçà on expose. Les multi-sélections (labels, statuts) se rappellent
   dans la barre de chips ; la période, à valeur unique et lisible dans son
   sélecteur, n'y va pas.
