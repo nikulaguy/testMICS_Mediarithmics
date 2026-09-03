@@ -46,6 +46,13 @@ Trois temps, toujours dans cet ordre : **choix du type → tunnel d'étapes → 
 - **Sortir en cours de route** : dès qu'une saisie existe, la croix (et Échap) ouvre la
   modale d'abandon — « Continue editing » secondaire, « Leave without saving » primaire
   danger. Sur le choix du type, rien n'est saisi : la croix ferme directement.
+- **Technical Name suggéré depuis le nom** (règle générique à toute création de
+  ressource) : minuscules, accents retirés, tout ce qui n'est pas alphanumérique
+  devient un tiret (« Été 2026 — Prospects FR » → `ete-2026-prospects-fr`). La
+  suggestion suit la frappe dans Name, s'arrête dès que l'utilisateur édite le champ
+  lui-même — une valeur voulue ne se fait jamais écraser — et reprend s'il le vide.
+  La frappe manuelle applique la même règle. Fonctions : `toTechnicalName` /
+  `sanitizeTechnicalName` (`src/utils/technicalName.ts`, exportées par `ui.ts`).
 - **Sélection d'éléments dans une étape** (Processing Activities) : drawer avec
   recherche + header-row de colonnes + rangées à cocher ; la liste des éléments choisis
   reprend le même header-row ; **supprimer passe par une modale de confirmation**,

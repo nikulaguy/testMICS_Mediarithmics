@@ -344,6 +344,16 @@ Côté code : coque `CreationFlow` (src/templates) + parcours vivant `SegmentCre
 - **Dernière étape** : le primaire **nomme l'action** (« Create resource »), jamais « Next », et
   reprend le verbe de l'en-tête.
 
+### Technical Name — suggéré depuis le nom (règle générique)
+- Toute ressource qui expose un « Technical Name » le **suggère depuis le nom saisi** :
+  minuscules, accents retirés, tout ce qui n'est pas alphanumérique devient un tiret, jamais
+  deux de suite ni en tête/queue (« Été 2026 — Prospects FR » → `ete-2026-prospects-fr`).
+- La suggestion suit la frappe dans Name et **s'arrête dès que l'utilisateur édite le champ
+  lui-même** (une valeur voulue ne se fait jamais écraser) ; vider le champ rend la main à la
+  suggestion. La frappe manuelle applique la même règle (minuscules, tirets).
+- Côté code : `toTechnicalName` / `sanitizeTechnicalName` (`src/utils/technicalName.ts`, via
+  `ui.ts`).
+
 ### Valider une étape — champs obligatoires
 - « Next » est **présenté** désactivé tant qu'un obligatoire manque, mais pas réellement :
   `aria-disabled="true"`, jamais `disabled` — un bouton réellement désactivé ne reçoit ni focus ni

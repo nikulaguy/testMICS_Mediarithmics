@@ -12,8 +12,10 @@ import {
   Steps,
   Tag,
   Tooltip,
+  sanitizeTechnicalName,
   scale,
   semantic,
+  toTechnicalName,
   typography,
 } from '../ui';
 import { CreationFlow } from '../templates/CreationFlow';
@@ -135,6 +137,12 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [technicalName, setTechnicalName] = useState('');
+  /**
+   * Le Technical Name est SUGGÉRÉ depuis Name (règle générique, voir
+   * utils/technicalName) tant que l'utilisateur n'y a pas touché lui-même.
+   * Vider le champ rend la main à la suggestion.
+   */
+  const [technicalTouched, setTechnicalTouched] = useState(false);
   const [evaluationPeriod, setEvaluationPeriod] = useState('1');
   /** L'utilisateur vient de taper autre chose qu'un chiffre : on le lui dit. */
   const [periodRejected, setPeriodRejected] = useState(false);
@@ -267,6 +275,7 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
             value={name}
             onChange={(v) => {
               setName(v);
+              if (!technicalTouched) setTechnicalName(toTechnicalName(v));
               // L'erreur se lève dès que le champ redevient valide, pas pendant
               // la frappe dans l'autre sens (§12).
               if (nameError && v.trim() !== '') setNameError(false);
@@ -284,8 +293,19 @@ export function SegmentCreation({ onClose, onCreated }: Props) {
               (écran 3) les montre dépliés ; l'état par défaut reste replié. */}
           <SectionToggle label="Advanced">
             <div style={{ display: 'flex', flexDirection: 'column', gap: scale.space24 }}>
-              <FieldRow info="Unique identifier used by the APIs.">
-                <Input label="Technical Name" value={technicalName} onChange={setTechnicalName} placeholder="georgia-pizza-winner-ack" />
+              <FieldRow info="Unique identifier used by the APIs. Suggested from the name: lowercase and hyphens only.">
+                <Input
+                  label="Technical Name"
+                  value={technicalName}
+                  // La frappe manuelle applique la même règle (minuscules, tirets)
+                  // et fige la suggestion ; vider le champ la réactive.
+                  onChange={(v) => {
+                    const propre = sanitizeTechnicalName(v);
+                    setTechnicalName(propre);
+                    setTechnicalTouched(propre !== '');
+                  }}
+                  placeholder="georgia-pizza-winner-ack"
+                />
               </FieldRow>
               <FieldRow info="How often the segment is recomputed.">
                 {/*

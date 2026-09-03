@@ -79,5 +79,9 @@ export { SideMenuItem } from './components/SideMenuItem';
 export { ListTemplate } from './templates/ListTemplate';
 export { CreationFlow, ActionbarCreation } from './templates/CreationFlow';
 
+// --- RÈGLES -----------------------------------------------------------------
+// Règles de gestion transverses du produit, à consommer telles quelles.
+export { toTechnicalName, sanitizeTechnicalName } from './utils/technicalName';
+
 // --- TOKENS -----------------------------------------------------------------
 export { micsTheme, primitives, semantic, scale, elevation, typography } from './theme/micsTheme';
